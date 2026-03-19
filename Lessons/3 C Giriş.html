@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data's Book on C</title>
+
+    <link rel="icon" type="image/x-icon" href="../Sources/favicon.png">
+
+    <script src="../Sources/JS/setBackgroundMedia.js"></script>
+
+    <link rel="stylesheet" href="../Sources/JS/hljs/vs2015.css">
+    <script src="../Sources/JS/hljs/highlight.min.js"></script>
+    <script>
+        window.onload = function() {
+            hljs.highlightAll();
+        };
+    </script>
+
+    <link rel="stylesheet" href="../Sources/CSS/main.css">
+</head>
+<body>
+    <h1>Giriş</h1>
+
+    <div style="height: 100px;"></div>
+    
+    <div id="mainDiv">
+        <h2>Yazılım Nedir?</h2>
+        <pre id="preh2">Yazılım, farklı amaçlarla tasarlanmış olan elektronik devrelerin ne yapmalarını özel bir dil ile anlatan, bilgisayar dillerdir.</pre>
+
+        <pre id="preh2">Normal şartlarda bilgisayar dili tektir. Binary adı verilen ve sadece bir ve sıfırlardan oluşan, insanlar tarafından okunması çok zor olan bir dildir. Zamanla insanlar bilgisayarları daha iyi programlamak ve anlamak için bu dil temelli bir çok yazılım dili geliştirilmiştir.</pre>
+
+        <pre id="preh2">Yazılım, ne dokunabilir ne de görebilirsiz. Peki bu özel sistem nasıl çalışır? Tabikide donanım adı verilen elektronik devreler sayesinde yazılım var olabilir. Donanımsız bir yazılım söz konusu dahi olmazken, aynı şekilde yazılımsız donanım da işlevsiz olur.</pre>
+
+        <h3>Donanım Nedir?</h3>
+        <pre id="preh3">Donanım; bilgisayar sistemlerinde, dokunabilen ve görünebilen bileşenlerdir.</pre>
+
+        <h3>Low-Level ve High-Level</h3>
+        <pre id="preh3">Yazılım dillerinde okunabilirlik derecesine göre ikiye ayrılır. Low-Level; insanlar tarafından zorlukla okunabilen ama bilgisayarlar tarafından kolaylıla okunabilen dillere denir. Örnek olarak, Assembly ve Binary'i verebiliriz. High-Level ise insanlar tarafından kolaylıkla okunabilen fakat bilgisayarlar tarafında okunması zaman alan yazılım dillerine denir. Örnek olarak, Python ve Java verilebilir.</pre>
+
+        <h3>Yazılım Dilleri</h3>
+        <pre id="preh3">Binary, insanlar tarafında neredeyse imkansız olan okunabilme oranı yüzünden günümüze kadar yüzlerce yazılım dili geliştirilmiştir. Hepsinin temelde yaptığı şey, yazılan programları Binary diline çevirip bilgisayarın okuması kolay hale getirmektir. Bu duruma derleme yani Compile denir.</pre>
+
+        <pre id="preh3">Bazı yazılım dilleri ise hiç Binary'e çevrilmez. Bu yazılım dillerine ise yorumlu yani Interpreted denir. Bu diller insanlar tarafından rahatça okur fakat makineler zor okur. Buda yavaşlığı getirir.</pre>
+
+        <pre id="preh3">Aşağidaki diller, 2024 Stackoverflow verilerine dayanarak en çok tercih edilen diller yer almaktır.</pre>
+
+        <ul id="listh3">
+            <li>JavaScpirt</li>
+            <li>C#</li>
+            <li>Python</li>
+            <li>Java</li>
+        </ul>
+
+        <h2>C Nedir?</h2>
+        <pre id="preh2">Geldik bu dökümantasyonun konusu olan C programlama diline...</pre>
+
+        <pre id="preh2">C, 1972 yılında Bell Laboratuvarları'nda Ken Thompson ve Dennis Ritchie tarafından yazılan, B dilinden türetilmiş bir derlenen programlama dilidir. O yıllarda UNIX işletim sistemini geliştirmek için kullanılsada günümüzde; İşletim sistemlerinden oyun motorlarına kadar geniş bir yelpazede kullanım alanı vardır.</pre>
+        
+        <pre id="preh2">C dilini kullanbilmek için IDE yani entegre geliştirme ortamına ihtiyaç duymaktayız. Ondan önce ise tabiki de bir C derliyicisine ihtiyaç duyarız. Ayrıca C programlama dilinin birden fazla derliyiciye sahiptir. Bunlardan bazıları;</pre>
+
+        <ul>
+            <li>GCC, GNU tarafından geliştirilen açık kaynaklı bir C ve C++ derliyicisidir.</li>
+            <li>Clang; C, C++, Objective-C ve CUDA dilleri için tasarlanmış bir derliyicidir.</li>
+            <li>MSVC yani Microsft Visual C, Microsft Visual Studio için Microsft tarafından geliştirilen C ve C++ derliyicisidir.</li>
+        </ul>
+
+        <pre id="preh2">Farklı farklı derliyiciler olsada hepsinin amacı aynıdır. C ile yazılan kodları Binary'e derlemektir. Bu dökümantasyonda GCC kullanıcağız. IDE için ise Stackoverflow geliştiricileri için en çok tercih edilen entegre geliştirme ortamı olan Visual Studio Code'u kullanıcağız.</pre>
+
+        <pre id="preh2">C programlama dilini bir çok yerde kullanmabiliriz. Örnek olarak;</pre>
+
+        <ul>
+            <li>İşletim sistemi yapımı</li>
+            <li>Oyun moturu yapımı</li>
+            <li>Gömülü sistemlerde</li>
+            <li>Veri tabanları dillerini yapımını</li>
+            <li>İnternet tarayıcısı yapımı</li>
+        </ul>
+
+        <h2>C Kurulum</h2>
+        <pre id="preh2">Teorik bilgileri aldığımıza göre artık pratik işlere girmenin vakti geldi...</pre>
+
+        <pre id="preh2">İlk olarak GCC derliyicisini kurmamız gerekli.</pre>
+
+        <h3>GCC Kurulumu</h3>
+        <pre id="preh3">Linux işletim sistemi kullanıyorsanız GCC varsayılan olarak gelmelidir.</pre>
+
+        <pre id="codeh3"><code class="language-bash">gcc</code></pre>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/3 C Giriş.html/1.png" alt="3.1" width="800px">
+        </div>
+
+        <pre id="preh3">Çıktı böyle ise GCC kurulu demektir.</pre>
+
+        <pre id="preh3">Windows işletim sistemi için ise MSYS2 adlı bir sistem kurup, GCC'yi indirip, sistem ortam değişkenlerine eklemeliyiz. Biraz karmaşık fakat öbür türlü çok karmaşık olucak. Yani en kolay geliştirme ortamı budur.</pre>
+
+        <pre id="preh3"><a href="https://www.msys2.org">MSYS2</a> sitesinden sistem mimarımıza uygun olanı indirelim. Kurucu indirdikten sonra kuralım. MSYS2 kendisini kurduğu yer genelde <code class="language-bash">"C:/MSYS2"</code> konumuna kendini kurur.</pre>
+
+        <pre id="preh3">Kurulum tamamlandıktan sonra Windows'un arama kısmında "MSYS2 MINGW64", mavi ikonlu uygulamayı açalım. Bu uygulamada(konsolda);</pre>
+
+        <pre id="codeh3"><code class="language-bash">pacman -Syu mingw-w64-x86_64-toolchain</code></pre>
+
+        <pre id="preh3">Komutunu çalıştıralım. Bu komut bizim için C ve C++ dili için tüm araçları ve ayrıca GCC kuracaktır. Kurulum tamamlandıktan sonra, Windows'un arama kısmında "Sistem ortam değişkenlerini düzenleyin" uygulamasını açalım. Görsellerle beraber adımları izliyelim.</pre>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/3 C Giriş.html/2.png" alt="3.2" width="800px">
+        </div>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/3 C Giriş.html/3.png" alt="3.3" width="800px">
+        </div>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/3 C Giriş.html/4.png" alt="3.4" width="800px">
+        </div>
+
+        <pre id="preh3">Çıkan pencerede dosyalarımız arasında MSYS2'nun kurulmuş olduğunu dizini bulalım. İçerisinde olan "mingw64" klasörünü içerisindeki "bin" klasörünü bulalım ve Tamam'a basalım.</pre>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/3 C Giriş.html/5.png" alt="3.5" width="800px">
+        </div>
+
+        <pre id="preh3">Son olarak art arda Tamam butonlarına basalım ve CMD konsulumuzu açalım.</pre>
+
+        <pre id="codeh3"><code class="language-bash">gcc</code></pre>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/3 C Giriş.html/6.png" alt="3.6" width="800px">
+        </div>
+
+        <pre id="preh3">Sonuç bu şekilde ise GCC hazır demektir. Eğer böyle değil ise adımları tekrarlanamız önerilir.</pre>
+
+        <h3>Entegre Geliştirme Ortamı Kurulumu</h3>
+        <pre id="preh3">Öncedende bahsettiğimiz gibi IDE olarak Visual Studio Code kullanıcağım. Tabi dilerseniz Clion veya Microsft Visual Studio kullanabilirsiniz.</pre>
+
+        <pre id="preh3">İlk olarak <a href="https://code.visualstudio.com">Visual Studio Code</a>'u resmi sitesinden kuralım. Windows ise kurucuyu, Linux ise dağtımınıza uygun olan paketi indirip kuralım.</pre>
+
+        <pre id="preh3">Visual Studio Code açıldığında ilk olarak C/C++ için geliştirilmiş olan <a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools-extension-pack">eklenti paketini</a> indirelim. Kurulduktan sonra sağ üst kısımdan terminal ekranını açalım. Şuan sistemimizde GCC kurulu olduğundan, <code class="language-bash">gcc kod.c -o çıktı.exe</code> şeklinde kolaylıkla derleme yapabilceğiz.</pre>
+
+        <h3>İlk Proje</h3>
+        <pre id="preh3">Artık ortam hazır olduğuna göre ilk projemizi oluşturabiliriz...</pre>
+
+        <pre id="preh3">Visual Studio Code ekranında Ctrl + K, Ctrl + O kobinasyonları ile bir proje dizini seçelim. Gelen ekrandaki sol kısımda projemizin klasör ve dosya yapısını görürüz. Şuan boş durumdadır. Sağ tık > New File yoluu izliyerek yeni bir dosya oluşturalım. Dosyamızın ismi "ilkKod.c" olsun.</pre>
+
+        <pre id="preh3">Ardından dosyamızın içersine şunu yazalım;</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+
+int main()
+{
+    printf("Merhaba, C!");
+
+    return 0;
+}</code>
+
+Yazalım ve alt kısımdaki komutları girelim;
+
+<code class="language-bash">gcc ilkKod.c -o ilkUygulama.exe
+.\ilkUygulama.exe</code>
+
+Ardından ekranda "Merhaba, C" yazdığını görüceksiniz.</pre>
+
+        <h2>İlk Kod</h2>
+        <pre id="preh2">İlk projemizde size verdiğim kodu hadi gelin inceleyelim...</pre>
+
+        <pre id="preh2">Fark etti iseniz <code class="language-c">printf</code> adlı bir komutu görmüş olabilirsiniz. Bu komut bizlere ekrana bir şeyler yazdırmamızı sağlayan bir araçtır. Hatta isterseniz tırnakların içerisine istediğiniz bir metni yazın ve komut satırında size verdiğim komutu uygulayın. Bakalım ekrandaki çıktı değişti mi?</pre>
+
+        <pre id="preh2"><code class="language-c">Printf</code> uzun bir zaman boyunca en iyi dostumuz olucaktır.</pre>
+
+        <h2>Paramtreli Programlar</h2>
+        <pre id="preh2">Paramtre, bir programın veya işlevin gerekli bilgileri dış kaynaklardan karşılanan verilerdir. İleride daha detaylı işlemekte olucağız.</pre>
+
+        <pre id="preh2">Paramtreli bir program yazarken bu komutu yönetimi kullanırız.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+
+int main(int argc, char *argv[])
+{
+    printf(argv[1]);
+
+    return 0;
+}</code>
+
+Bu komutta Main yani başlangıç kısmında iki tane parametre alıyoruz. Birinci paramtre olan argc girilen paramtre sayısını belirtirken, argv ise girilen paramtreleri temsik eder. Bu komut biraz kafanızı karıştırabilir, ilerleyen sayfalarda ve konularda daha detaylı bir şekilde anlatım sağlanacaktır.
+
+Derledikten sonra;
+
+<code class="language-c">.\ilkUygulama.exe Selam</code>
+<code class="language-c">.\ilkUygulama.exe Merhaba</code>
+
+Bu iki komutu çalıştırırsak, ekrandaki çıktının bizim girdiğimiz paramtreye göre değiştini görürüz...</pre>
+
+        <h2>Derleme Süreci</h2>
+        <pre id="preh2">Kodumuzu yazdık, derledik ve çalıştırdık. Peki "derleme" dediğimiz kısımda arka planda gerçekleşen olaylar tam olarak ne? Ne oluyor da bizim C dili ile yazdığımız kodlar nasıl da makine diline çeviriliyor? Bizler C kodunda "printf" gördüğümüz anlıyoruz ki bu komut ekrana yazılar yazdırmamızı sağlayan bir araçtır. Peki makineler bunu nasıl anlıyor? İşte bu yüzden derleme süreçlerini inceleyelim.</pre>
+
+        <h3>Ön İşleme(Preprocessor)</h3>
+        <pre id="preh3">Normal dillerde derleme süreci, yazılan kodu direk olarak makine koduna çevirlerek yapılmaktadır. Fakat C programlama dilinde işler biraz farklı yürümekte... GCC veya diğer derliyiciler "Ön İşleme" denilen bu kısımda diyez işaretlerine "#" göre kodu düzenlerler. İlerki sayfalarda göreceğimiz <code class="language-c">#ifdef</code> ve <code class="language-c">#ifndef</code> satırlarını, <code class="language-c">#include</code> ile eklediğimiz kütüpheneleri derlenecek kod için düzenler. Bu durum aynı kodu farklı işletim sistemlerinde derliyebilmek ve kütüphaneleri kullanabilmek için önemlidir. Diyez ile başlayan satırlara ise "önişlemci bildirimleri" adı verilir.</pre>
+
+        <h3>Derleme</h3>
+        <pre id="preh3">Bu kısım ise, ön işleme bölümünde işlenen kod dosyalarının makine koduna dönüştürüldüğü kısımdır. Örnek olarak yazdığımız "ilkKod.c" dosyası ön işlemci aşamasından geçer. Ardından derleyici onu "o" uzantılı bir dosyaya dönüştürür. Dosyamızın yeni hali "ilkKod.o" olur. Bu "o" uzantılı dosyamızda ise işletim sistemine özgü olan makine kodlarını içerir. Fakat eğer kodumuzda bir hata meydana gelirse bu kısımda derleyici derleme işlemini iptal eder ve hata mesajı ekrana verir.</pre>
+
+        <h3>Bağlana(Linking)</h3>
+        <pre id="preh3">Bu kısım artık son aşamadır. Çoğu projemizde olucağı gibi, birden fazla "o" uzantılı dosyalar bağlama işlemi ile birbirlerine bağlanırlar. Sonuç olarak ortaya çalıştıralabilir bir dosya olan ".exe" ve bir dosya formatı ortaya çıkar. Bu kısıma kadar gelebilen kodlarda herhangi bie hata bulunmaz.</pre>
+
+        <pre id="preh3">Aşağıda bu üç aşama ile ilgili bir şema verilmiştir;</pre>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/3 C Giriş.html/7.png" alt="3.7" width="800px">
+        </div>
+
+        <h2>Kaynakça</h2>
+        <ul>
+            <li><a href="https://tr.wikipedia.org/wiki/Yazılım">https://tr.wikipedia.org/wiki/Yazılım</a></li>
+            <li><a href="https://tr.wikipedia.org/wiki/Bilgisayar_donanımı">https://tr.wikipedia.org/wiki/Bilgisayar_donanımı</a></li>
+            <li><a href="https://survey.stackoverflow.co/2024/technology#most-popular-technologies-language">https://survey.stackoverflow.co/2024/technology#most-popular-technologies-language</a></li>
+            <li><a href="https://tr.wikipedia.org/wiki/C_(programlama_dili)">https://tr.wikipedia.org/wiki/C_(programlama_dili)</a></li>
+            <li><a href="https://informatecdigital.com/tr/C-dili-için-4-derleyici/">https://informatecdigital.com/tr/C-dili-için-4-derleyici/</a></li>
+            <li><a href="https://clang.llvm.org">https://clang.llvm.org</a></li>
+            <li><a href="https://tr.wikipedia.org/wiki/Microsoft_Visual_C%2B%2B">https://tr.wikipedia.org/wiki/Microsoft_Visual_C%2B%2B</a></li>
+            <li><a href="https://www.siberegitmen.com/c-programlama-dili-ve-kullanim-alanlari/">https://www.siberegitmen.com/c-programlama-dili-ve-kullanim-alanlari/</a></li>
+            <li><a href="https://www.msys2.org">https://www.msys2.org</a></li>
+            <li><a href="https://code.visualstudio.com">https://code.visualstudio.com</a></li>
+            <li><a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools-extension-pack">https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools-extension-pack</a></li>
+            <li><a href="https://stackoverflow.com/questions/498320/pass-arguments-into-c-program-from-command-line/498322#498322">https://stackoverflow.com/questions/498320/pass-arguments-into-c-program-from-command-line/498322#498322</a></li>
+            <li><a href="https://www.mustafayemural.com/c-my000002/">https://www.mustafayemural.com/c-my000002/</a></li>
+        </ul>
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <footer style="position: fixed; left: 0; bottom: 0; width: 100%; background: transparent; text-align: center; padding: 10px 0; z-index: 100;">
+        <div>
+            <a href="./2 Ön Söz.html" style="margin-right: 20px; cursor:pointer;">
+                &larr; Önceki
+            </a>
+            <a href="" style="cursor:pointer;">
+                Sonraki &rarr;
+            </a>
+        </div>
+        <div>
+            <p>&copy; 2026 Data's Book</p>
+        </div>
+
+        <div style="position: absolute; right: 20px; bottom: 20px;">
+            <a href="./1 Markdown İçindekiler.html" style="text-decoration: none;">
+                İçindekiler
+            </a>
+        </div>
+    </footer>
+</body>
+</html>
+
+<!-- Muhammet Enes nam-ı diğer Data Delete tarafından sevgi ile yapıldı <3 -->
