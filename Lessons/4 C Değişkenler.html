@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data's Book on C</title>
+
+    <link rel="icon" type="image/x-icon" href="../Sources/favicon.png">
+
+    <script src="../Sources/JS/setBackgroundMedia.js"></script>
+
+    <link rel="stylesheet" href="../Sources/JS/hljs/vs2015.css">
+    <script src="../Sources/JS/hljs/highlight.min.js"></script>
+    <script>
+        window.onload = function() {
+            hljs.highlightAll();
+        };
+    </script>
+
+    <link rel="stylesheet" href="../Sources/CSS/main.css">
+</head>
+<body>
+    <h1>Değişkenler</h1>
+
+    <div style="height: 100px;"></div>
+    
+    <div id="mainDiv">
+        <h2>Değişken Nedir?</h2>
+        <pre id="preh2">Değişkenler, programın içersinde bilgi tutan yapılardır.</pre>
+
+        <pre id="preh2">Değişkenler genelde, daha sonraki zamanlarda gerekliği olacak olan bilgileri depolamak için kullanılır. Bu bilgiler genelde geçicidir ve program kapatıldığında bilgiler temizlenir.</pre>
+
+        <pre id="preh2">Örneğin; Bir banka sisteminde kullanıcı kendi hesabına girmek istesin. Normal şartlarda kullanıcı bir kere şifre girer ve işlemler ardından banka hesabına giriş yapılır. Bu durumu sağlayan yapı ise değişkenlerdir. Kullanıcının girdiği şifre bilgisini bir değişkene atanır ve gerektiği alanlarda değişken çağrılarak bilgi kullanılır. Eğer değişkenler olmaz ise kullanıcı sürekli şifresini girmek zorunda kalıcaktır.</pre>
+
+        <h2>Sayısal Değişkenler</h2>
+        <pre id="preh2">Değişkenlerin türleri vardır. Bunlardan biri ise sayısal değişkenlerdir. Bu tür, tanımlanan değişkenin türü gereği değeri sayılar ile ifade edilir.</pre>
+        
+        <h3>Short</h3>
+        <pre id="preh3">C programlama dilinde en küçük değer tutabilen sayı türüdür. -32,768 ila 32,767 arasında sayı tutabilir.</pre>
+
+        <pre id="preh3">Düzenleyici bir türdür. Yani tek başına kullanılmak yerine Integer sayı türünün sayı aralığını küçültür.</pre>
+        
+        <pre id="preh3">"<code class="language-c">unsigned</code>" ile de negatif sayılar görmezden gelinir ve sadece pozitif sayılar alınabilir. 0 ila 65,535 arasında sayı alabilir.</pre>
+
+        <pre id="preh3">Amacı ise küçük sayıları depolamaktır. Bellekte kapladığı alan 2 bayttır.</pre>
+
+        <pre id="codeh3"><code class="language-c">short int eksiYuz = -100;
+unsigned short int yuz = 100;</code></pre>
+
+        <h3>Integer</h3>
+        <pre id="preh3">Integer, en çok tercih edilen sayı türüdür. -2,147,483,648 ila 2,147,483,647 arasında sayı tutabilir.</pre>
+
+        <pre id="preh3">Ana türdür. Düzenleyicilerin düzenlediği yapıdır.</pre>
+
+        <pre id="preh3">"<code class="language-c">unsigned</code>" ile de negatif sayılar görmezden gelinir ve sadece pozitif sayılar alınabilir. 0 ila 4,294,967,295 arasında sayı alabilir.</pre>
+
+        <pre id="preh3">Bellekte kapladığı alan ise 4 bayttır.</pre>
+
+        <pre id="codeh3"><code class="language-c">int eksiBesMilyon = -5000000;
+unsigned int besMilyon = 5000000;</code></pre>
+
+        <h3>Long</h3>
+        <pre id="preh3">Çok uzun sayılar için kullanılır. -9,223,372,036,854,775,808 ila 9,223,372,036,854,775,807 arasındaki sayıları tutabilir.</pre>
+
+        <pre id="preh3">Bellekte 8 baytlık bir yer kaplamaktadır.</pre>
+
+        <pre id="preh3"><code class="language-c">long long dunyaNufusu = 8000000000;</code></pre>
+
+        <h3>Float</h3>
+        <pre id="preh3">En çok tercih edilen ondalıklı sayı türüdür.  3.4 × 10^-38 ila 3.4 × 10^38 arasında sayı tutabilir.</pre>
+
+        <pre id="preh3">Bellekte kapladığı yer ise 4 bayttır.</pre>
+
+        <pre id="preh3"><code class="language-c">float ondaklikliSayi = 123123.123123;</code></pre>
+
+        <h3>Double</h3>
+        <pre id="preh3">Double ise yüksek hassasiyet gerektiren matematik işlemlerinde kullanılır.</pre>
+
+        <pre id="preh3">Bellekte kapadığı yer ise 8 bayttır.</pre>
+
+        <pre id="codeh3"><code class="language-c">double karmasikSayi = 2313123.34234e10;</code></pre>
+        
+        <h2>Değişken İsimlendirme Kuralları</h2>
+        <pre id="preh2">Değişkenlerin isimlendirme kuralları aşağıdaki tablo şeklinde verilmiştir.</pre>
+
+        <table id="tableh2" border="1">
+            <thead>
+                <th>Kural İsmi</th>
+                <th>Açıklaması</th>
+                <th>Doğru Kullanım</th>
+                <th>Yanlış Kullanım</th>
+            </thead>
+            <tbody>
+                <td>ASCII Kurallarına Uymak</td>
+                <td>Değişken isimlendirirken sadece alfanumarik ve alt tire(_) kullanılmalıdır.</td>
+                <td>karmasik_bir_sayi</td>
+                <td>Karşmaşık Bir Sayı</td>
+            </tbody>
+            <tbody>
+                <td>Harf veya Alt Tire İle Başlanmalı</td>
+                <td>Değişken ismi harf veya alt tire ile başlamalı.</td>
+                <td>12_sayisi</td>
+                <td>sayi12</td>
+            </tbody>
+            <tbody>
+                <td>Özel Kelimeler Olmamalı</td>
+                <td>Değişken ismi C programlama dili için özel yeri olan yapıların ismi olmamamlı.</td>
+                <td>forDongusuIcinMiktar</td>
+                <td>for</td>
+            </tbody>
+        </table>
+
+        <h2>Char</h2>
+        <pre id="preh2">Char değişken tipi, normal şartlarda tek bir harf tutar.</pre>
+
+        <pre id="codeh2"><code class="language-c">char buyukA = 'A';</code>
+        
+Tek tırnak içerisine yazılır.</pre>
+
+        <pre id="preh2">Fakat bu hali pek işimize yaramıcağından biz dizi şeklinde olan halini kullanıcağız. Dizileri henüz görmedik ama ilerki sayfalarda daha detaylı şeklinde işlemekte olacağız...</pre>
+
+        <pre id="codeh2"><code class="language-c">char[] hello = "Merhaba, Dünya!";</code>
+        
+Çift tırnaklar içerisine depolanmak istenen metin yazılır.</pre>
+
+        <h2>Depolama Sınıfları</h2>
+        <pre id="preh2">C programlama dilinde, diğer dillerin aksine erişim belirteçlerin yerine depolanma şekilerine göre erişim belirlenir. Aşağıdaki tabloda erişim sınıflarının tablo şeklinde verilmiştir.</pre>
+
+        <table id="tableh2" border="1">
+            <thead>
+                <th>İsmi</th>
+                <th>İşlevi</th>
+                <th>Kullanımı</th>
+            </thead>
+            <tbody>
+                <td>Auto</td>
+                <td>Bulunduğu bloğun içerisinde farklı, bloğunun içerisindeki blokda farklı değerler alabilmesi için kullanılır.</td>
+                <td>auto ismi = değer</td>
+            </tbody>
+            <tbody>
+                <td>Static</td>
+                <td>Nerede ilk tanımlanırsa, bir sonraki tanımları (değerlerini) yok sayan ve üzerine işlem yapıldığında her her yerde geçerli olan bir depolama türüdür.</td>
+                <td>static ismi = değer</td>
+            </tbody>
+            <tbody>
+                <td>Extern</td>
+                <td>Bir kod dosyasında tanımlanan değişkeni bir diğer kod dosyasında değer atamayı sağlar.</td>
+                <td>extern ismi = değer</td>
+            </tbody>
+        </table>
+
+        <h2>Kullanıcıdan Veri Almak</h2>
+        <pre id="preh2">C programlama dilinde kullanıcıdan konsol üzerinden veri alabilmek için <code class="language-c">scanf</code> komutu kullanılır.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include <stdio.h>
+
+int main()
+{
+    int s1;
+
+    printf("Bir sayi giriniz: ");
+
+    scanf("%d", &s1);
+
+    printf("Girilen sayi: %d", s1);
+
+    return 0;
+}</code>
+
+Bu programda s1 adlı değişkene, girilen sayıyı atıyoruz ve ekranda gösteriyoruz...</pre>
+
+        <pre id="preh2">Eğer farklı türdeki değişkenler için kullanıcılardan veri alıcaksak eğer <code class="language-c">scanf</code> tırnaklar içerisindeki yüzdelik(%) işaretinin yanındaki harfi değiştirmeliyiz.Almak istediğimiz veri türleri için, tablodaki kullanımı uygulamalayız.</pre>
+
+        <table id="tableh2" border="1">
+            <thead>
+                <th>İstenilen Tür</th>
+                <th>Kullanılan Sembol</th>
+            </thead>
+            <tbody>
+                <td>Integer</td>
+                <td>%d</td>
+            </tbody>
+            <tbody>
+                <td>Long</td>
+                <td>%ld</td>
+            </tbody>
+            <tbody>
+                <td>İşaretsiz(unsigned) Integer</td>
+                <td>%u</td>
+            </tbody>
+            <tbody>
+                <td>Float veya Double</td>
+                <td>%f</td>
+            </tbody>
+            <tbody>
+                <td>Char[]</td>
+                <td>%s</td>
+            </tbody>
+        </table>
+
+        <h2>Değişken Türleri Dönüştürme</h2>
+        <pre id="preh2">Bazı durumlarda bizlere Float türü gerekirken, elde Integer oluyor. Bu durumu çözmek için değişken türlerini dönüştürürüz...</pre>
+
+        <pre id="preh2">Aşağıdaki başlıkların altında önemli türlerin birbirleriyle dönüşümleri verilmiştir.</pre>
+
+        <h3>Integer &rarr; Float</h3>
+        <pre id="codeh3"><code class="language-c">int s1 = 203;
+float s2 = (float) s1;</code></pre>
+
+        <h3>Float &rarr; Integer</h3>
+        <pre id="codeh3"><code class="language-c">float s1 = 123.12;
+int s2 = (int) s1;</code>
+
+Noktadan sonraki sayılar silinir.</pre>
+
+        <h3>Integer &rarr; Char[]</h3>
+        <pre id="codeh3"><code class="language-c">#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    char yaziSayi[] = "1000";
+
+    int sayi = atoi(yaziSayi);
+
+    printf("'%s' -> %d\n", yaziSayi, sayi);
+
+    return 0;
+}</code>
+
+Ekrana hem 1000'i Char[] olarak hem de Integer olarak yazar.</pre>
+
+        <h3>Char[] &rarr; Integer</h3>
+        <pre id="codeh3"><code class="language-c">int sayi = 247593;
+char yaziSayi[10];
+
+sprintf(yaziSayi, "%d",sayi);</code>
+
+Sayı ne kadar büyük ise köşeli parantezlere o kadar sayı yazılır.</pre>
+
+        <h2>Sabitlik</h2>
+        <pre id="preh2">Değişkenler yapısı geriği değiştirebilir olarak yapıdadır. Ancak sabit değişkenlerde tanımlanabilir. Bir kere tanımlanır ardından hiç bir zaman değiştirilemez.</pre>
+
+        <pre id="preh2">İki tür sabitlik vardır. "<code class="language-c">const</code>" ve "<code class="language-c">#define</code>". Aralında fark yoktur. Sadece bellekte farklı şekillerde yer yaplarlar.</pre>
+
+        <pre id="codeh2"><code class="language-c">#define DEGISKEN_ISMI 12
+int const degiskenIsmi = 12;</code></pre>
+
+        <h2>Typedef</h2>
+        <pre id="preh2">Typedef ise, bir değişken türüne kendi özel ismimizi vermemizi sağlayan bir yapıdır.</pre>
+
+        <pre id="preh2">Örnek kod aşağıda verilmiştir.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include <stdio.h>
+
+typedef int tamSayi;
+
+int main()
+{
+    tamSayi sayi = 16;
+
+    printf("%d", sayi);
+
+    return 0;
+}</code>
+
+Program çalıştırılıp çıktımıza bakılırsa "16" görülür.</pre>
+
+        <h2>Kaynakça</h2>
+        <ul>
+            <li><a href="https://www.rabisu.com/tr/docs/tutorials/C%20Programlama/c-dilinde-veri-tipleri-ve-duzenleyiciler#-4-veri-tiplerinin-karşılaştırma-tablosu">https://www.rabisu.com/tr/docs/tutorials/C%20Programlama/c-dilinde-veri-tipleri-ve-duzenleyiciler#-4-veri-tiplerinin-karşılaştırma-tablosu</a></li>
+            <li><a href="https://medium.com/@yunus.emre.cinbolat/c-programlamada-veri̇-ti̇pleri̇-nelerdi̇r-ne-i̇şe-yarar-3b2afba9ac83">https://medium.com/@yunus.emre.cinbolat/c-programlamada-veri̇-ti̇pleri̇-nelerdi̇r-ne-i̇şe-yarar-3b2afba9ac83</a></li>
+            <li><a href="https://www.frmtr.com/c-ve-c-/9188331-c-dilinde-veri-tipleri-ve-degiskenler-int-float-char-hakkinda-bilmeniz-gereken-10-a.html">https://www.frmtr.com/c-ve-c-/9188331-c-dilinde-veri-tipleri-ve-degiskenler-int-float-char-hakkinda-bilmeniz-gereken-10-a.html</a></li>
+            <li><a href="https://www.cdersleri.com/c-veri-tipleri-c-data-types">https://www.cdersleri.com/c-veri-tipleri-c-data-types</a></li>
+            <li><a href="https://www.tasarimkodlama.com/algoritma/degisken-nedir-degisken-isimlendirme-kurallari/">https://www.tasarimkodlama.com/algoritma/degisken-nedir-degisken-isimlendirme-kurallari/</a></li>
+            <li><a href="https://www.cdersleri.com/c-depolama-sinifi-c-storage-class">https://www.cdersleri.com/c-depolama-sinifi-c-storage-class</a></li>
+            <li><a href="https://www.guru99.com/tr/c-storage-classes.html">https://www.guru99.com/tr/c-storage-classes.html</a></li>
+            <li><a href="https://www.dijitalders.com/icerik/106/5460/c_programlama_scanf_fonksiyonu.html">https://www.dijitalders.com/icerik/106/5460/c_programlama_scanf_fonksiyonu.html</a></li>
+            <li><a href="https://www.mustafayemural.com/c-my000010/">https://www.mustafayemural.com/c-my000010/ </a></li>
+            <li><a href="https://stackoverflow.com/questions/2279379/how-to-convert-integer-to-char-in-c">https://stackoverflow.com/questions/2279379/how-to-convert-integer-to-char-in-c</a></li>
+            <li><a href="https://www.yazilimkodlama.com/c-programlama-ornekleri/cde-define-ve-const-arasindaki-fark/">https://www.yazilimkodlama.com/c-programlama-ornekleri/cde-define-ve-const-arasindaki-fark/</a></li>
+            <li><a href="https://sonsuzus.github.io/posts/c_typedef">https://sonsuzus.github.io/posts/c_typedef</a></li>
+        </ul>
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <footer style="position: fixed; left: 0; bottom: 0; width: 100%; background: transparent; text-align: center; padding: 10px 0; z-index: 100;">
+        <div>
+            <a href="./3 C Giriş.html" style="margin-right: 20px; cursor:pointer;">
+                &larr; Önceki
+            </a>
+            <a href="" style="cursor:pointer;">
+                Sonraki &rarr;
+            </a>
+        </div>
+        <div>
+            <p>&copy; 2026 Data's Book</p>
+        </div>
+
+        <div style="position: absolute; right: 20px; bottom: 20px;">
+            <a href="./1 C İçindekiler.html" style="text-decoration: none;">
+                İçindekiler
+            </a>
+        </div>
+    </footer>
+</body>
+</html>
+
+<!-- Muhammet Enes nam-ı diğer Data Delete tarafından sevgi ile yapıldı <3 -->

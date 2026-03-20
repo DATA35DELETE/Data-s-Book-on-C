@@ -35,20 +35,18 @@
 ### C : Değişkenler
 - **Değişkenler Nedir?**: Tanımı. Kullanım Senaryoları
 - **Sayısal Değişkenler**
-  - **char**: Tanım. unsigned char. Örnek.
   - **short**: Tanım. unsigned short. Örnek.
   - **int**: Tanım. unsigned int. Örnek.
   - **long**: Tanım. long long. unsigned long. Örnek.
   - **float**: Tanım. Örnek.
   - **double**: Tanım. long double. Örnek.
-- **Boolean**: Tanım. stdbool.h. Örnek.
 - **İsimlendirme Kuralları**: Tablo Halinde
+- **Char**: Tanım. Örnek.
 - **Depolama Sınıfları**: Tanım
   > Tablo Halinde
   - **auto**
   - **static**
   - **extern**
-  - **register**
 - **Kullanıcıdan Değişken Alma**: scanf. Örnek.
 - **Değişkenlerin Türünü Değiştirme**: Tanım.
   - **int &rarr; float**: Örnek.
