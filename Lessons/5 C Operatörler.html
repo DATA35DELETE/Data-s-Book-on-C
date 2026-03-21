@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data's Book on C</title>
+
+    <link rel="icon" type="image/x-icon" href="../Sources/favicon.png">
+
+    <script src="../Sources/JS/setBackgroundMedia.js"></script>
+
+    <link rel="stylesheet" href="../Sources/JS/hljs/vs2015.css">
+    <script src="../Sources/JS/hljs/highlight.min.js"></script>
+    <script>
+        window.onload = function() {
+            hljs.highlightAll();
+        };
+    </script>
+
+    <link rel="stylesheet" href="../Sources/CSS/main.css">
+</head>
+<body>
+    <h1>Operatörler</h1>
+
+    <div style="height: 100px;"></div>
+    
+    <div id="mainDiv">
+        <h2>Operatörler Nedir?</h2>
+        <pre id="preh2">Operatörler; basit matematik işlemlerini, mantıksal işlemlerini ve karşılaştırma işlemlerini yapabilceğimiz yapılardır.</pre>
+
+        <pre id="preh2">Örneğin; Bir hesap makinesi yapıyor olalım. Toplama, çıkarma gibi işlemler için bu operatörlere ihtiyaç duymaktayız...</pre>
+
+        <h2>Atama Operatörü</h2>
+        <pre id="preh2">Atama operatörü, bir değeri bri değişkene atamak için kullanılır. Sembolü eşittir(=) ve atama işlemini, eşittirin sağındaki değeri solundaki değişkene atama şeklinde gerçekleşir.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+
+int main(){
+    int buBirSayidir = 25;
+    buBirSayidir = 12
+
+    printf("%d",buBirSayidir);
+
+    return 0;
+}</code>
+
+Çıktımız "12" olaraktır. Değişkenimizi ilk olarak 25 değerini atadık. Daha sonra 12 değerine atadık ve çıktımız "12" olmuş oldu.</pre>
+
+        <h2>Aritmatik Operatörler</h2>
+        <pre id="preh2">Aritmatik operatörler, basit matematiksel işlemleri yapabilmezi sağlarlar.</pre>
+
+        <h3>Toplama</h3>
+        <pre id="preh3">Toplama işlemi için artı(+) sembolü kullanılır.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+
+int main(){
+    int x = 10 + 10;
+    int y = 4;
+
+    int z = x + y;
+
+    printf("%d",z);
+
+    return 0;
+}</code>
+
+Çıktımız "24" olucaktır. X değişkenimizi 10 + 10 işlemi ile 20 değerini atadık, y değişkenimizi 4 değerini atadık. Ardından z değişkenmize ikisinin toplamı olan "24" değerini elde ettik.</pre>
+
+        <h3>Çıkarma</h3>
+        <pre id="preh3">Çıkarma işlemi için eksi(-) sembolü kullanılır.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+
+int main(){
+    int x = 10;
+    int y = 5 - 3;
+
+    int z = x - y;
+
+    printf("%d",z);
+
+    return 0;
+}</code>
+
+Çıktımız "8" olucaktır. X değişkenmizi 10 değerini atadık. Y değişkenimizi 5 - 3 işleminin sonucu olan 2 değerini atadık. Son olarak x'den y'i çıkardık ve sonucumuz 8 olmuştur.</pre>
+
+        <h3>Çarpma</h3>
+        <pre id="preh3">Çarpma işlemi için yıldız(*) sembolü kullanılır.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+
+int main(){
+    int x = 10;
+    int y = 5 - 3;
+
+    int z = x - y;
+
+    printf("%d",z);
+
+    return 0;
+}</code>
+
+Çıtımız "30" olucaktır.</pre>
+
+        <h2>Kaynakça</h2>
+        <ul>
+        </ul>    
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <footer style="position: fixed; left: 0; bottom: 0; width: 100%; background: transparent; text-align: center; padding: 10px 0; z-index: 100;">
+        <div>
+            <a href="./4 C Değişkenler.html" style="margin-right: 20px; cursor:pointer;">
+                &larr; Önceki
+            </a>
+            <a href="" style="cursor:pointer;">
+                Sonraki &rarr;
+            </a>
+        </div>
+        <div>
+            <p>&copy; 2026 Data's Book</p>
+        </div>
+
+        <div style="position: absolute; right: 20px; bottom: 20px;">
+            <a href="./1 C İçindekiler.html" style="text-decoration: none;">
+                İçindekiler
+            </a>
+        </div>
+    </footer>
+</body>
+</html>
+
+<!-- Muhammet Enes nam-ı diğer Data Delete tarafından sevgi ile yapıldı <3 -->
