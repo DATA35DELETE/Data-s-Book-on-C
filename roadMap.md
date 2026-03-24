@@ -77,7 +77,7 @@
 - **Bitwise Operatörler**: &, |, ^, ~, <<, >>. Tanım. Örnek.
 - **Ternary**: Tanım. Örnek. Avantajı.
 - **sizeof Operatörü**: Tanım. Örnek.
-- **Yazdırma Komutunda Veri Yazdırma**: Tanım. Örnek.
+- **Yazdırma Komutunda % İle Veri Yazdırma**: Tanım. Örnek.
 - **Yorum Satırı**: // ve /* */. Tanım. Örnek.
  
 ---

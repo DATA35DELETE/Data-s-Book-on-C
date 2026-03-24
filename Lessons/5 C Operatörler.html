@@ -163,8 +163,102 @@ int main(){
     return 0;
 }</code></pre>
 
+        <h2>Karşılaştırma Operatörleri</h2>
+        <pre id="preh2">Karşılaştırma operatörleri; bir değer ile bir başka değeri karşılaştırarak, 1 veya 0 sonucunu çıkartan operatörlerdir.</pre>
+
+        <h3>Büyüktür</h3>
+        <pre id="preh3">Büyüktür işlemi için büyüktür(>) sembolü kullanılır.</pre>
+
+        <pre id="codeh3"><code class="language-c">short int kosul1 = 10 > 1; // 10 1'den büyük olduğundan sonuç 1 olur
+    
+short int kosul2 = 10 > 20; // 10 20'den büyük olduğundan sonuç 0 olur</code></pre>
+
+        <h3>Küçüktür</h3>
+        <pre id="preh3">Küçüktür, işlemi için küçüktür(<) sembolü kullanılır.</pre>
+
+        <pre id="codeh3"><code class="language-c">short int kosul1 = 10 < 1; // 10 1'den küçük olduğundan sonuç 1 olur
+    
+short int kosul2 = 10 < 20; // 10 20'den büyük olduğundan sonuç 0 olur</code></pre>
+
+        <h3>Büyüktür veya Eşittir</h3>
+        <pre id="preh3">Büyüktür veya eşittir işlemi için büyüktür ve eşittir(>=) sembolleri birlikte kullanılır.</pre>
+
+        <pre id="codeh3"><code class="language-c">short int kosul1 = 21 >= 7; // 21 7'den büyük olduğundan sonuç 1 olur
+    
+short int kosul2 = 68 >= 68; // 68 68'e eşit olduğundan sonuc 1 olur
+    
+short int kosul3 = 40 >= 41; // 40 41'den küçük olduğundan sonuç 0 olur</code></pre>
+
+        <h3>Küçüktür veya Eşittir</h3>
+        <pre id="preh3">Küçüktür veya eşittir işlemi için küçüktür ve eşittir(<=) sembolleri birlikte kullanılır.</pre>
+
+        <pre id="codeh3"><code class="language-c">short int kosul1 = 21 <= 7; // 21 7'den büyük olduğundan sonuç 0 olur
+    
+short int kosul2 = 68 <= 68; // 68 68'e eşit olduğundan sonuc 1 olur
+    
+short int kosul3 = 40 <= 41; // 40 41'den küçük olduğundan sonuç 1 olur</code></pre>
+
+        <h3>Eşittir</h3>
+        <pre id="preh3">Eşittir işlemi için iki eşittir(==) kullanılır.</pre>
+
+        <pre id="codeh3"><code class="language-c">short int kosul1 = 56 == 65; // 56 65'e eşit olmadığında sonuç 0
+    
+short int kosul2 = 56 == 56; // 56 56'ya eşit olduğundan sonuc 1 olur</code></pre>
+
+        <h3>Eşit Değil</h3>
+        <pre id="preh3">Eşit değil işlemi için ünlem ve eşittir(!=) sembolleri kullanılır.</pre>
+
+        <pre id="codeh3"><code class="language-c">short int kosul1 = 37 != 98; // 37 ile 98 aynı olmadığından sonuç 1 olur
+    
+short int kosul2 = 37 != 37; // 37 ile 37 aynı olduğundna sonuç 0 olur</code></pre>
+
+        <h2>Mantıksal Operatörleri</h2>
+        <pre id="preh2">Mantıksal operatörler; iki bir ve sıfır değerini mantıksal olarak karşılaştırmak veya değiştirmek için kullanılan operatörlerdir.</pre>
+
+        <h3>Değil</h3>
+        <pre id="preh3">Değil işlemi için ünlem(!) sembolü kullanılır.</pre>
+
+        <pre id="preh3">Değil işlemi, değeri tersine çevirmek için kullanılır. Bir değerini sıfır, sıfır değerini bir yapabilir.</pre>
+
+        <pre id="codeh3"><code class="language-c">short int kosul1 = !1; // 1'in tersi 0'dır. Sonuç, 0
+    
+short int kosul2 = !0; // 0'ın tersi 1'dir. Sonuç, 0</code></pre>
+
+        <h3>Ve</h3>
+        <pre id="preh3">Ve işlemi için iki ampersend(&&) sembolleri kullanılır.</pre>
+
+        <pre id="preh3">Ve işlemi, iki değerin bir olduğu durumlarda bir sonucunu vermektedir. Diğer durumlarda sıfır sunucu vermektedir.</pre>
+
+        <pre id="codeh3"><code class="language-c">short int kosul1 = 0 && 0; // İki değer bir olmadığından sonuç 0
+    
+short int kosul2 = 1 && 0; // İki değer bir olmadığından sonuç 0
+    
+short int kosul3 = 0 && 1; // İki değer bir olmadığından sonuç 0
+    
+short int kosul4 = 1 && 1; // İki değer bir olduğundan sonuç 1</code></pre>
+
+        <h3>Veya</h3>
+        <pre id="preh3">Veya işlemi için iki uzun çizgi(||) sembolleri kullanılır.</pre>
+
+        <pre id="preh3">Veya, iki değerin herhangi birisinden biri bir olduğu zaman bir sonucunu vermektedir.</pre>
+
+        <pre id="codeh3"><code class="language-c">short int kosul1 = 0 || 0; // İki değer de bir olmadığından sonuç 0
+    
+short int kosul2 = 1 || 0; // İki değerden biri bir olduğundan sonuç 1
+    
+short int kosul3 = 0 || 1; // İki değerden biri bir olduğundan sonuç 1
+    
+short int kosul4 = 1 || 1; // İki değerde bir olduğundan sonuç 1</code></pre>
+
+        <h2>Bitwise(Bit Düzeyinde) Operatörleri</h2>
+        <pre id="preh2">Bitsel operatörler, bit düzeyinde işlem yapabilmek için kullanılan operatörlerdir.</pre>
+
+        <h3>Ve</h3>
+        <pre id="preh3">Ve işlemi için ampersend(&) sembolü ile işlem gerçekleşmektedir. İki değerin Binary değerindeki bitlerin karşılaştırarak yeni bir değer vermektedir.</pre>
+
         <h2>Kaynakça</h2>
         <ul>
+            <li><a href="https://www.programiz.com/c-programming/bitwise-operators">https://www.programiz.com/c-programming/bitwise-operators</a></li>
         </ul>    
     </div>
 
