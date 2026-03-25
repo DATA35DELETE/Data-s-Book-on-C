@@ -28,12 +28,12 @@
         <h2>Değişken Nedir?</h2>
         <pre id="preh2">Değişkenler, programın içersinde bilgi tutan yapılardır.</pre>
 
-        <pre id="preh2">Değişkenler genelde, daha sonraki zamanlarda gerekliği olacak olan bilgileri depolamak için kullanılır. Bu bilgiler genelde geçicidir ve program kapatıldığında bilgiler temizlenir.</pre>
+        <pre id="preh2">Değişkenler genelde, daha sonraki zamanlarda gerekll olacak olan bilgileri depolamak için kullanılır. Bu bilgiler genelde geçicidir ve program kapatıldığında bilgiler temizlenir.</pre>
 
-        <pre id="preh2">Örneğin; Bir banka sisteminde kullanıcı kendi hesabına girmek istesin. Normal şartlarda kullanıcı bir kere şifre girer ve işlemler ardından banka hesabına giriş yapılır. Bu durumu sağlayan yapı ise değişkenlerdir. Kullanıcının girdiği şifre bilgisini bir değişkene atanır ve gerektiği alanlarda değişken çağrılarak bilgi kullanılır. Eğer değişkenler olmaz ise kullanıcı sürekli şifresini girmek zorunda kalıcaktır.</pre>
+        <pre id="preh2">Örneğin; Bir banka sisteminde kullanıcı kendi hesabına girmek istesin. Normal şartlarda kullanıcı bir kere şifre girer ve işlemler ardından banka hesabına giriş yapılır. Bu durumu sağlayan yapı ise değişkenlerdir. Kullanıcının girdiği şifre bilgisini bir değişkene atanır ve gerektiği alanlarda değişken çağrılarak bilgi kullanılır. Eğer değişkenler olmasaydı kullanıcı sürekli şifresini girmek zorunda kalıcaktı..</pre>
 
         <h2>Sayısal Değişkenler</h2>
-        <pre id="preh2">Değişkenlerin türleri vardır. Bunlardan biri ise sayısal değişkenlerdir. Bu tür, tanımlanan değişkenin türü gereği değeri sayılar ile ifade edilir.</pre>
+        <pre id="preh2">Değişkenlerin türleri vardır. Bunlardan biri ise sayısal değişkenlerdir. Bu tür, tanımlanan değişkenin türü gereği, değeri sayılar ile ifade edilir.</pre>
         
         <h3>Short</h3>
         <pre id="preh3">C programlama dilinde en küçük değer tutabilen sayı türüdür. -32,768 ila 32,767 arasında sayı tutabilir.</pre>
@@ -81,7 +81,7 @@ unsigned int besMilyon = 5000000;</code></pre>
         <pre id="codeh3"><code class="language-c">double karmasikSayi = 2313123.34234e10;</code></pre>
         
         <h2>Değişken İsimlendirme Kuralları</h2>
-        <pre id="preh2">Değişkenlerin isimlendirme kuralları aşağıdaki tablo şeklinde verilmiştir.</pre>
+        <pre id="preh2">Değişken isimlendirme kuralları tablo şeklinde verilmiştir.</pre>
 
         <table id="tableh2" border="1">
             <thead>
@@ -121,14 +121,14 @@ unsigned int besMilyon = 5000000;</code></pre>
         
 Tek tırnak içerisine yazılır.</pre>
 
-        <pre id="preh2">Fakat bu hali pek işimize yaramıcağından biz dizi şeklinde olan halini kullanıcağız. Dizileri henüz görmedik ama ilerki sayfalarda daha detaylı şeklinde işlemekte olacağız...</pre>
+        <pre id="preh2">Fakat bu hali pek kullanışlı olmadığından biz dizi şeklinde olan halini kullanıcağız. Dizileri henüz görmedik ama ilerki sayfalarda daha detaylı şeklinde işlemekte olacağız...</pre>
 
         <pre id="codeh2"><code class="language-c">char[] hello = "Merhaba, Dünya!";</code>
         
 Çift tırnaklar içerisine depolanmak istenen metin yazılır.</pre>
 
         <h2>Depolama Sınıfları</h2>
-        <pre id="preh2">C programlama dilinde, diğer dillerin aksine erişim belirteçlerin yerine depolanma şekilerine göre erişim belirlenir. Aşağıdaki tabloda erişim sınıflarının tablo şeklinde verilmiştir.</pre>
+        <pre id="preh2">C programlama dilinde, diğer dillerin aksine erişim belirteçleri yerine depolanma şekilerine göre erişim belirlenir. Aşağıdaki tabloda erişim sınıflarının tablo şeklinde verilmiştir.</pre>
 
         <table id="tableh2" border="1">
             <thead>
@@ -143,7 +143,7 @@ Tek tırnak içerisine yazılır.</pre>
             </tbody>
             <tbody>
                 <td>Static</td>
-                <td>Nerede ilk tanımlanırsa, bir sonraki tanımları (değerlerini) yok sayan ve üzerine işlem yapıldığında her her yerde geçerli olan bir depolama türüdür.</td>
+                <td>Nerede ilk tanımlanırsa, bir sonraki tanımları (değerlerini) yok sayan ve üzerine işlem yapıldığında her yerde geçerli olan bir depolama türüdür.</td>
                 <td>static ismi = değer</td>
             </tbody>
             <tbody>
@@ -171,9 +171,9 @@ int main()
     return 0;
 }</code>
 
-Bu programda s1 adlı değişkene, girilen sayıyı atıyoruz ve ekranda gösteriyoruz...</pre>
+Bu programda s1 adlı değişkene, kullanıcı tarafından girilen sayıyı atıyoruz ve ekranda gösteriyoruz...</pre>
 
-        <pre id="preh2">Eğer farklı türdeki değişkenler için kullanıcılardan veri alıcaksak eğer <code class="language-c">scanf</code> tırnaklar içerisindeki yüzdelik(%) işaretinin yanındaki harfi değiştirmeliyiz.Almak istediğimiz veri türleri için, tablodaki kullanımı uygulamalayız.</pre>
+        <pre id="preh2">Eğer farklı türdeki değişkenler için kullanıcılardan veri alıncak ise <code class="language-c">scanf</code> tırnaklar içerisindeki yüzdelik(%) işaretinin yanındaki harfi değiştirmeliyiz.Almak istediğimiz veri türleri için, tablodaki kullanımı uygulayabiliriz.</pre>
 
         <table id="tableh2" border="1">
             <thead>
@@ -203,7 +203,7 @@ Bu programda s1 adlı değişkene, girilen sayıyı atıyoruz ve ekranda göster
         </table>
 
         <h2>Değişken Türleri Dönüştürme</h2>
-        <pre id="preh2">Bazı durumlarda bizlere Float türü gerekirken, elde Integer oluyor. Bu durumu çözmek için değişken türlerini dönüştürürüz...</pre>
+        <pre id="preh2">Bazı durumlarda Float türü gerekirken, elde Integer oluyor. Bu durumu çözmek için değişken türlerini dönüştürürüz...</pre>
 
         <pre id="preh2">Aşağıdaki başlıkların altında önemli türlerin birbirleriyle dönüşümleri verilmiştir.</pre>
 
@@ -232,7 +232,7 @@ int main()
     return 0;
 }</code>
 
-Ekrana hem 1000'i Char[] olarak hem de Integer olarak yazar.</pre>
+Ekrana hem 1000'i Char[] olarak hem de Integer olarak yazılır.</pre>
 
         <h3>Char[] &rarr; Integer</h3>
         <pre id="codeh3"><code class="language-c">int sayi = 247593;
@@ -243,9 +243,9 @@ sprintf(yaziSayi, "%d",sayi);</code>
 Sayı ne kadar büyük ise köşeli parantezlere o kadar sayı yazılır.</pre>
 
         <h2>Sabitlik</h2>
-        <pre id="preh2">Değişkenler yapısı geriği değiştirebilir olarak yapıdadır. Ancak sabit değişkenlerde tanımlanabilir. Bir kere tanımlanır ardından hiç bir zaman değiştirilemez.</pre>
+        <pre id="preh2">Değişkenler yapısı geriği değiştirebilir olarak yapıdadır. Ancak sabit değişkenlerde tanımlanabilir. Bir kere tanımlanır ardından hiç bir zaman değiştirilemezler.</pre>
 
-        <pre id="preh2">İki tür sabitlik vardır. "<code class="language-c">const</code>" ve "<code class="language-c">#define</code>". Aralında fark yoktur. Sadece bellekte farklı şekillerde yer yaplarlar.</pre>
+        <pre id="preh2">İki tür sabitlik vardır. "<code class="language-c">const</code>" ve "<code class="language-c">#define</code>". Aralında fark yoktur. Sadece bellekte farklı şekillerde yer kaplarlar.</pre>
 
         <pre id="codeh2"><code class="language-c">#define DEGISKEN_ISMI 12
 int const degiskenIsmi = 12;</code></pre>
@@ -268,7 +268,7 @@ int main()
     return 0;
 }</code>
 
-Program çalıştırılıp çıktımıza bakılırsa "16" görülür.</pre>
+Program çalıştırılıp çıktımıza bakılırsa "16" görülmektedir.</pre>
 
         <h2>Kaynakça</h2>
         <ul>
