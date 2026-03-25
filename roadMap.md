@@ -68,6 +68,7 @@
   - **/**: Tanım. Örnek.
   - **%**: Tanım. Örnek.
   - **Bileşik Atama Operatörleri**: +=, -=, \*=, /=. Örnek.
+- **Yorum Satırı**: // ve /* */. Tanım. Örnek.
 - **Karşılaştırma Operatörleri**
   - **<, >, <=, >=, ==, !=**: Tanım. Örnek.
 - **Mantıksal Operatörler**
@@ -78,7 +79,6 @@
 - **Ternary**: Tanım. Örnek. Avantajı.
 - **sizeof Operatörü**: Tanım. Örnek.
 - **Yazdırma Komutunda % İle Veri Yazdırma**: Tanım. Örnek.
-- **Yorum Satırı**: // ve /* */. Tanım. Örnek.
  
 ---
  
