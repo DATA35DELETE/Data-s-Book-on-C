@@ -99,10 +99,14 @@ li {
     color: white;
     font-family:'Times New Roman', Times, serif;
     border-radius: 10px;
-    width: fit-content;
+    width: fit-content; 
     list-style-position: inside;
     text-align: left;
     display: list-item;
+    
+    word-break: break-all;
+    word-wrap: break-word;
+    white-space: pre-wrap;
 }
 #listh3 {margin-left: 2em;}
 
