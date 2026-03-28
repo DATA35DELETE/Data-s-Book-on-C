@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data's Book on C</title>
+
+    <link rel="icon" type="image/x-icon" href="../Sources/favicon.png">
+
+    <script src="../Sources/JS/setBackgroundMedia.js"></script>
+
+    <link rel="stylesheet" href="../Sources/JS/hljs/vs2015.css">
+    <script src="../Sources/JS/hljs/highlight.min.js"></script>
+    <script>
+        window.onload = function() {
+            hljs.highlightAll();
+        };
+    </script>
+
+    <link rel="stylesheet" href="../Sources/CSS/main.css">
+</head>
+<body>
+    <h1>Diziler ve Stringler</h1>
+
+    <div style="height: 100px;"></div>
+    
+    <div id="mainDiv">
+         <h2>Diziler Nedir?</h2>
+         <pre id="preh2">Diziler, bir değişkene birden fazla değer atmamızı sağlayan özel değişken tipleridir.</pre>
+
+         <pre id="codeh2"><code class="language-c">veriTipi diziIsmi[diziBoyutu] = {degerler}</code>
+        
+Şeklinde tanımlanırlar.</pre>
+
+        <pre id="preh2">Dizilerde Index mantığı vardır. Index, sıfırdan başlıyarak sonsuza kadar giden bir sıra belirliyicidir. Yani dizinin birinci elemanı Index'e göre sıfırdır. Dizideki bir değere erişmek için ise <code class="language-c">diziIsmi[indexNumarası]</code> şeklinde ulaşılır. Örnek; <code class="language-c">sayilar[2];</code> bu kısımda sayilar'daki üçüncü elemanı almış bulunmaktayız.</pre>
+
+        <pre id="preh2">C programlama dili manual bir dil olduğudan çoğu şeyi kendimiz yazmak zorundayız... Diğer dillerde bir dizinin eleman sayısını almak için hazır fonksiyonlar vardır. Fakat C programlama dilinde böyle bir hazır fonksiyon bulunmadığından kendimiz yazacağız. Bunun için <code class="language-c">sizeof(diziIsmi) / diziTurununRAMdeKapladigiAlanSayisi</code> komutunu kullanıcağız.</pre>
+
+        <pre id="preh2">Şimdi ise öğrendiklerimizi pekiştirmek için, sıfırdan ona kadar bir dizi oluşturalım ve For ile sırayla konsolda gösterelim.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+
+int main(){
+
+    int sayilar[]= {0,1,2,3,4,5,6,7,8,9,10};
+    
+    //    Sonuç: on bir yani sayilar dizisinin boyutu kadardır
+    //                                 |
+    for (int i = 0; i < sizeof(sayilar) / 4; i++)
+    {
+        printf("%d. Elemani: %d\n", i, sayilar[i]);
+    }
+    
+
+    return 0;
+}</code>
+
+Kod derlenip çalıştırıldığında tüm elemanları yazdırır.</pre>
+
+        <h3>Çok Boyutlu Diziler</h3>
+        <pre id="preh3">Çok boyutlu diziler, tek boyutlu dizilerden farklı olarak sütun ve satır şeklinde iki boyutlu ve benzeri diziler oluşturulabilir.</pre>
+
+        <pre id="preh3">Üç boyutlu verilen bir dörtgen prizmanın değerlerine göre, şeklinde alanını hesaplayan bir program yazalım. Değerleri ise kullanıcıdan alalım.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+
+int main(){
+
+    int dortgen[3] = {0,0,0};
+
+    printf("Dortgen prizmanin x degerini giriniz: ");
+    scanf("%d", &dortgen[0]);
+
+    printf("Dortgen prizmanin y degerini giriniz: ");
+    scanf("%d", &dortgen[1]);
+
+    printf("Dortgen prizmanin z degerini giriniz: ");
+    scanf("%d", &dortgen[2]);
+
+    printf("Dortgen prizmanin alani: %d", dortgen[0] * dortgen[1] * dortgen[2]);
+}
+</code>
+
+Böylelikle bir dörtgen prizmanın alanını hesaplama programımız oldu.</pre>
+
+
+        <h2>String</h2>
+        <pre id="preh2">String, programlamada metinsel ifadeleri içeren bir değişken türüdür. Lakin C programala dilinde String adlı bir değişken türü yoktur. Bunun sebebi, C programlama dilinin üretildiği zamanlarda String adlı bir veri türünün de olmamsı ve ihtiyaç da duyulmamasıdır. Fakat günümüzde diğer programalama dillerinde sıkça kullandığımız bu türü nasıl C programlama dilinde kullanıcağız? Değişkenler sayfasında değindimiz üzere şimdi String görevini üstlenen Char dizisini inceleyim.</pre>
+
+        <pre id="codeh2"><code class="language-c">char stringIfadeninIsmi[] = "String İfadenin İçeriği";</code>
+        
+Şeklinde tanımlanır.</pre>
+
+        <pre id="preh2">Bu tür diğer değişken türlerine hiç benzemez. Örneğin; atama operatörü ile bir String ifadeye bir değer atanamaz. Derleyici hata vericektir.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+
+int main(){
+
+    char helloWorld[0];
+
+    helloWorld = "Selam"; // Hata çıkıcaktır
+
+    printf("%s", helloWorld);
+}</code>
+
+Konsolda derlendiği zaman;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/8 C Diziler ve Döngüler.html/1.png" alt="8.1" width="800px">
+        </div>
+
+        <pre id="preh2">Bu sorunu çözmek için "String Fonksiyonları" konusunu inceleyim.</pre>
+
+        <h3>String Fonksiyonları</h3>
+        <pre id="preh3">String'ler özel olduklarından kendileri has fonksiyonlara sahiptirlerdir. Bu fonksiyonları kullanabilmek için <code class="language-c">#include &lt;string.h></code> kütüphanesini kod dosyamıza ekliyelim.</pre>
+
+        <h3>strcpy(string1, string2)</h3>
+        <pre id="preh3">Strcpy, string1'in içeriğini string2'i ile değiştirir.</pre>
+
+        <pre id="preh3">Şimdi ise baştaki sorunumuzu bu komut ile çözelim.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+#include &lt;string.h> // Eklenen kütüphane
+
+int main(){
+
+    char helloWorld[0];
+
+    strcpy(helloWorld, "Hello World");
+
+    printf("%s", helloWorld); // Printf'de bastırmak için %s kullanılır
+}</code>
+
+Kodları derlediğimizde sorunumuzun çözüldüğünü göreceğiz.</pre>
+
+
+        <h3>strcat(string1, string2)</h3>
+        <pre id="preh3">Strcat, string2'yi string1'in arkasına aktarır.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+#include &lt;string.h>
+
+int main(){
+
+    char hello[] = "Hello";
+
+    char world[] = "World";
+
+    strcat(hello, world);
+
+    printf("%s", hello);
+}</code>
+
+Çıktı "HelloWorld" olucaktır.</pre>
+
+        <h3>strlen(string1)</h3>
+        <pre id="preh3">Strlen, string1'in uzunluğunu verir.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+#include &lt;string.h>
+
+int main(){
+
+    char helloWorld[] = "Hello World";
+
+    printf("%d", strlen(helloWorld));
+}</code>
+
+Çıktımız "11" olucaktır.</pre>
+
+        <h3>strcmp(string1, string2)</h3>
+        <pre id="preh3">Strcmp, string1 ile string2'yi karşılaştırır. Eğer iki ifadede eşit ise sıfır, değil ise bir sonucunu verir.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+#include &lt;string.h>
+
+int main(){
+
+    char hello[] = "Hello";
+
+    if(!strcmp(hello, "Hello")){
+        printf("Hello World");
+    }
+}</code>
+
+Çıktımız "Hello World" olucaktır.</pre>
+
+
+
+         <h2>Kaynakça</h2>
+         <ul>
+            <li><a href="https://www.kodbloklari.com/c-dili-diziler/">https://www.kodbloklari.com/c-dili-diziler/</a></li>
+            <li><a href="https://www.kodbloklari.com/c-dili-cok-boyutlu-diziler/">https://www.kodbloklari.com/c-dili-cok-boyutlu-diziler/</a></li>
+            <li><a href="https://www.dijitalders.com/icerik/106/5468/c_programlamada_string_islemleri.html">https://www.dijitalders.com/icerik/106/5468/c_programlamada_string_islemleri.html</a></li>
+         </ul>
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <footer style="position: fixed; left: 0; bottom: 0; width: 100%; background: transparent; text-align: center; padding: 10px 0; z-index: 100;">
+        <div>
+            <a href="./7 C Döngü Yapıları.html" style="margin-right: 20px; cursor:pointer;">
+                &larr; Önceki
+            </a>
+            <a href="" style="cursor:pointer;">
+                Sonraki &rarr;
+            </a>
+        </div>
+        <div>
+            <p>&copy; 2026 Data's Book</p>
+        </div>
+
+        <div style="position: absolute; right: 1px; bottom: 20px; display: flex; align-items: center;">
+            <a href="./1 C İçindekiler.html" style="text-decoration: none;">
+                İçindekiler
+            </a>
+        </div>
+    </footer>
+</body>
+</html>
+
+<!-- Muhammet Enes nam-ı diğer Data Delete tarafından sevgi ile yapıldı <3 -->
