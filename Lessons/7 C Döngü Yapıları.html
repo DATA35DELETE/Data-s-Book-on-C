@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data's Book on C</title>
+
+    <link rel="icon" type="image/x-icon" href="../Sources/favicon.png">
+
+    <script src="../Sources/JS/setBackgroundMedia.js"></script>
+
+    <link rel="stylesheet" href="../Sources/JS/hljs/vs2015.css">
+    <script src="../Sources/JS/hljs/highlight.min.js"></script>
+    <script>
+        window.onload = function() {
+            hljs.highlightAll();
+        };
+    </script>
+
+    <link rel="stylesheet" href="../Sources/CSS/main.css">
+</head>
+<body>
+    <h1>Döngü Yapıları</h1>
+
+    <div style="height: 100px;"></div>
+    
+    <div id="mainDiv">
+        <h2>Döngü Nedir?</h2>
+        <pre id="preh2">Döngü, bir kod bloğunu birden fazla kez tekrar çalıştırılmasına denir.</pre>
+
+        <pre id="preh2">Döngü Yapıları, bir döngü oluşturarak program akışını değiştirebilirler. Aynı karar yapılarında olduğu gibi program akışında değişiklikler yapabilirler.</pre>
+
+        <pre id="preh2">Örneğin bir sayaç uygulaması yaptığımızı düşünelim. Her zaman için tek tek <code class="language-c">printf</code> komutu ile zamanı bildirirsek, belki yüz bin belki milyon satır kod yazmamız gerekebilir. Bu sorunu çözmek için ise döngü yapıları kullanılır. Döngü yapıları sayesinde yüzlerce satır kodluk işi sadece bir kaç satır kod ile yapabilmekteyiz.</pre>
+
+        <h2>While</h2>
+        <pre id="preh2">While, parantezlerindeki değer bir olduğu sürece kod bloğunu çalıştırmaktadır.</pre>
+
+        <pre id="preh2">Konumuzu pekiştirmek için bir proje yapalım. Projemiz sıfırdan yüze kadar sayıları yazdıran bir program yazalım. Ayrıca While parantezlerinde mantıksal ve karşılaştırma operatörleri kullanılabilir.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+
+int main(){
+
+    int sayac = 0;
+
+   while (sayac <= 100)
+   {
+        printf("Dongunun %d. adimi\n", sayac);
+
+        sayac++; // ++, bir arttırma operatörüdür
+   }
+}</code>
+
+Kodları derleyip çalıştırdığımız da sıfırdan yüze kadar tüm sayılar "Dongunun X. adimi" formatında yazılır.</pre>
+
+        <h3>Kısır Döngü</h3>
+        <pre id="preh3">While döngüsünde kısır döngü tehlikesi vardır. Eğer parantezlerine direk bir değerini yazarsak döngü sonsuza kadar çalışır ve program donanıma fazla yük bindirmesiyle sonuçlanır.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include <stdio.h>
+
+int main(){
+
+    int sayac = 0;
+
+   while (1)
+   {
+        printf("Dongunun %d. adimi\n", sayac);
+
+        sayac++;
+   }
+}</code>
+
+Program derlenip çalıştırıldığında, kaynak kullanımı CPU tarafında %5.4 gibi, bu program için absürt bir kullanıma sahiptir.</pre>
+
+        <h2>For</h2>
+        <pre id="preh2">For, miktarı belli olan ve "i" değişkeni ile döngünün hangi adımında olduğunu anlayabilceğimiz bir döngü yapısıdır.</pre>
+
+        <pre id="preh2">Şimdi ise While ile yaptığımız örneği For ile yapalım.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include <stdio.h>
+
+int main(){
+
+   for (int i = 0; i <= 100; i++)
+   {
+        printf("Dongunun %d. adimi\n", i);
+   }
+}</code>
+
+Kodları derleyip çalıştırdığımızda sonuç aynıdır. Tek farkları daha az kodla aynı işi yapabilmemizdir.</pre>
+
+        <h2>Break</h2>
+        <pre id="preh2">Break; döngü yapılarında Switch-Case-Default karar grubunda kullandığımız, döngülerde döngüyü "kırmak" yani durdurmak için kullanılan yardımcıdır.</pre>
+
+        <pre id="preh2">Bir önceki örneğimiz şu şekilde modifiye edelim. Döngü onuncu adıma geldiğinde kırılsın ve döngü son bulsun.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt,stdio.h>
+
+int main(){
+
+    // For döngüsü örneği
+    for (int i = 0; i <= 100; i++)
+    {
+        printf("Dongunun %d. adimi\n", i);
+
+        if (i >= 10) // Eğer bir satırlık bir iş varsa
+            break;   // kod bloğu açmayabiliriz
+    }
+
+
+    // While döngüsü örneği
+    int sayac = 0;
+
+    while (sayac <= 100)
+    {
+        sayac++;
+
+        printf("Dongunun %d. adimi\n", sayac);
+
+        if (sayac >= 10)
+            break;
+    }
+}</code>
+
+İki döngüde onuncu adımda son bulucaktır.</pre>
+
+        <h2>Continue</h2>
+        <pre id="preh2">Continue, döngüyü geçerli olan döngü adımının atlamasını sağlar.</pre>
+
+        <pre id="preh2">Pekiştirmek için önceki örneğimzde, on ila doksan arasındaki tüm döngü adımlarını atlasın.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include <stdio.h>
+
+int main(){
+
+    // For döngüsü örneği
+    for (int i = 0; i <= 100; i++)
+    {
+        if (i >= 10 && i <= 90)
+            continue;
+
+        printf("Dongunun %d. adimi\n", i);
+    }
+
+
+    // While döngüsü örneği
+    int sayac = 0;
+
+    while (sayac <= 100)
+    {
+        sayac++;
+
+        if (sayac >= 10 && sayac <= 90)
+            continue;
+
+        printf("Dongunun %d. adimi\n", sayac);
+    }
+}</code>
+
+Kodları derleyip çalıştırdığımız da döngülerin on ila doksan döngü adımlarını atladığını görmekteyiz.</pre>
+
+        <h2>Kaynakça</h2>
+        <ul>
+            <li><a href="https://www.dijitalders.com/icerik/106/5638/c_programlama_donguler.html">https://www.dijitalders.com/icerik/106/5638/c_programlama_donguler.html</a></li>
+            <li><a href="https://www.kodbloklari.com/c-dili-dongulerde-break-ve-continue-komutlari/">https://www.kodbloklari.com/c-dili-dongulerde-break-ve-continue-komutlari/</a></li>
+        </ul>    
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <footer style="position: fixed; left: 0; bottom: 0; width: 100%; background: transparent; text-align: center; padding: 10px 0; z-index: 100;">
+        <div>
+            <a href="./6 C Karar Yapıları.html" style="margin-right: 20px; cursor:pointer;">
+                &larr; Önceki
+            </a>
+            <a href="" style="cursor:pointer;">
+                Sonraki &rarr;
+            </a>
+        </div>
+        <div>
+            <p>&copy; 2026 Data's Book</p>
+        </div>
+
+        <div style="position: absolute; right: 1px; bottom: 20px; display: flex; align-items: center;">
+            <a href="./1 C İçindekiler.html" style="text-decoration: none;">
+                İçindekiler
+            </a>
+        </div>
+    </footer>
+</body>
+</html>
+
+<!-- Muhammet Enes nam-ı diğer Data Delete tarafından sevgi ile yapıldı <3 -->

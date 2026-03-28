@@ -89,11 +89,10 @@
  
 ---
  
-### C : Döngüler
+### C : Döngü Yapıları
 - **Döngü Nedir?**: Tanım. Örnek.
 - **while**: Tanım. Örnek.
 - **for**: Tanım. Örnek.
-- **do-while**: Tanım. Örnek. while ile Farkı.
 - **break ve continue**: Tanım. Örnek.
  
 ---

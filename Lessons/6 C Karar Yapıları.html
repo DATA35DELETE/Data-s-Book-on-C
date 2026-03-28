@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data's Book on C</title>
+
+    <link rel="icon" type="image/x-icon" href="../Sources/favicon.png">
+
+    <script src="../Sources/JS/setBackgroundMedia.js"></script>
+
+    <link rel="stylesheet" href="../Sources/JS/hljs/vs2015.css">
+    <script src="../Sources/JS/hljs/highlight.min.js"></script>
+    <script>
+        window.onload = function() {
+            hljs.highlightAll();
+        };
+    </script>
+
+    <link rel="stylesheet" href="../Sources/CSS/main.css">
+</head>
+<body>
+    <h1>Karar Yapıları</h1>
+
+    <div style="height: 100px;"></div>
+    
+    <div id="mainDiv">
+        <h2>Karar Yapıları Nedir?</h2>
+        <pre id="preh2">Karar yapıları, verilen koşula göre program akşının yolunu değiştirebilen yapılara denir.</pre>
+
+        <pre id="preh2">Program akışı, bir programdaki kodların çalışma sırasına denir. Program akışı kod dosyasının en başından en sonuna kadar kodları teker teker çalıştırmaktadır. Karar yapıları ise bu akışın bir kısmını değiştirememizi sağlayan yapılardır. Örneğin; A durumu için z kodlarını, B durumu için de y kodlarını çalıştırabiliriz. İşte bu gibi durumlarda karar yapıları kullanmaktadır.</pre>
+
+        <h2>If-Else If-Else</h2>
+        <pre id="preh2">Bu yapı grubu, karar yapılarınında sıkça kullanılan bir yapı grubudur.</pre>
+
+        <h3>If</h3>
+        <pre id="preh3">If, karar grubunun başıdır. Parantezlerindeki değer bir ise kod bloğundaki kodlar çalışır, sıfır ise kod bloğundaki kodlar çalışmaz.</pre>
+
+        <pre id="codeh3"><code class="language-c">// Kodlar...
+
+short int kosul1 = 1;
+if (kosul1)
+{
+    // kosul1 ifadesi bir olduğundan bu kısımdaki kodlar çalışıcaktır
+}
+
+// Kodlar...
+
+short int kosul2 = 0;
+if (kosul2)
+{
+    // kosul2 ifadesi sıfır olduğundan bu kısımdaki kodlar çalışmıcaktır
+}
+
+// Kodlar...</code></pre>
+
+        <pre id="preh3">Aynı zamanda operatörlerden karşılaştırma ve mantıksal operatörler ile de kullanımı mümkündür.</pre>
+
+        <pre id="codeh3"><code class="language-c">// Kodlar...
+
+if (100 > 19)
+{
+    // İfadenin sonucu 1 olduğundan bu kısımdaki kodlar çalışıcaktır
+}
+
+// Kodlar...
+
+if (1 && 0)
+{
+    // İfadenin sonucu 0 olduğundan bu kısımdaki kodlar çalışmıcaktır
+}
+
+// Kodlar...</code></pre>
+
+        <h3>Else If</h3>
+        <pre id="preh3">Else If, If'den sonra ki karar yapsıdır. Eğer If'in parantezlerindeki ifade sıfır ise program If'in altındaki Else If'lere bakmaya başlar. Ayrıca bir If'ten sonra birden fazla Else If koyulabilir.</pre>
+
+        <pre id="preh3">Else If ve birden fazla If kullanımın arasındaki fark ise mantık ve kullanım amacıdır. Eğer bir koşulu birden fazla If ile karar edersek, aynı kodların tekrar çalışabilir veya istenmeyen bir zamanda kodların çalıştırılabilir. Eğer Else If kullanırsak program akışı aynı zamanda tek yapıda karar gerçekleştirirken, aynı durum için birden fazla If kullanırsak ise program akışı gereğinden fazla karar yapar ve performans kayıplarına neden olabilir.</pre>
+
+        <pre id="preh3">O zaman konuyu pekiştirmek için bir örnek yazalım... Kullanıcının sınav sonucunu girip, sınav soncuna göre bir çıktı üreten bir program yazalım.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+
+int main(){
+
+    int sinav_sonucu = 0;
+
+    printf("Lutfen sinav sonucunuzu giriniz: ");
+
+    scanf("%d", &sinav_sonucu);
+
+    if (sinav_sonucu == 100)
+    {
+        printf("Sinavdan 100 alarak ustun bir basari gostediniz...");
+    }
+    else if (sinav_sonucu <= 99 && sinav_sonucu >= 80)
+    {
+        printf("Sinavda yuksek bir basari gostediniz...");
+    }
+    else if (sinav_sonucu <= 79 && sinav_sonucu >= 60)
+    {
+        printf("Sinavda iyi bir basari gostediniz...");
+    }
+    else if (sinav_sonucu <= 59 && sinav_sonucu >= 40)
+    {
+        printf("Sinavda ortalama bir basari gostediniz...");
+    }
+    else if (sinav_sonucu <= 39)
+    {
+        printf("Sinavda kotu bir basari gostediniz...");
+    }
+
+    return 0;
+}</code>
+
+Kodları derleyip çalıştırdığımız program çalışıcaktır ve girdiğiniz sınav sonucunuza göre çıktı varklı olucaktır.</pre>
+
+        <h3>Else</h3>
+        <pre id="preh3">Else, bu karar grubunun son yapısıdır. Eğer If ve Else If'ler çalışmaz ise kendi kod bloğu çalıştırılır.</pre>
+
+        <pre id="preh3">Else, bir If'in alt kısmına sadece bir kere yerleştirebilir. Parantezleri yoktur.</pre>
+
+        <pre id="preh3">Şimdi ise ufak bir proje daha yapalım. Bir seçim programı yazalım ve kullanıcı seçim ksımında olmayan bir numara girerse, Else ile karar edelim bir mesaj bildirelim.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+
+int main(){
+
+    printf("0: Cikis\n");
+    printf("1: Giris\n");
+    printf("2: Kayit Ol\n");
+
+    short int secim = 0;
+
+    printf("--> ");
+    scanf("%d", &secim);
+
+    if (secim == 0)
+    {
+        printf("\nCikis yapiliyor...");
+    }
+    else if (secim == 1)
+    {
+        printf("\nGiris yapiliyor...");
+    }
+    else if (secim == 2)
+    {
+        printf("\nKayit yapiliyor...");
+    }
+    else
+    {
+        printf("\nGecerli olmayan bir secim sectiniz");
+    }
+
+    return 0;
+}</code>
+
+Kodlayıp derliyelim ve çalıştıralım.</pre>
+
+        <h3>Switch-Case-Default</h3>
+        <pre id="preh3">Bu karar grubu ise tek bir değer karar edilicekse kullanılır. Yazılış şekilleri If-Else If-Else yapısından biraz farklıdır fakat aynı amaç için kullanılır.</pre>
+
+        <pre id="preh3">Switch'in parantezleri, Case'lerin karar edeceği değişken tanımlanır. Eğer Case'ler çalışmaz ise Default kısmı çalışmaktadır.</pre>
+
+        <pre id="preh3">Şimdi ise örneğimizi Switch-Case-Default ile yeniden yazalım.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+
+int main(){
+
+    printf("0: Cikis\n");
+    printf("1: Giris\n");
+    printf("2: Kayit Ol\n");
+
+    short int secim = 0;
+
+    printf("--> ");
+    scanf("%d", &secim);
+
+    switch (secim)
+    {
+    case 0:
+        printf("\nCikis yapiliyor...");
+        break;
+    case 1:
+        printf("\nGiris yapiliyor...");
+        break;
+    case 2:
+        printf("\nKayit yapiliyor...");
+        break;
+    default:
+        printf("\nGecerli olmayan bir secim sectiniz");
+        break;
+    }
+
+    return 0;
+}</code></pre>
+
+        <h2>Kaynakça</h2>
+        <ul>
+            <li><a href="https://www.cdersleri.com/c-dilinde-if-else-deyimi">https://www.cdersleri.com/c-dilinde-if-else-deyimi</a></li>
+            <li><a href="https://www.guru99.com/tr/c-switch-case-statement.html">https://www.guru99.com/tr/c-switch-case-statement.html</a></li>
+        </ul>
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <footer style="position: fixed; left: 0; bottom: 0; width: 100%; background: transparent; text-align: center; padding: 10px 0; z-index: 100;">
+        <div>
+            <a href="./5 C Operatörler.html" style="margin-right: 20px; cursor:pointer;">
+                &larr; Önceki
+            </a>
+            <a href="./7 C Döngü Yapıları.html" style="cursor:pointer;">
+                Sonraki &rarr;
+            </a>
+        </div>
+        <div>
+            <p>&copy; 2026 Data's Book</p>
+        </div>
+
+        <div style="position: absolute; right: 1px; bottom: 20px; display: flex; align-items: center;">
+            <a href="./1 C İçindekiler.html" style="text-decoration: none;">
+                İçindekiler
+            </a>
+        </div>
+    </footer>
+</body>
+</html>
+
+<!-- Muhammet Enes nam-ı diğer Data Delete tarafından sevgi ile yapıldı <3 -->
