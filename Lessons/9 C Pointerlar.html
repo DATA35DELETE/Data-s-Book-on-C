@@ -26,12 +26,13 @@
     
     <div id="mainDiv">
         <h2>Pointer Nedir?</h2>
-        <pre id="preh2">Türkçesiyle işaretçi anlamına gelen Pointer, bir yapının bellekdeki adresiyle ilgili işlem yapmamızı sağlayan bir değişken türüdür.</pre>
+        <pre id="preh2">Türkçesiyle işaretçi anlamına gelen Pointer, bir yapının bellekdeki adresiyle ilgili işlem yapmamızı sağlayan bir araçtır.</pre>
 
-        <pre id="preh2">İlk olarak bellek adresi nedir onu amlatalım. Her bir değişkenin tutulduğu her adrese bellek adresi denir. Bunu evinizin adresi olarak düşünebilirsiniz. Aynı sizin gibi yapılarında bir bellek adresleri vardır.</pre>
+        <pre id="preh2">İlk olarak bellek adresi nedir onu amlatalım. Her bir yapının RAM'da tutulduğu her adrese bellek adresi denir. Bunu evinizin adresi olarak düşünebilirsiniz. Aynı sizin gibi yapılarında bir bellek adresleri vardır.</pre>
 
-        <pre id="preh2">Peki neden bellek adresine ihtiyaç duyalım ki? Bu soruyu bir kargocuya "Senin neden bir ev adresine ihtiyacın var ki?" demekle eş değerdir. Çünkü yapıcağımız işlemlerin hangi değişkene yapılması gerektiğini program bilemez. İşte bu durumlar için bellek adresleri vardır. C programalama dilinde değişkenlere bir işlem yapıldığında genelde onun kopyası üzerine yapılır. Ama bazı durumlarda direkt orjinalin üstünde işlem yapmamız gerekir. Daha görmedik ama örnek olarak fonksiyonlarda paramtre göndermini verebiliriz. Paramtre yani bir değişken gönderirken fonksiyonlara, gönderilen değişkenin kopyasını göndermiş oluruz. Bu durum orjinali üzerinde işlem yapmamızı engeller niteliktedir. Bu sebeble bellek adresleri kullanılır.</pre>
+        <pre id="preh2">Peki neden bellek adresine ihtiyaç duyalım ki? Bu soruyu bir kargocuya "Senin neden bir ev adresine ihtiyacın var ki?" demekle eş değerdir. Çünkü yapıcağımız işlemlerin hangi değişkene yapılması gerektiğini program bilemez. İşte bu durumlar için bellek adresleri vardır. C programalama dilinde değişkenlere bir işlem yapıldığında genelde onun kopyası üzerine yapılır. Ama bazı durumlarda direkt orjinalin üstünde işlem yapmamız gerekir. Daha görmedik ama örnek olarak fonksiyonlarda paramtre gönderim örneğini verebiliriz. Paramtre yani bir değişken gönderirken fonksiyonlara, gönderilen değişkenin kopyasını göndermiş oluruz. Bu durum orjinali üzerinde işlem yapmamızı engeller niteliktedir. Bu sebeble bellek adresleri kullanılır.</pre>
 
+        <h2>Pointer Tanımlama</h2>
         <pre id="preh2">İşaretçiler için iki araca ihtiyaç duymaktayız. yıldız(*) ve ampersand(&) işaretleri kullanılır.Ampersend, kullanılan yapının adresini verirken yıldız ise o bellek adresindeki değere ulaşmak veya değiştirmek için kullanılır.</pre>
 
         <pre id="preh2">Şimdi ise ufak bir örnek yapalım. İki adet değişken tanımlayalım. Biri normal int türünde diğeri ise öncekinin adresini tutucak Pointerlı int türünde. Pointerlı olanı üzerinde işlemler yapalım ve ekrana Pointersız olanı bastıralım.</pre>
@@ -54,11 +55,90 @@ int main(){
 
 Sırayla konsolda; "5", "15" ve "35" çıktılarını vericektir.</pre>
 
+        <h2>Pointer Aritmetiği</h2>
+        <pre id="preh2">Pointer aritmetiği, Pointer olan bir değişkeni artırma veya azaltma işlemlerine denir.</pre>
+
+        <pre id="preh2">Bu sistem biraz karmaşık gözüksede aslında dizilerin var olmasını sağlayan önemli bir araçtır. Dizideki veriler aslında bellek sıralanmış şeklinde güzükmektedirler. Örneğin, bir Integer türünde üç elemanlı bir dizimiz olsun. Dizimizin sıfır Index'li elemanın bellek adresi ise "1000" olarak düşünürsek, birinci Index'li elemanın bellek adresi ise "1004" olmalıdır.</pre>
+
+        <pre id="preh2">Teorik olarak anlatığımız örneğimizi pratiğe dökelim...</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+
+int main(){
+
+    int sayilar[] = {10,20,30};
+    int *sayilarPtr = sayilar; // sayilar'ın Pointer'ini atama
+
+    printf("0. Index: %d\n0. Index Bellek Adresi: %p\n", *sayilarPtr, &sayilar[0]); // 10
+    printf("1. Index: %d\n1. Index Bellek Adresi: %p\n", *(sayilar + 1), &sayilar[1]); // 20
+    printf("2. Index: %d\n2. Index Bellek Adresi: %p", *(sayilar + 2), &sayilar[2]); // 30
+}</code>
+
+Derleyim çalıştırdığımız da bu ekran görüntüsüne benzer bir görüntü görmeliyiz.</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/9 C Pointer.html/1.png" alt="9.1" width="800px">
+        </div>
+
+        <pre id="preh2">Ekran görüntüsünde de olduğu gibi bellek adresileri artı dört şeklinde artmaktadır.</pre>
+
+        <h3>Char Dizisinde Pointer Aritmetiği</h3>
+        <pre id="preh3">Integer dizisinden farkı yoktur. Sadece dört dört artmak yerine bir bir artmaktadır bellek adresleri</pre>
+
+        <pre id="preh3">Integer veri türüd dizisi için verdiğimiz örneği bir String ifadede yani Char veri türü disinde uygulayalım.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include <stdio.h>
+
+int main(){
+
+    char harfler[] = "abc";
+    char *harflerPtr = harfler; // harfler'in Pointer'ini atama
+
+    printf("0. Index: %d\n0. Index Bellek Adresi: %p\n", *harflerPtr, &harfler[0]); // a
+    printf("1. Index: %d\n1. Index Bellek Adresi: %p\n", *(harflerPtr + 1), &harfler[1]); // b
+    printf("2. Index: %d\n2. Index Bellek Adresi: %p", *(harflerPtr + 2), &harfler[2]); // c
+}</code>
+
+Derleyim çalıştırdığımızda;</pre>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/9 C Pointer.html/2.png" alt="9.2" width="800px">
+        </div>
+
+        <pre id="preh3">Benzer bir görüntü karşımızda olucaktır.</pre>
+
+        <h2>Fonksiyonlarda Pointer Kullanımı</h2>
+        <pre id="preh2">Aynı dizeler ve değişkenler gibi fonksiyonlarda da bellek adresi vardır. Dolayısıyla Pointer kullanımı vardır.</pre>
+
+        <pre id="preh2">Bu durumu ufak bir örnek ile anlatalım. Bir fonksiyonu hem normal hem de Pointer'lı halini kullanalım. Fonksiyonlar konusuna geldiğimizde daha iyi anlıcaksınızdır fakat bu sayfadaki çok kapsamlı olduğundan değinmeden geçemem.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+
+int selamla(){
+    printf("Hello!\n");
+
+    return 0;
+}
+// Bu fonksiyon ekrana "Hello!" yazdırmaktadır
+
+int main(){
+
+    selamla(); // Noormal fonksiyon çağrısı
+
+    int (*selamlaPtr)() = &selamla; // Tanımlıyoruz
+
+    selamlaPtr(); // Pointer'lı fonksiyon çağrısı
+}</code>
+
+Çıktımız iki türlü fonksiyon çağrısı içinde aynı olucaktır.</pre>
+
         <h2>Kaynakça</h2>
         <ul>
             <li><a href="https://sonsuzus.github.io/posts/c_isaretci">https://sonsuzus.github.io/posts/c_isaretci</a></li>
             <li><a href="https://karakasu.medium.com/c-dilinde-i̇şaretçi-aritmetiği-pointer-arithmetic-f11c194391bd">https://karakasu.medium.com/c-dilinde-i̇şaretçi-aritmetiği-pointer-arithmetic-f11c194391bd</a></li>
             <li><a href="https://www.youtube.com/watch?v=wn4hVGcPhnE">https://www.youtube.com/watch?v=wn4hVGcPhnE</a></li>
+            <li><a href="https://www.w3schools.com/c/c_pointers_arithmetic.php">https://www.w3schools.com/c/c_pointers_arithmetic.php</a></li>
+            <li><a href="https://www.geeksforgeeks.org/c/function-pointer-in-c/">https://www.geeksforgeeks.org/c/function-pointer-in-c/</a></li>
         </ul>    
     </div>
 

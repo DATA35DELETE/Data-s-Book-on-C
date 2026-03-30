@@ -111,6 +111,17 @@
  
 ### C : Pointerlar
 - **Pointer Nedir?**: Tanım. Bellek Adresi. Örnek.
+- **Pointer Tanımlama**: \* ve & operatörleri. Örnek.
+- **Pointer Aritmetiği**: Tanım. Örnek.
+  - **Char Dizisinde Pointer Aritmetiği**
+- **Pointer ve Fonksiyonlar**: Call by Reference. Örnek.
+- **Çift Pointer (Double Pointer)**: Tanım. Örnek.
+- **NULL Pointer**: Tanım. Güvenli Kullanım. Örnek.
+- **Function Pointers**: Tanım. Kullanım Senaryoları.
+  - **Tanımlama ve Kullanma**: Sözdizimi. Örnek.
+  - **Callback Yapısı**: Tanım. Örnek.
+  - **Function Pointer Dizisi**: Tanım. Örnek.
+  - **Plugin Sistemi**: Tanım. Örnek.
 
 ---
  
