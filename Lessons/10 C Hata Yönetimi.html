@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data's Book on C</title>
+
+    <link rel="icon" type="image/x-icon" href="../Sources/favicon.png">
+
+    <script src="../Sources/JS/setBackgroundMedia.js"></script>
+
+    <link rel="stylesheet" href="../Sources/JS/hljs/vs2015.css">
+    <script src="../Sources/JS/hljs/highlight.min.js"></script>
+    <script>
+        window.onload = function() {
+            hljs.highlightAll();
+        };
+    </script>
+
+    <link rel="stylesheet" href="../Sources/CSS/main.css">
+</head>
+<body>
+    <h1>Hata Yönetimi</h1>
+
+    <div style="height: 100px;"></div>
+    
+    <div id="mainDiv">
+        <h2>Hata Yönetimi</h2>
+        <pre id="preh2">Hata yönetimi; bir programda bir hata oluştuğunda, o hatayı algılayıp program daha çökmeden yönetim sistemine hata yönetimi denir.</pre>
+
+        <pre id="preh2">Diğer dillerde <code>try catch</code> gibi yapılarla hata yönetimi yapılır. Fakat C programalam dilinde bu tarz hazır yapıları bulunmadığından kendimiz bu işi halletme durumundayız. C programlama dilinde <code class="language-c">errno</code> adı verilen bir global hata yönetim değişkeni vardır. Örneğin, dosya veya bellek tahsis işlemlerinde bir hata meydana geldiğinde, meydana gelen hata kodu <code>errno</code> değişkenine kayıt edilir. Biz ise mevzu bahis işlemlerin ardından <code>errno</code>'yu kontrol ederek "Bir hata meydana gelmiş mi?" şeklinde hata yönetimi sağlarız.</pre>
+
+        <pre id="preh2">Pointer'lar sayfamızda NULL'u görmüştük. Benzer şekilde hata veren işlemlerde NULL verir fakat bir yandan da <code>errno</code> değişkenine hata kodlarını kayıt eder.</pre>
+
+        <h3>Hata Kodları ve Anlamları</h3>
+        <pre id="preh3">Her bir hatanın anlamı ve kodu vardır. Şimdi ise tablo şeklinde inceleyelim.</pre>
+
+        <table id="tableh3" border="1">
+            <thead>
+                <tr>
+                    <th>Hata Kodu</th>
+                    <th>Anlamı</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0</td>
+                    <td>Hata Yok</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>İşlemeye İzin Verilmiyor</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Böyle Bir Dizin veya Dosya Yok</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Böyle Bir Süreç Yok</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Kesintiye Uğramış Sistem Çağrısı</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>G/Ç Hatası</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>Böyle Bir Cihaz veya Adres Yok</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>Argüman Listesi Çok Uzun</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>Yürütme Biçimi Hatası</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>Geçersiz Dosya Numarası</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>Çocuk Süreçleri Yok</td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td>Tekrar Deneyin</td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td>Hafıza Yetersiz</td>
+                </tr>
+                <tr>
+                    <td>13</td>
+                    <td>İzin Red Edildi</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <pre id="preh3">Pekiştirmek için bir örnek yapalım. Olmayan bir dosyayı açmaya çalışalım ve hata kodunu gözlemliyelim. Dosya işlemlerini öğrenmemiş olsak da hata yönetimi en çok bu işlemlerde yapılır. Dosya İşlemleri sayfamızda daha detaylı işleyeğiz.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+#include &lt;errno.h> // Kütüphanemiz
+
+int main(){
+
+    FILE *olmayanDosya = fopen("olmayanBirDosya.x", "r"); // Olmayan bir dosyayı açmak
+
+    printf("Hata Kodu: %d", errno); // Hata kodumuzu konsolda yazdırlım...
+
+    fclose(olmayanDosya); // Bellek yönetimi için dosyamzıdan çıkalım
+}</code>
+
+Kodumuz derlenip çalıştırıldığında "Hata Kodu: 2" şeklinde bir yazı karşınıza çıkıcaktır.</pre>
+
+        <h2>Perror()</h2>
+        <pre id="preh2">Bu fonksiyon, <code>errno</code> göre bizlere ekranımıza hata mesajını bastırmamızı sağlar.</pre>
+
+        <pre id="preh2">Şimdi ise kodumuzu bu fonksiyonumuzu ekliyelim.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt,stdio.h>
+#include &lt;errno.h> // Kütüphanemiz
+
+int main(){
+
+    FILE *olmayanDosya = fopen("olmayanBirDosya.x", "r"); // Olmayan bir dosyayı açmak
+
+    printf("Hata Kodu: %d\n", errno); // Hata kodumuzu konsolda yazdırlım...
+    perror("Hata Mesaji"); // Hata koduna göre hata mesajını verir...
+
+    fclose(olmayanDosya); // Bellek yönetimi için dosyamzıdan çıkalım
+}</code></pre>
+
+        <h2>Strerror()</h2>
+        <pre id="preh2">Bu fonksiyon ise verilen hata kodlarının, hata mesajlarının sonucunu verir.</pre>
+
+        <pre id="preh2">Şimdi ise sıfırdan on üçe kadar hata kodlarının mesajlarını ekrana yazalım.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+#include &lt;errno.h>
+#include &lt;string.h> // Strerror için string.h kütüphanemiz de lazım olmakla
+
+int main(){
+
+    for (int i = 0; i <= 13; i++)
+    {
+        printf("%d hata kodunun mesaji: %s\n", i, strerror(i));
+    }
+
+    strerror(errno); // errno ile kullanımı
+
+    return 0;
+}</code>
+
+Kodumuzun çıktısı, sırasıyla hata kodları ve onuların hata mesajlarıdır.</pre>
+
+        <h2>Kaynakça</h2>
+        <ul>
+            <li><a href="https://www.w3schools.com/c/c_error_handling.php">https://www.w3schools.com/c/c_error_handling.php</a></li>
+            <li><a href="https://www.tutorialspoint.com/cprogramming/c_error_handling.htm">https://www.tutorialspoint.com/cprogramming/c_error_handling.htm</a></li>
+        </ul>    
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <footer style="position: fixed; left: 0; bottom: 0; width: 100%; background: transparent; text-align: center; padding: 10px 0; z-index: 100;">
+        <div>
+            <a href="./9 C Pointerlar.html" style="margin-right: 20px; cursor:pointer;">
+                &larr; Önceki
+            </a>
+            <a href="" style="cursor:pointer;">
+                Sonraki &rarr;
+            </a>
+        </div>
+        <div>
+            <p>&copy; 2026 Data's Book</p>
+        </div>
+
+        <div style="position: absolute; right: 1px; bottom: 20px; display: flex; align-items: center;">
+            <a href="./1 C İçindekiler.html" style="text-decoration: none;">
+                İçindekiler
+            </a>
+        </div>
+    </footer>
+</body>
+</html>
+
+<!-- Muhammet Enes nam-ı diğer Data Delete tarafından sevgi ile yapıldı <3 -->
