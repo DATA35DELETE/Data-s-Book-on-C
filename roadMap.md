@@ -26,7 +26,7 @@
 - **İlk Kod**: printf
 - **Parametreli Programlar Yazma**: argc ve argv. Tanım. Örnek.
 - **Derleme Süreci**: Tanım. Neden Önemli?
-  - **Ön İşleme(Preprocessor) (.i)**: Makro genişletme. Header birleştirme. Örnek.
+  - **Ön İşleme (Preprocessor) (.i)**: Makro genişletme. Header birleştirme. Örnek.
   - **Derleme (.o)**: Object dosyası. Semboller. Örnek.
   - **Linking**: Object dosyalarını birleştirme. Static vs Dynamic. Link Hataları. Örnek.
  
@@ -122,7 +122,7 @@
   - **Callback Yapısı**: Tanım. Örnek.
   - **Function Pointer Dizisi**: Tanım. Örnek.
   - **Plugin Sistemi**: Tanım. Örnek.
-
+ 
 ---
  
 ### C : Hata Yönetimi
@@ -202,6 +202,14 @@
   - **Linux (POSIX)**: open, read, write, close. Örnek.
   - **Dosya Tanımlayıcıları (fd)**: Tanım. Örnek.
   - **Dosya İzinleri**: chmod. Örnek.
+  - **Windows API (windows.h)**: Tanım. POSIX ile Farkı. Kullanım Senaryoları.
+    - **HANDLE Kavramı**: Tanım. Örnek.
+    - **CreateFile**: Tanım. Parametreler. Örnek.
+    - **ReadFile / WriteFile**: Tanım. Örnek.
+    - **CloseHandle**: Tanım. Bellek Yönetimi. Örnek.
+    - **Dosya İzinleri ve Özellikleri**: SetFileAttributes. GetFileAttributes. Örnek.
+    - **Dizin İşlemleri**: CreateDirectory. RemoveDirectory. Örnek.
+    - **Hata Yönetimi**: GetLastError. FormatMessage. Örnek.
 - **JSON Dosyası**: JSON Nedir?
   - **JSON Mantığı**: Tanım. Yapısı.
   - **cJSON Kütüphanesi**: Kurulum. Örnek.
