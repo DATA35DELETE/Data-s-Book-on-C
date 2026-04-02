@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data's Book on C</title>
+
+    <link rel="icon" type="image/x-icon" href="../Sources/favicon.png">
+
+    <script src="../Sources/JS/setBackgroundMedia.js"></script>
+
+    <link rel="stylesheet" href="../Sources/JS/hljs/vs2015.css">
+    <script src="../Sources/JS/hljs/highlight.min.js"></script>
+    <script>
+        window.onload = function() {
+            hljs.highlightAll();
+        };
+    </script>
+
+    <link rel="stylesheet" href="../Sources/CSS/main.css">
+</head>
+<body>
+    <h1>Fonksiyonlar</h1>
+
+    <div style="height: 100px;"></div>
+    
+    <div id="mainDiv">
+        <h2>Fonksiyon Nedir?</h2>
+        <pre id="preh2">Fonksiyonlar, programlamada çalıştıralablir kod bütünlerdir.</pre>
+
+        <pre id="preh2">Fonksiyonlar, kodlarımızı daha iyi yönetmemizi ve düzenlememizi sağlayan yapıladır. Bir çok yerde karşımıza çıkmakta olan fonksiyonlar; String ve dosya işlemleri gibi hazır durumdada bulanabilirler.</pre>
+
+        <pre id="preh2">Fonksiyonlarda dikkat edilmesi gereken kısım ise çağrılıcak satırdan önce tanımlanması veya tanıtılması gerekir. Yoksa program "implicit declaration of function" hatasını vericektir.</pre>
+
+        <pre id="codeh2">Fonksiyon tanımlamak için;
+
+<code class="language-c">donusVeriTipi fonksiyonIsmi(&lt;parametreler>)
+{ // Kod bloğu başlangıcı
+
+    // Kodlar...
+
+} // Kod bloğu bitişi
+</code>
+
+Şeklinde tanımlanır.</pre>
+
+        <pre id="preh2">Şimdi bir iki artı iki işleminin sonucu ekrana yazdıran bir program yazalım.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+
+int ikiArtiIki(){ // Fonksiyonumuz
+    
+    printf("2 + 2 = %d\n", 2 + 2); // İşlemimiz
+}
+
+int main() {
+    ikiArtiIki(); // Fonksiyonu çağırdık
+
+    return 0;
+}</code>
+
+Çıktımız "2 + 2 = 4" olucaktır.</pre>
+
+        <pre id="preh2">Bu örnek bir önden tanımlı bir fonksiyon örneğiydi. Şimdi ise önden tanıtımlı örneği görelim.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+
+int ikiArtiIki(); // Fonksiyonumuzu programa tanttık
+
+int main() {
+    ikiArtiIki(); // Fonksiyonu çağırdık
+
+    return 0;
+}
+
+int ikiArtiIki(){ // Tanıttığımız fonksiyonu tanımladık
+    
+    printf("2 + 2 = %d\n", 2 + 2); // İşlemimiz
+}</code>
+
+Çıktımız aynı olucaktır. Fakat kodsal olaral mevzu bahis fonksiyonumuzu, çağrıldığı kısımdan sonra tanımlamış olduk. Fakat yine önden tanıtım yapmamız gerekti.</pre>
+
+        <pre id="preh2">İsimlendirme kuralları ise değişkenlerin isimlendirme kuralları ile aynıdır.</pre>
+
+        <h3>Main Fonksiyonu</h3>
+        <pre id="preh3">Main fonksiyonu programın başlangıç kısmıdır ve bir projede tek bir Main fonksiyonu yer almalıdır. Eğer bir projede Main fonksiyonu yazılmaz ise program hata vericektir. Yani bir nevi ilk kodların çalıştırıldığı fonksiyondur.</pre>
+
+        <h2>Void'li Fonksiyonlar</h2>
+        <pre id="preh2">Void'li fonksiyonlar, çağrıldıklarında bir sonuç vermeyen fonksiyonlardır.</pre>
+
+        <pre>Şimdi ise ekrana "Hello World" yazısını yazdıran bir Void fonksiyon yazalım.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+
+void sayHelloWorld() // Fonksiyonumuz
+{
+    printf("Hello World\n");
+}
+
+int main() {
+    sayHelloWorld(); // Fonksiyonu çağırdık
+
+    return 0;
+}
+</code>
+
+Çıktımız "Hello World1 olucaktır.</pre>
+
+        <h2>Return'lü Fonksiyonlar</h2>
+        <pre id="preh2">Return'lü fonksiyonlar ise çağrıldıklarına bir sonuc veren fonksiyonlardır. Void fonksiyonlar aksine bir değer verirler. Değer verme ise Return anahtar kodu ile sağlanır.</pre>
+
+        <pre id="preh2">Şimdi ise "Hello World" yazısını şimdi bir fonksiyon aracılığı ile bir değişkene atayalım ve Main'den ekrana bastıralım.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+
+char* getHelloWorld() // Fonksiyonumuz
+{
+    return "Hello World"; // Verilen değerimiz
+}
+
+int main() {
+    char *yazi = getHelloWorld(); // Fonksiyonu çağırdık ve değişkenimize atadık
+    
+    printf("Fonksiyondan alinin deger: %s", yazi); // Fonksiyondan alınan değeri yazdırdık
+
+    return 0; // Main return'u aynı zamanda Main'nin dönüş değeridir
+}</code>
+
+Çıktımız "Fonksiyondan alinin deger: Hello World" olucaktır.</pre>
+
+        <h2>Parametreli Fonksiyonlar</h2>
+        <pre id="preh2">Paramtreli fonksiyonlar ise fonksiyonun parantezlerinde istenen verilerle alınır. Fonksiyon çağrılırken değerler parantezlere yazılır. Sırayla atanır. Aynı zamanda atanan değerler, orjinal değişkenlerin kopyasıdır.</pre>
+
+        <pre id="preh2">Şimdi ise iki tane paramtre alan ve toplama yapan bir fonksiyon yazalım. Birinci paramtreyi sonucu Pointer aracılığıyla atayan, ikinci ise toplanan olarak kullanılır.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+
+void topla(int *taban, int toplanan) // Fonksiyonumuz
+{
+    *taban += toplanan;
+}
+
+int main() {
+    int x = 15; // Taban olucak değişkenmize 15 değerini atadık
+    
+    topla(&x, 6); // Fonksiyonumuzu çağralım. Birinci paramtre Pointerlı olduğundan ampersend'li yani bellek adresini gönderdik
+    
+    printf("Islemin sonucu = %d", x); // İşlemlerin ardından x'i ekrana yazdıralım
+
+    return 0;
+}</code>
+
+Çıktımız "Islemin sonucu = 21" olucaktır.</pre>
+
+        <h2>Özyenilemeli Fonksiyonlar</h2>
+        <pre id="preh2">Bu fonksiyonlar ise fonksiyon içersinde kendini tekrar çağıran fonksiyonlara denir.</pre>
+
+        <pre id="preh2">Döngü ile yaptığımız birden ona kadar ekrana yazdırma örneğimizi özyenilemeli fonksiyonlarda yapalım.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+
+int sirala(int *taban) // Fonksiyonumuz
+{
+    *taban += 1;
+    
+    printf("%d\n", *taban);
+    
+    if(*taban >= 10)
+        return 0; // 10'a geldiğinde fonksiyonu sonlandır
+    else
+        sirala(taban);
+}
+
+int main() {
+    int x = 0;
+    
+    sirala(&x); // Fonksiyonumuzu çağrılarım
+
+    return 0;
+}
+</code>
+
+Çıktımız birden ona kadar sayılar olucaktır.</pre>
+
+        <h2>Kaynakça</h2>
+        <ul>
+            <li><a href="https://web.cs.hacettepe.edu.tr/~maydos/Docs/c/fonksyon.pdf">https://web.cs.hacettepe.edu.tr/~maydos/Docs/c/fonksyon.pdf</a></li>
+        </ul>    
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <footer style="position: fixed; left: 0; bottom: 0; width: 100%; background: transparent; text-align: center; padding: 10px 0; z-index: 100;">
+        <div>
+            <a href="./10 C Hata Yönetimi.html" style="margin-right: 20px; cursor:pointer;">
+                &larr; Önceki
+            </a>
+            <a href="" style="cursor:pointer;">
+                Sonraki &rarr;
+            </a>
+        </div>
+        <div>
+            <p>&copy; 2026 Data's Book</p>
+        </div>
+
+        <div style="position: absolute; right: 1px; bottom: 20px; display: flex; align-items: center;">
+            <a href="./1 C İçindekiler.html" style="text-decoration: none;">
+                İçindekiler
+            </a>
+        </div>
+    </footer>
+</body>
+</html>
+
+<!-- Muhammet Enes nam-ı diğer Data Delete tarafından sevgi ile yapıldı <3 -->
