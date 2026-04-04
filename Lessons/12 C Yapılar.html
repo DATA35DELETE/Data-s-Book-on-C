@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data's Book on C</title>
+
+    <link rel="icon" type="image/x-icon" href="../Sources/favicon.png">
+
+    <script src="../Sources/JS/setBackgroundMedia.js"></script>
+
+    <link rel="stylesheet" href="../Sources/JS/hljs/vs2015.css">
+    <script src="../Sources/JS/hljs/highlight.min.js"></script>
+    <script>
+        window.onload = function() {
+            hljs.highlightAll();
+        };
+    </script>
+
+    <link rel="stylesheet" href="../Sources/CSS/main.css">
+</head>
+<body>
+    <h1>Yapılar</h1>
+
+    <div style="height: 100px;"></div>
+    
+    <div id="mainDiv">
+        <h2>Struct Nedir?</h2>
+        <pre id="preh2">Scructs, C programlama dilinde özelleştirilmiş değişken türlerini oluşturmak için kullanılan bir araçtır.</pre>
+
+        <pre id="preh2">Diğer modern dillerde Struct'lara benzer olarak Class'lar OOP prensibi vardır. Bu kavramların C programlama dilindeki karşılığı olarak Struct'lar vardır.</pre>
+
+        <pre id="preh2">Peki Struct dediğimiz bu araç aslında ne yapıyor? Ne gibi işlerimiz için kullanıcağız? Neden kullanmalıyız? Gibi sorunların cevabı için Struct konusuna giriş yapalım...</pre>
+
+        <h2>Struct Tanımlama ve Kullanımı</h2>
+        <pre id="preh2">Struct tanımlamak için <code class="language-c">struct</code> anahtar kelimesini kullanmalıyzı. Ardından Struct adını ve küme parantezlerini açıyoruz. Küme parantezlerinde Struct içersinde olmasını istediğim değişkenin türünü ve ismini girip son olarak noktalı virgül koyuruz. Bu işlemi istediğiniz kadar yapabilirsiniz. Son olarak küme parantezlerini kapatıp noktalı virgülümüzü konuyoruz.</pre>
+
+        <pre id="codeh2"><code class="language-c">struct structIsmi{
+    int s1;
+    char* metin1;
+
+    ...
+};</code>
+
+Şeklinde formülü verebiliriz.</pre>
+
+        <pre id="preh2">İsimlendirme kuralları ise değişkenlerin isimlendirme kurallarıyla aynıdır.</pre>
+
+        <pre id="preh2">Değişken türümüzü oluşturmuş olduk. Şimdi ise oluşturduğumuz değişken tipimizi bir değişkene atayalım ve verileri atayıp ekrana basalım.</pre>
+
+        <pre id="preh2">"kullanıcı" adlı bir Struct oluşturalım. İçersine "name", "id" ve "cash" olsun. Ardından Struct oluşturalım ve bir değişkene atayalım. Verileri dolduralım ve ekrana yazdıralım.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+#include &lt;string.h>
+
+struct kullanci
+{
+    char name[50]; // Yeteri kadar alan açıyoruz Char'lı name değişkenimiz için
+    int id;
+    double cash;
+};
+
+
+int main(){
+
+    // 1. Kullanıcı \\
+
+    struct kullanci user1; // Oluşturduğumuz değişken türümüzü böyle bir değişkene atıyoruz
+    strcpy(user1.name ,"Data"); // Değişkenimizin değerlerine erişmek için ismi.degerinIsmi şeklinde erişilir veya değiştirilir
+    user1.id = 0;
+    user1.cash = 100.03;
+    
+    // Yazdırma İşmemi
+    printf("1. Kullanicinin ismi: %s\n", user1.name);
+    printf("1. Kullanicinin id  : %d\n", user1.id);
+    printf("1. Kullanicinin cash: %f\n\n", user1.cash);
+
+    // 2. Kullanıcı \\
+    
+    struct kullanci user2;
+    strcpy(user2.name ,"Enes");
+    user2.id = 1;
+    user2.cash = 45.33;
+    
+    // Yazdırma İşmemi
+    printf("2. Kullanicinin ismi: %s\n", user2.name);
+    printf("2. Kullanicinin id  : %d\n", user2.id);
+    printf("2. Kullanicinin cash: %f", user2.cash);
+
+    return 0;
+}</code>
+
+Çıktımız ise;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/12 C Structs.html/1.png" alt="12.1" width="800px">
+        </div>
+
+        <h3>Typedef İle Kullanım</h3>
+        <pre id="preh3">Typedef'i önceki sayfalarımızda incelemiştik ki Struct ile Typedef çok kullanıldığı için yardımcı bir yapıdır.</pre>
+
+        <pre id="preh3">Şimdi ise örneğimizi Typedef kullanarak tekrardan yazalım.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+#include &lt;string.h>
+
+typedef struct kullanci
+{
+    char name[50];
+    int id;
+    double cash;
+} users; // kullanici isimli Struct'ımızı users olarak gösterdik böylelikle
+
+
+int main(){
+
+    // 1. Kullanıcı \\
+
+    users user1; // Typedef kullanımda farkı sadece anahtar kelime olarak struct kullanmıyoruz.
+    strcpy(user1.name ,"Data");
+    user1.id = 0;
+    user1.cash = 100.03;
+    
+    // Yazdırma İşmemi
+    printf("1. Kullanicinin ismi: %s\n", user1.name);
+    printf("1. Kullanicinin id  : %d\n", user1.id);
+    printf("1. Kullanicinin cash: %f\n\n", user1.cash);
+
+    // 2. Kullanıcı \\
+    
+    users user2;
+    strcpy(user2.name ,"Enes");
+    user2.id = 1;
+    user2.cash = 45.33;
+    
+    // Yazdırma İşmemi
+    printf("2. Kullanicinin ismi: %s\n", user2.name);
+    printf("2. Kullanicinin id  : %d\n", user2.id);
+    printf("2. Kullanicinin cash: %f", user2.cash);
+
+    return 0;
+}</code>
+
+Çıktımız aynı olucaktır fakat kullanım ve okuma kolaylığı bakımından Typedef daha kullanışlıdır.</pre>
+
+        <h2>Struct'larda Pointer Kullanımı</h2>
+        <pre id="preh2">Struct'larda Pointer kullanımı, tıpkı değişkenlerde Pointer kullanımı ile aynıdır.</pre>
+
+        <pre id="preh2">Şimdiki örneğimizi Pointer kullanımı ile yapalım.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+
+typedef struct kullanci
+{
+    char *name;
+    int id;
+    double cash;
+} users;
+
+
+int main(){
+
+    // 1. Kullanıcı \\
+
+    users user1; // Typedef kullanımda farkı sadece anahtar kelime olarak struct kullanmıyoruz
+    users *user1Ptr = &user1; // Tanımladığımız user1'i user1Ptr işaretçisine atadık
+    (*user1Ptr).name = "Data"; // Güvenli olması için user1Ptr'deki değerlere parantez içersinden erişilir
+    (*user1Ptr).id = 16;
+    (*user1Ptr).cash = 100.03;
+    
+    // Yazdırma İşmemi
+    printf("1. Kullanicinin ismi: %s\n", (*user1Ptr).name);
+    printf("1. Kullanicinin id  : %d\n", (*user1Ptr).id);
+    printf("1. Kullanicinin cash: %f\n\n", (*user1Ptr).cash);
+
+    return 0;
+}</code>
+
+Çıktımız;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/12 C Structs.html/2.png" alt="12.2" width="800px">
+        </div>
+
+        <pre id="preh2">Mantık olarak değişen bir kısım yoktur. Sadece yöntem değiştirmiş olduk. Fakat Pointer kullanımı bizlere ok operatörü(->) kullanmamızı sağlar.</pre>
+
+        <h3>Ok(->) Operatörü</h3>
+        <pre id="preh3">Ok operatörü bir tire(-) ve bir büyüktür(>) işaretlerinden oluşur.</pre>
+
+        <pre id="preh3">Ok operatörü, Struct'larda ve Union'larda içlerindeki değerlere erişebilmek için kullanılan bir operatördür. Şü şekilde kullanılır;</pre>
+
+        <pre id="codeh3">*structIsmi -> structinIcerisindekiDegerIsmi = deger;</pre>
+
+        <pre id="preh3">Şimdi ise verilere erişme kısmında ok operaötürünü kullanalım.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+#include <string.h>
+
+typedef struct kullanci
+{
+    char *name;
+    int id;
+    double cash;
+} users;
+
+
+int main(){
+
+    // 1. Kullanıcı \\
+
+    users user1;
+    users *user1Ptr = &user1;
+    user1Ptr -> name = "Data";
+    user1Ptr -> id = 16;
+    user1Ptr -> cash = 100.03;
+    
+    // Yazdırma İşmemi
+    printf("1. Kullanicinin ismi: %s\n", user1Ptr -> name);
+    printf("1. Kullanicinin id  : %d\n", user1Ptr -> id);
+    printf("1. Kullanicinin cash: %f\n\n", user1Ptr -> cash);
+
+    return 0;
+}</code>
+
+Çıktımız aynı olucaktır.</pre>
+
+        <pre id="preh3">Ok operatöründeki amaç kullanım kolaylığı sağlamaktır.</pre>
+
+        <h2>İç içe Struct'lar</h2>
+        <pre id="preh2">İç içe olma durumu, bir Struct içersinde başka bir Struct'ın verilerine erişebilmek demektir.</pre>
+
+        <pre id="pre2">Örnek olarak şimdi örneğimize birde "ebeveynler" adlı bir Struct daha oluşturalım "kullanici" ile iç içer olsunlar. "ebeveynler" Struct' içerisinde ise anaAdi ve babaAdi yer alsın.</pre>
+
+        <pre id="preh2"><code class="language-c">#include &lt;stdio.h>
+
+typedef struct ebeveynler{
+    char *anaAdi;
+    char *babaAdi;
+} ebeveynler;
+
+typedef struct kullanci
+{
+    char *name;
+    int id;
+    double cash;
+    ebeveynler kullanicininEbevenyleri; // İç içe tanımlama için tanımlamadan önce yukarıda tanımlanmalıdır. Ardından bu şekilde iç içe olma durumu gerçekleşir
+} users;
+
+
+int main(){
+
+    // 1. Kullanıcı \\
+
+    users user1;
+    users *user1Ptr = &user1;
+    user1Ptr -> name = "Data";
+    user1Ptr -> id = 16;
+    user1Ptr -> cash = 100.03;
+
+    user1Ptr -> kullanicininEbevenyleri.anaAdi = "Database"; // Erişmek için; *x -> y.a
+    user1Ptr -> kullanicininEbevenyleri.babaAdi = "Computer";
+
+    // Yazdırma İşmemi
+    printf("1. Kullanicinin ismi: %s\n", user1Ptr -> name);
+    printf("1. Kullanicinin id  : %d\n", user1Ptr -> id);
+    printf("1. Kullanicinin cash: %f\n\n", user1Ptr -> cash);
+
+    printf("1. Kullanicinin ana adi: %s\n", user1Ptr -> kullanicininEbevenyleri.anaAdi);
+    printf("1. Kullanicinin baba adi: %s\n", user1Ptr -> kullanicininEbevenyleri.babaAdi);
+
+    return 0;
+}</code>
+
+Çıktımız ise;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/12 C Structs.html/3.png" alt="12.3" width="800px">
+        </div>
+
+        <pre id="preh2">Şeklinde kullanımı gerçeklir.</pre>
+
+        <h2>Union</h2>
+        <pre id="preh2">Union, Struct'lara benzer olucak şekilde lakin içerisindeki değerlerin türlerinin en büyüğü kadar bellekte yer tahsis eden bir yapıdır.</pre>
+
+        <pre id="preh2">Aynı Struct'lar gibi oluşuturul fakat anahat kelime olarak <code class="language-c">union</code> kullanılır ve noktalı virgülden hemen önce gözükücek ismi yazılır. Ayrıca bir değişkene atanması gerekmez, direkt gözüken ismi üzerinden erişilir. Yani Static'tir.</pre>
+
+        <pre id="codeh2"><code class="language-c">union unionIsmi{
+    int s1;
+    char* metin1;
+
+    ...
+} gozukecekIsmi;</code>
+
+İçlerindeki değerlere erişmek için;
+
+<code class="language-c">gozukecekIsmi.s1;</code></pre>
+
+        <pre id="preh2">Union, içindeki değerlerin türlerinin en büyüğü kadar bellekte yer tahsis ettiğini söylemiştik. Bu her ne kadar bellek tasarufu konusunda iyi olsa da bellek taşma durumlarında yanıltıcı veriler döndürme durumu olabilir. Union bellekte gösterimsel olarak üst üstü şeklinde duruyor. Aslında bir hüclerinin içinde aslında Uniom'nun içersinde tanımlanan değerler kadar veri tutuluyor. Bu durum Struct'larda geçerli değildir. Struct'larda daha çok yan yana olma durumu vardır. Yani her veri için kendi hücresi vardır.</pre>
+
+        <pre id="preh2">Şimdi bir örnek yapalım. Örneğim bizlere aynı değerlere sahip bir Struct ve Union'nun bellekte ne kadar yer kapladıklarını yazan bir program olsun.</pre>
+
+        <pre id="codeh2"><code>#include &lt;stdio.h>
+
+union ornekBirUnion
+{
+    int s1;
+    int s2;
+
+    char c1;
+    char c2;
+
+    long long ll1;
+    long long ll2;
+} ornekBirUnion;
+
+typedef struct ornekBirStruct
+{
+    int s1;
+    int s2;
+
+    char c1;
+    char c2;
+
+    long long ll1;
+    long long ll2;
+} ornekBirStruct;
+
+
+int main(){
+
+    printf("Struct'in kapladigi alan -> %d\n", sizeof(ornekBirStruct));
+    printf("Union'un kapladigi alan -> %d\n", sizeof(ornekBirUnion));
+
+    return 0;
+}</code>
+
+Çıktımız;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/12 C Structs.html/4.png" alt="12.4" width="800px">
+        </div>
+
+        <pre id="preh2">Aynı verilere sahip olmalarına rahmen Union 8, Struct 32 bayt yer ayrımıştır.</pre>
+
+        <h2>Enum</h2>
+        <pre id="preh2">Enum, diğer yapıların aksine özel değer isimleri oluşturmak için kullanılır.</pre>
+
+        <pre id="preh2">Enum'daki amaç ise kodun okunabirliğini ve kullanabirliğini artırmaktır.</pre>
+
+        <pre id="preh2">Struct gibi tanımlanır. Tek fark ise değerler atanılabilir.</pre>
+
+        <pre id="codeh2"><code class="language-c">enum modlar{
+    ZIYARETCI = 1,
+    KULLANICI = 2,
+    OPERATOR = 3 // Sonda virgül eklenmez
+};</code>
+
+Enum olduğu belli olsun diye içerisindeki değerlerin isimleri büyük harfle yazılır.</pre>
+
+        <pre id="preh2">Şimdi ise bir kullanıcı modu ayırt etme programı yazalım. Verdiğim örnekdeki gibi bir Enum oluşturalım ve If ve Else If'lerle ayırt edelim.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+
+enum modlar{
+    ZIYARETCI = 1,
+    KULLANICI = 2,
+    OPERATOR = 3
+};
+
+int main(){
+
+    enum modlar kullaniciMods;
+    kullaniciMods = ZIYARETCI; // Bu kısımdaki veriyi değştirerek, çıktıdaki değişimi gözlemleyebilirsiniz
+
+    if (kullaniciMods == ZIYARETCI)
+    {
+        printf("Kullanici ziyaretcidir.\n");
+    }
+    else if (kullaniciMods == KULLANICI)
+    {
+        printf("Kullanici normal kullanicidir.\n");
+    }
+    else if (kullaniciMods == OPERATOR)
+    {
+        printf("Kullanici operatordur.\n");
+    }
+
+    return 0;
+}</code>
+
+kullaniciMods'un değeri değiştikçe çıktıda değişecektir.</pre>
+
+        <pre id="preh2">Ayrıca Enum'larda Typedef'de kullanılabilir. Şimdi örneğimizi Typedef'li yazalım.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+
+typedef enum modlar{
+    ZIYARETCI = 1,
+    KULLANICI = 2,
+    OPERATOR = 3
+} mods;
+
+int main(){
+
+    mods kullaniciMods; // Sadece mods yazmamız yeterli artık
+    kullaniciMods = ZIYARETCI;
+
+    if (kullaniciMods == ZIYARETCI)
+    {
+        printf("Kullanici ziyaretcidir.\n");
+    }
+    else if (kullaniciMods == KULLANICI)
+    {
+        printf("Kullanici normal kullanicidir.\n");
+    }
+    else if (kullaniciMods == OPERATOR)
+    {
+        printf("Kullanici operatordur.\n");
+    }
+
+    return 0;
+}</code>
+
+İşlevsel olarak bir değişim olmucaktır.</pre>
+
+        <h2>Kaynakça</h2>
+        <ul>
+            <li><a href="https://medium.com/@yunus.emre.cinbolat/c-di̇li̇nde-structure-yapicilar-nedi̇r-c09dc5310f22">https://medium.com/@yunus.emre.cinbolat/c-di̇li̇nde-structure-yapicilar-nedi̇r-c09dc5310f22</a></li>
+            <li><a href="https://www.digitalocean.com/community/tutorials/arrow-operator-c-plus-plus">https://www.digitalocean.com/community/tutorials/arrow-operator-c-plus-plus</a></li>
+            <li><a href="https://www.youtube.com/watch?v=a6zSy5_Pu_0">https://www.youtube.com/watch?v=a6zSy5_Pu_0</a></li>
+            <li><a href="https://www.bilgigunlugum.net/prog/cprog/c_bilesim">https://www.bilgigunlugum.net/prog/cprog/c_bilesim</a></li>
+            <li><a href="https://www.w3schools.com/c/c_enums.php">https://www.w3schools.com/c/c_enums.php</a></li>
+        </ul>    
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <footer style="position: fixed; left: 0; bottom: 0; width: 100%; background: transparent; text-align: center; padding: 10px 0; z-index: 100;">
+        <div>
+            <a href="./11 C Fonksiyonlar.html" style="margin-right: 20px; cursor:pointer;">
+                &larr; Önceki
+            </a>
+            <a href="" style="cursor:pointer;">
+                Sonraki &rarr;
+            </a>
+        </div>
+        <div>
+            <p>&copy; 2026 Data's Book</p>
+        </div>
+
+        <div style="position: absolute; right: 1px; bottom: 20px; display: flex; align-items: center;">
+            <a href="./1 C İçindekiler.html" style="text-decoration: none;">
+                İçindekiler
+            </a>
+        </div>
+    </footer>
+</body>
+</html>
+
+<!-- Muhammet Enes nam-ı diğer Data Delete tarafından sevgi ile yapıldı <3 -->
