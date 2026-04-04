@@ -154,20 +154,6 @@
  
 ---
  
-### C : Kendi Dinamik Listeni Yap
-- **Dinamik Liste Nedir?**: Tanım. Array ile Farkı. Kullanım Senaryoları.
-- **Linked List**: Tanım. Node Yapısı. Örnek.
-  - **Tek Yönlü (Singly)**: Tanım. Örnek.
-  - **Çift Yönlü (Doubly)**: Tanım. Örnek.
-  - **Dairesel (Circular)**: Tanım. Örnek.
-- **Stack (Yığın)**: Tanım. LIFO. Örnek.
-  > Metodları
-- **Queue (Kuyruk)**: Tanım. FIFO. Örnek.
-  > Metodları
-- **Generic Liste**: void pointer ile genel liste. Örnek.
- 
----
- 
 ### C : Bellek Yönetimi
 - **Bellek Yönetimi Nedir?**: Stack vs Heap. Tanım.
 - **Memory Layout**: Programın RAM'deki Yapısı. Görselleştirme.
@@ -185,6 +171,20 @@
   - **mmap**: Tanım. Örnek.
   - **POSIX Shared Memory**: shm_open. shm_unlink. Örnek.
   - **Semaphore ile Senkronizasyon**: Tanım. Örnek.
+ 
+---
+ 
+### C : Kendi Dinamik Listeni Yap
+- **Dinamik Liste Nedir?**: Tanım. Array ile Farkı. Kullanım Senaryoları.
+- **Linked List**: Tanım. Node Yapısı. Örnek.
+  - **Tek Yönlü (Singly)**: Tanım. Örnek.
+  - **Çift Yönlü (Doubly)**: Tanım. Örnek.
+  - **Dairesel (Circular)**: Tanım. Örnek.
+- **Stack (Yığın)**: Tanım. LIFO. Örnek.
+  > Metodları
+- **Queue (Kuyruk)**: Tanım. FIFO. Örnek.
+  > Metodları
+- **Generic Liste**: void pointer ile genel liste. Örnek.
  
 ---
  
@@ -216,6 +216,15 @@
   - **JSON Oluşturma**: Örnek.
   - **JSON Yazma**: Örnek.
   - **JSON Okuma**: Örnek.
+- **XML Dosyası**: XML Nedir?
+  - **XML Mantığı**: Tanım. Yapısı. JSON ile Farkı.
+  - **libxml2 Kütüphanesi**: Kurulum. Örnek.
+  - **XML Okuma (DOM)**: xmlReadFile. xmlDocGetRootElement. Örnek.
+  - **Node Gezinme**: xmlFirstElementChild. xmlNextElementSibling. Örnek.
+  - **Attribute Okuma**: xmlGetProp. Örnek.
+  - **XPath ile Sorgulama**: Tanım. xmlXPathEvalExpression. Örnek.
+  - **XML Yazma**: xmlNewDoc. xmlNewNode. xmlSaveFile. Örnek.
+  - **Bellek Yönetimi**: xmlFreeDoc. xmlCleanupParser. Örnek.
 - **Zlib ile Sıkıştırılmış Dosyalar**: Tanım. Kullanım Senaryoları.
   - **Zlib Nedir?**: Kurulum. Örnek.
   - **Dosya Sıkıştırma**: deflate. Örnek.
