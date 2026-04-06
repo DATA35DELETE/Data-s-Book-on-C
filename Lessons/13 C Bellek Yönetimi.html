@@ -25,13 +25,41 @@
     <div style="height: 100px;"></div>
     
     <div id="mainDiv">
-        
+        <h2>Bellek Yönetim Nedir?</h2>
+        <pre id="preh2">Bellek yönetimi, bir programda hangi işlemde ne kadar bellek yönetilmesini belirleyen yönetimlerine bellek yönetimi denir.</pre>
+
+        <pre id="preh2">Java veya Python gibi dillerde bellek yönetimi konusu pek karşınıza çıkmayabilir. Çünkü bu işi genelde dilin kendisi halletmektedir. Peki ya C'de? C için durumlar tam tersidir. Bahsetiğimiz gibi C programlama dilinde her işlem "manual" olarak yazılmalı ve çalıştırılmalıdır. Bunun da pek tabi sebebi C progrmalama dilinin, tüm dillerin atası olmasıdır. Eğer <a href="https://github.com/python/cpython">Python dilinin Github</a> sayfasına baktı iseniz, "Diller" bölümünde %35.8 gibi bir oran ile C yazılım dilini içerdiğini görüceksiniz.</pre>
+
+        <pre id="preh2">Peki C programlama dilinde bellek yönetimi nasıl? Neredeyse tamamiyle "manual" yani yazılımcının bu işi yapması gerektiğini görürüz. İş bu yüzden C programlama dilinde bellek yönetimi konusu öpk ama çok önemlidir.</pre>
+
+        <pre id="preh2">Bellek yönetimi kavramında iki tür bellek alanı üzerinden çalışılır. Bunlardan biri Stack diğeri ise Heap'tir. Gelin bu iki kavramı anlatmaya çalışalım...</pre>
+
+        <h3>Stack</h3>
+        <pre id="preh3">Stack; bellekte program başlatıldığında, sabit boyutlu değerlerin depolanbilceği bir bellek alanıdır.</pre>
+
+        <pre id="preh3">Stack, LIFO yani [Last in, First Out(Son Giren, İlk Çıkar)] prensibi ile çalışır. Bu prensibi aslında bir nevi elma sepete benzetebiliriz. Mesela, 5 tane elmamız olsun ve bu elmaları sepetimize koymuş olalım. Gösterimsel ve yazımsal olarak gösterirsek ise şu şekil gözükücektir.</pre>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/13 C Bellek Yönetimi.html/2.svg" alt="13.1" width="800px">
+        </div>
+
+        <pre id="preh3">Elmalarımızı(elma1, elma2, elma3, elma4, elma5) sırayla sepetimize eklemiş olalım. Daha sonra sepetimizi boşaltmak istediğimiz zaman ilk çıkacak elma, en son giren koyulmuş olan elma5 olucaktır. İşte bu sisteme LIFO sistemi denir.</pre>
+
+        <pre id="preh3">İşte Stack bellek alanında veriler bu şekilde saklanırlar. Amacı ise fonksiyon ve yapı çağrılarını depolamak ve hızlı bir şekilde işlemektir.</pre>
+
+        <h3>Heap</h3>
+        <pre id="preh3">Heap, bellekde dinamik yani daha sonradan boyutu değişebilen veriler için bir bellek alanıdır.</pre>
+
+        <pre id="preh3">Heap, Stack'in aksine yavaştır ve uzun ömürlü ve dinamik veri yapıları için kullanılır.</pre>
+
+        <pre id="preh3">Heap ise FIFO[First in, First out(İlk Giren, İlk Çıkar)] prensibi ile çalışır. Bu prensibi ise bir banka kuyruğuna benzetebiliriz. Kuyruğa kim ilk girdiyse, haliyle ilk işi bitende o olucağıdan kuyruktan ayrılanda ilk giren olur.</pre>
+
+        <h2>Bellek Katmanları</h2>
+        <pre></pre>
 
         <h2>Kaynakça</h2>
         <ul>
-            <li><a href="https://aslihanakbiyik.medium.com/c-öğreticisi-bellek-yönetimi-7d8bf82b3076">https://aslihanakbiyik.medium.com/c-öğreticisi-bellek-yönetimi-7d8bf82b3076</a></li>
-            <li><a href="https://fatihsoysal.com/blog/c-malloc-ile-bellek-yonetimi-boyut-hesaplama-rehberi/">https://fatihsoysal.com/blog/c-malloc-ile-bellek-yonetimi-boyut-hesaplama-rehberi/</a></li>
-            <li><a href="https://mehmet-kelepce.medium.com/c-dilinde-dinamik-bellek-yönetimi-bd4002816df0">https://mehmet-kelepce.medium.com/c-dilinde-dinamik-bellek-yönetimi-bd4002816df0</a></li>
+            <li><a href="https://barisalgul.medium.com/stack-ve-heap-nedir-farkları-nelerdir-180f56c0716b">https://barisalgul.medium.com/stack-ve-heap-nedir-farkları-nelerdir-180f56c0716b</a></li>
         </ul>    
     </div>
 
