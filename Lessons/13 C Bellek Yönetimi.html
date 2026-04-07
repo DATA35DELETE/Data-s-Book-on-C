@@ -55,11 +55,85 @@
         <pre id="preh3">Heap ise FIFO[First in, First out(İlk Giren, İlk Çıkar)] prensibi ile çalışır. Bu prensibi ise bir banka kuyruğuna benzetebiliriz. Kuyruğa kim ilk girdiyse, haliyle ilk işi bitende o olucağıdan kuyruktan ayrılanda ilk giren olur.</pre>
 
         <h2>Bellek Katmanları</h2>
-        <pre></pre>
+        <pre id="preh2">Bellek katmanları, RAM donanımının içerisinde geçici depolanan verilerin nasıl depolandığını göre katmanlar kullanılır. Bellek dört bölmeden oluşmaktadır; Yazı katmanı, veri katmanı, Heap katmanı ve Stack katmanlarından oluşur.</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/13 C Bellek Yönetimi.html/3.svg" alt="13.3" width="800px">
+        </div>
+
+        <pre id="preh2">Her bir katmanın kendine has görevleri ve veri depolama şekilleri vardır. Şimdi sırayla inceleyelim.</pre>
+
+        <h3>Yazı Katmanı(Text Segment)</h3>
+        <pre id="preh3">Yazı katmanı, belleğin en alt katmanıdır. Bu katmanda, yazılan kodların derlenmiş içerikleri bulunur.</pre>
+
+        <pre id="preh3">Bu katmanda program akışı içerisinde herhangi bir oynama sonucu programı bozma ihtimali bulunduğudan, salt okunur yani sadece okunabilir yazılamaz formatında saklanır. Böylelikle programın içeriği korunmuş olur.</pre>
+
+        <pre id="preh3">Burdan şunu anlıyoruz ki yazdığımız programlar HDD veya SSD'lerde değil RAM'de çalıştırılır. Program kapatıldığında otomatik bir şekilde katmandan, kapatılan programın içeriği silinir.</pre>
+
+        <h3>Veri Katmanı</h3>
+        <pre id="preh3">Bu katman ise değişkenlerin ve yapıların depolandığı kısımdır.</pre>
+
+        <pre id="preh3">Veri katmanı iki bölümden oluşur. Başlatılmış ve başlatılmamış diğer bir adıyla BSS.</pre>
+
+        <pre id="preh3">Başlatılmış bölümünde, program içerisinde programcı tarafından veri atanan değişkenler saklanır.</pre>
+
+        <pre id="preh3">BSS ise program içerinde programcı tarafından veri atanmamış değişkenler saklanır. C programlama dilinde bu bölümde saklanan değişkenlere otomatik şekilde sıfır değerini atamaktadır.</pre>
+
+        <pre id="preh3">Şimdi ise programda iki adet değişken tanımlayalım. Bir tanesini başlatılmış diğerini ise BSS şeklinde oluşturalım.</pre>
+
+        <pre id="codeh3"><code class="language-c">int main() {
+    int BSS_Degisken; // Bu değişken veri segmenti katmanındaki BSS bölümünde saklanır
+    
+    int baslatilmisDegisken = 42; // Bu değişken veri segmenti katmanındaki başlatılmış bölümünde saklanır
+
+    return 0;
+}</code></pre>
+
+        <h3>Heap Katmanı</h3>
+        <pre id="preh3">Heap, yukarıda anlattığımız veriler için bir veri katmanıdır.</pre>
+
+        <pre id="preh3">C tarafında bu kısım Pointer'ların saklandığı ve göreceğimiz olan malloc ve calloc fonksiyonların bellek ayırdığı kısım bu kısımdır.</pre>
+
+        <pre id="codeh3"><code class="language-c">int *ornekPtr;</code></pre>
+
+        <h3>Stack Katmanı</h3>
+        <pre id="preh3">Stack'de yukarıda anlattığmız gibidir.</pre>
+
+        <pre id="preh3">C tarafında bakacak olursak, verisi ve boyutu belli olan verilerin saklandığı kısımdır.</pre>
+
+        <pre id="codeh3"><code class="language-c">int ornekStack = 42;</code></pre>
+
+        <h3>Segment Hataları</h3>
+        <pre id="preh3">Segment hataları, bir programın kendi alandan dışına çıkıp, ona ait olmayan bir bellek alanındaki verilere değiştirldiğinde ortaya çıkan bir hatadır.</pre>
+
+        <pre id="preh3">Segment hataları, genelde gerçekleştiğinde programın çökmesiyle sonuçlanan bir hatadır.</pre>
+
+        <pre id="preh3">Segment hatası diğer adıyla Segfault'un nedenleri listle şeklinde verilmiştir;</pre>
+
+        <ul id="listh3">
+            <li>Geçersiz(NULL) olan Pointer'lara erişim.</li>
+            <li>Dizi boyutunu aşan işlemleri gerçekleştirme.</li>
+            <li>Bellek sızıntıları ve serbest bırakılmamış dinamik veriler.</li>
+        </ul>
+
+        <pre id="preh3">Bunlar Segfault'a neden olabilcek programlama hatalarıdır. Şimdi bir NULL değerine sahip Pointer tanımlayalım ve erişmeye çalışalım.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+
+int main() {
+    int *ptr = NULL;
+    *ptr = 12; // Segfault çıkacağı kısım
+
+    return 0;
+}</code>
+
+Çıktımız "Segmentation fault" olucaktır.</pre>
 
         <h2>Kaynakça</h2>
         <ul>
             <li><a href="https://barisalgul.medium.com/stack-ve-heap-nedir-farkları-nelerdir-180f56c0716b">https://barisalgul.medium.com/stack-ve-heap-nedir-farkları-nelerdir-180f56c0716b</a></li>
+            <li><a href="https://www.geeksforgeeks.org/c/memory-layout-of-c-program/">https://www.geeksforgeeks.org/c/memory-layout-of-c-program/</a></li>
+            <li><a href="https://apiup.com.tr/c-programlama-dili-ve-segmentation-fault-hatasi-nedir-ve-nasil-cozulur">https://apiup.com.tr/c-programlama-dili-ve-segmentation-fault-hatasi-nedir-ve-nasil-cozulur</a></li>
         </ul>    
     </div>
 
