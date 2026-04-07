@@ -198,18 +198,29 @@
   > Metodları
 - **Dosya Konumlandırma**: fseek. ftell. rewind. Örnek.
 - **İkili (Binary) Dosyalar**: Tanım. Örnek.
-- **Native Dosya İşlemleri**: Tanım. stdio.h vs OS API.
-  - **Linux (POSIX)**: open, read, write, close. Örnek.
-  - **Dosya Tanımlayıcıları (fd)**: Tanım. Örnek.
-  - **Dosya İzinleri**: chmod. Örnek.
-  - **Windows API (windows.h)**: Tanım. POSIX ile Farkı. Kullanım Senaryoları.
-    - **HANDLE Kavramı**: Tanım. Örnek.
-    - **CreateFile**: Tanım. Parametreler. Örnek.
-    - **ReadFile / WriteFile**: Tanım. Örnek.
-    - **CloseHandle**: Tanım. Bellek Yönetimi. Örnek.
-    - **Dosya İzinleri ve Özellikleri**: SetFileAttributes. GetFileAttributes. Örnek.
-    - **Dizin İşlemleri**: CreateDirectory. RemoveDirectory. Örnek.
-    - **Hata Yönetimi**: GetLastError. FormatMessage. Örnek.
+- **Native Dosya İşlemleri**: Tanım. stdio.h vs OS API. Kullanım Senaryoları.
+  - **Linux — .so Dosyaları**:
+    - **Shared Object Nedir?**: .so ve .a Farkı. Dinamik vs Statik.
+    - **Derleme**: gcc -shared -fPIC. Örnek.
+    - **Yükleme (Runtime)**: dlopen. Tanım. Parametreler. Örnek.
+    - **Sembol Çözümleme**: dlsym. Tanım. Örnek.
+    - **Hata Yönetimi**: dlerror. Örnek.
+    - **Kapatma**: dlclose. Bellek Yönetimi. Örnek.
+    - **LD_LIBRARY_PATH**: Tanım. Kullanım. Örnek.
+    - **ldd Komutu**: Bağımlılık Analizi. Örnek.
+  - **Windows — .dll Dosyaları**:
+    - **DLL Nedir?**: .dll ve .lib Farkı. Implicit vs Explicit Linking.
+    - **DLL Oluşturma**: __declspec(dllexport). Örnek.
+    - **Implicit Linking**: .lib ile Derleme. Tanım. Örnek.
+    - **Explicit Linking (Runtime)**: LoadLibrary. Tanım. Parametreler. Örnek.
+    - **Sembol Çözümleme**: GetProcAddress. Tanım. Örnek.
+    - **Hata Yönetimi**: GetLastError. FreeLibrary. Örnek.
+    - **DllMain**: Tanım. DLL_PROCESS_ATTACH / DETACH. Örnek.
+    - **Dependency Walker / dumpbin**: Bağımlılık Analizi. Örnek.
+  - **Cross-Platform Kullanım**:
+    - **Platform Soyutlama**: Tanım. \#ifdef ile Yönetim. Örnek.
+    - **Ortak Arayüz Tasarımı**: Tanım. Örnek.
+    - **Plugin Sistemi Kurma**: Tanım. Örnek.
 - **JSON Dosyası**: JSON Nedir?
   - **JSON Mantığı**: Tanım. Yapısı.
   - **cJSON Kütüphanesi**: Kurulum. Örnek.
@@ -230,7 +241,11 @@
   - **Dosya Sıkıştırma**: deflate. Örnek.
   - **Dosya Açma**: inflate. Örnek.
   - **gzip Formatı**: Tanım. Örnek.
+
+---
  
+
+
 ---
  
 ### C : Önişlemci (Preprocessor)
