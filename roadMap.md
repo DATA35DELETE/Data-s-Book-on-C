@@ -165,7 +165,7 @@
 - **malloc**: Tanım. Örnek.
 - **calloc**: Tanım. malloc ile Farkı. Örnek.
 - **realloc**: Tanım. Örnek.
-- **free**: Tanım. Bellek Sızıntısı. Örnek.
+- **free**: Tanım. Bellek Sızıntısı(Valgrind). Örnek.
 - **Bellek Hataları**: Dangling Pointer. Buffer Overflow. Örnek.
 - **RAM'de İletişim (Shared Memory)**: Tanım. Kullanım Senaryoları.
   - **mmap**: Tanım. Örnek.
@@ -241,11 +241,7 @@
   - **Dosya Sıkıştırma**: deflate. Örnek.
   - **Dosya Açma**: inflate. Örnek.
   - **gzip Formatı**: Tanım. Örnek.
-
----
- 
-
-
+  
 ---
  
 ### C : Önişlemci (Preprocessor)

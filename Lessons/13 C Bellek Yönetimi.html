@@ -129,11 +129,258 @@ int main() {
 
 Çıktımız "Segmentation fault" olucaktır.</pre>
 
+        <h2>Malloc</h2>
+        <pre id="preh2">Malloc, C programlama dilinde RAM'de dinamik bellek ayırmak için kullanılan bir fonksiyondur. Malloc, "stdlib.h" kütüphanesinde yer alır. Bu sebele kod dosyamıza "stdlib.h" kütüphanesini eklemeliyiz.</pre>
+
+        <pre id="codeh2"><code class="language-c">tür *isim = (tür *)malloc(baytCinsindenAyrilacakAlan);</code>
+        
+Şeklinde bellekten yer ayırtırız.</pre>
+
+        <pre id="preh2">Malloc, bellekte alan ayrırken nasıl bir veri ile ayırdığını kontrol etmez. Bu yüzden genelde belleğin programcı tarafından veri atanmamış kısımları çöp verilerle doludur.</pre>
+
+        <pre id="preh2">Evet... Teorik konuştuğumuz yeter, şimdi pratik olarak ele alalım.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+#include &lt;stdlib.h> // Kütüphanemiz
+
+
+int main(){
+
+    int *sayilar = (int *)malloc(5 * sizeof(int)); // Bu kısımda sizeof kullandık çünkü, sizeof(int)'in değeri burada 4'tür. Biz bunu 5 ile çarptık ve 20 sonucu elde ettik. C'de 20 baytlık bir alan ayırdı. Bu kısımda sizeof kullanmamızın sebebi okunabilirliktir. Çünkü eğer yanlış hesaplarsak program çökücektir. Çünkü biz her ne kadar 20 baytlık bir alan ayırmış olsakda aslında bizi ilgilendiren kısım "bu bellekte kaç tane Integer depolanır?" olucaktır. 20 baytlık bir alanda 5 tane Integer yer alır. Oda yıldız işaretinin sol kısmındadır. Bu sebeble bu format kullanılır
+
+    *(sayilar) = 12; // Bellek ayırdığımız yapıyı bir nevi diziye benzetebiliriz. Şuan yaptığımız bir nevi bir dizinin sıfırıncı Index'deki elemana erişmektir. Diğer Index'deki değerere erişmek için *(sayilar + i) kullanılır. i, Index'i temsil eder
+
+    printf("Ozel ayrilan bellek alaninda 0. Index'deki deger: %d\n", *(sayilar)); // Çıktı 12 olucaktır
+    printf("Ozel ayrilan bellek alaninda 1. Index'deki deger: %d\n", *(sayilar + 1)); // Program tarafından atamamış olsakta eriştiğimiz zaman rastgele bir değer getirir. Bunun sebebi ise bahsettiğimiz gibi malloc bellekte yer ayırırken, nasıl ayırdığını bakmaz. Her çalıştırmada değişmektedir
+
+    return 0;
+}</code></pre>
+
+        <h2>Calloc</h2>
+        <pre id="preh2">Calloc; Malloc'tan farklı olarak bellekte yer ayırırken, ayırdığı kısımdaki verileri temizler değerlerini sıfıra atar. Bu özelliği sayesinde Malloc yerine tercih edilir.</pre>
+
+        <pre id="codeh2"><code class="language-c">tür *isim = (tür *)malloc(baytCinsindenAyrilacakAlan, sizeof(tür));</code>
+        
+Şeklinde ayrıltırılır.</pre>
+
+        <pre id="preh2">Şimdi size verdiğimiz örneği Calloc ile yeniden yazalım ve farkı görelim.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+#include &lt;stdlib.h>
+
+int main(){
+
+    int *sayilar = (int *)calloc(5, sizeof(int));
+
+    *(sayilar) = 12;
+
+    printf("Ozel ayrilan bellek alaninda 0. Index'deki deger: %d\n", *(sayilar)); // Çıktı 12 olucaktır
+    printf("Ozel ayrilan bellek alaninda 1. Index'deki deger: %d\n", *(sayilar + 1)); // Çıktı 0 olucaktır
+
+    return 0;
+}</code></pre>
+
+        <h3>Hata Kontrolü</h3>
+        <pre id="preh3">Her şeyin kesin olmadığı gibi Malloc ve Calloc ile ayırdıkları da kesin değildir. Eğer bir RAM dolu ilse ayırma işlemi başarız olursa metodlar NULL döner ve biz bunu kontrol etmeliyiz. Yoksa program "Segmentation fault" hatalarıyla dolar.</pre>
+
+        <pre id="preh3">Şimdi ki örneğimizi NULL kontrollü şekilde yeniden yazalım.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+#include &lt;stdlib.h>
+
+int main(){
+
+    int *sayilar = (int *)calloc(5, sizeof(int));
+    if (sayilar == NULL)
+    {
+        printf("Bellek ayrilamadi"); // Bildirme
+
+        return 1; // Programın hata ile sonuçlandığını bildirmek için 1 ile dönüyoruz
+    }
+    
+
+    *(sayilar) = 12;
+
+    printf("Ozel ayrilan bellek alaninda 0. Index'deki deger: %d\n", *(sayilar)); // Çıktı 12 olucaktır
+    printf("Ozel ayrilan bellek alaninda 1. Index'deki deger: %d\n", *(sayilar + 1)); // Çıktı 0 olucaktır
+
+    return 0;
+}</code>
+
+Çıktı büyük ihtimalle değişmicektir. Fakat eğer bellek beş bayttan bile az bir alan kaldı ise Calloc bu kısımda NULL döner.</pre>
+
+        <h2>Realloc</h2>
+        <pre id="preh2">Realloc ise Malloc veya Calloc ayırdığımız belleklerin boyutlarını büyütmemiz için kullandığımız fonksiyondur. Eğer başarısız olursa NULL döner.</pre>
+
+        <pre id="codeh2"><code>isim = (tür *)realloc(isim, yeniBoyutu);</code>
+        
+Şeklinde yeniden boyutlandırılır.</pre>
+
+        <pre id="preh2">Şimdi ise verdiğimiz örnekte Realloc kullanalım ve "sayilar" bellek alanımızı beş adet Integer alanından(yirmi Bayt) on tane Integer alabilecek(kırk Bayt) bir bellek alanına dönüştürelim. Ardından sekizinci Index'deki elemana bir değer atıyalım ve yazdıralım.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+#include &lt;stdlib.h>
+
+int main(){
+
+    int *sayilar = (int *)calloc(5, sizeof(int));
+    if (sayilar == NULL)
+    {
+        printf("Bellek ayrilamadi"); // Bildirme
+
+        return 1; // Programın hata ile sonuçlandığını bildirmek için 1 ile dönüyoruz
+    }
+    
+
+    *(sayilar) = 12;
+
+    printf("Ozel ayrilan bellek alaninda 0. Index'deki deger: %d\n", *(sayilar)); // Çıktı 12 olucaktır
+    printf("Ozel ayrilan bellek alaninda 1. Index'deki deger: %d\n", *(sayilar + 1)); // Çıktı 0 olucaktır
+
+    // *(sayilar + 8) = 34; | Normal şartlarda boyutu yermeze bile bu tarz bir erişim sağlayabiliriz. Lakin bu işlem aslında bize ait olmayan bir bellek alanında işlem anlamına gelir. Bu durum, eğer işlem gerçekleştirdiğimiz bellek alanının gerçek sahibi gelip oaraya kendi verisini yazmadığı sürece sorun çıkarmaz. Ama yazarsa bizim programımız çökücektir. Aynı durum karşı program içinde geçerlidir
+
+    sayilar = (int *)realloc(sayilar, 10 * sizeof(int)); // 20 bayt -> 40 bayt
+    if (sayilar == NULL)
+    {
+        printf("Bellek ayrilamadi"); // Bildirme
+
+        return 1; // Programın hata ile sonuçlandığını bildirmek için 1 ile dönüyoruz
+    }
+
+    *(sayilar + 8) = 34; // Şimdi güvenli bir şekilde işlem yapabiliriz. Çıktı 34 olmalıdır
+
+    printf("Ozel ayrilan bellek alaninda 8. Index'deki deger: %d\n", *(sayilar + 8));
+
+    return 0;
+}</code></pre>
+
+        <h2>Free</h2>
+        <pre id="preh2">Free, Malloc veya Calloc ile ayrıldığımız bellek alanlarını serbest bırakır.</pre>
+
+        <pre id="codeh2"><code class="language-c">free(isim);</code>
+
+Şeklinde serbest bırakılır.</pre>
+
+        <pre id="preh2">Free çok önemlidir. Özellikle program akışı içersinde işimizin bittiği bellek alanlarını serbest bırakmak yani boşaltmak çok ama çok önemlidir. Bunun sebebi ise gereksiz yere tutulmuş bellek alanları bizlere hem veri sızıtısına hem de luzümsüz bir bellek tüketimine yol açar. Eğer belleği fazla şişirirsek program bir yerden sonra çöker. İşte bu yüzden hem program kapatılmadan önce hem de program akışı içersinde işimizin bittiği bellek alanlarını serbest bırakmalıyız ki RAM'i verimli kullanalım.</pre>
+
+        <pre id="prehh2">Artık son dokunuş olarak Free ile de bellek sızıntılarını önleyelim.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+#include &lt;stdlib.h>
+
+int main(){
+
+    int *sayilar = (int *)calloc(5, sizeof(int));
+    if (sayilar == NULL)
+    {
+        printf("Bellek ayrilamadi");
+
+        return 1;
+    }
+    
+
+    *(sayilar) = 12;
+
+    printf("Ozel ayrilan bellek alaninda 0. Index'deki deger: %d\n", *(sayilar));
+    printf("Ozel ayrilan bellek alaninda 1. Index'deki deger: %d\n", *(sayilar + 1));
+
+    // *(sayilar + 8) = 34;
+
+    sayilar = (int *)realloc(sayilar, 10 * sizeof(int));
+    if (sayilar == NULL)
+    {
+        printf("Bellek ayrilamadi");
+
+        return 1;
+    }
+
+    *(sayilar + 8) = 34;
+
+    printf("Ozel ayrilan bellek alaninda 8. Index'deki deger: %d\n", *(sayilar + 8));
+
+    free(sayilar); // En sonda "sayilar" bellek alanını serbest bıraktık
+
+    return 0;
+}</code>
+
+Böylelikle tertemiz bir programımız oldu.</pre>
+
+
+        <h2>Bellek Hataları</h2>
+        <pre id="preh2">Tek hatasız olmayan Malloc veya Calloc değildir. Bizlerde hatasız değiliz. İşte bellek alanında programcı tarafından, bellek kısmında yapılan hatalara bellek hataları denir.</pre>
+
+        <h3>Dangling Pointer</h3>
+        <pre id="preh3">Dangling Pointer yani sarkan işaretçi hatası, Free edilmiş bir bellek alanına erişmeye çalışmaya çalışdığında ortaya çıkan hatadır. Dönen veri rastgele olur.</pre>
+
+        <pre id="preh3">Örneğimizi bu konu üzerine güncelleyelim.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+#include &lt;stdlib.h>
+
+int main(){
+
+    int *sayilar = (int *)calloc(5, sizeof(int));
+    if (sayilar == NULL)
+    {
+        printf("Bellek ayrilamadi");
+
+        return 1;
+    }
+    
+
+    *(sayilar) = 12;
+
+    printf("Ozel ayrilan bellek alaninda 0. Index'deki deger: %d\n", *(sayilar));
+    printf("Ozel ayrilan bellek alaninda 1. Index'deki deger: %d\n", *(sayilar + 1));
+
+    // *(sayilar + 8) = 34;
+
+    sayilar = (int *)realloc(sayilar, 10 * sizeof(int));
+    if (sayilar == NULL)
+    {
+        printf("Bellek ayrilamadi");
+
+        return 1;
+    }
+
+    *(sayilar + 8) = 34;
+
+    printf("Ozel ayrilan bellek alaninda 8. Index'deki deger: %d\n", *(sayilar + 8));
+
+    free(sayilar);
+
+    printf("Ozel ayrilan bellek alaninda 8. Index'deki deger: %d\n", *(sayilar + 8)); // Free edilmesine rahmen 8. Index'sine erişmeye çalışalım. Belki aynı değeri 34 yazdırabilir ama şuan bize ait olmayan bir bellekten veri almış olduk
+
+    return 0;
+}</code></pre>
+
+        <h3>Buffer Overflow</h3>
+        <pre id="preh3">Buffer Overflow yani bellek taşması, bir bellek alanına, alanından fazla veri yazdırmaya Buffer Overflow denir.</pre>
+
+        <pre id="preh3">Bu durum genelde kullanıcıdan girdi alma sırasında meydana gelir. Biz programda yirmi karakterlik bir veri istiyebiliriz. Ama kullanıcı bize kırk karakterlik bir veri girerse, yirmi karakter bellek alanına diğer yirmi karakter ise belleğin hemen yanındaki belki bize ait olmayan bir belleğe yazılır. Bu durum küçük hatalardan devasa sistem açıklarına kadar geniş bir yelpazede risk oluşturmaktadır.</pre>
+
+        <pre id="preh3">Bellek taşması yaşatıcak bir program yazalım. Scanf ile izah edelim ki en çok hata Scanf'den çıkar. Çünkü Scanf ne uzunlukta veri girildiğine bakmazsızın direkt veriyi değişkene yazar.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+
+int main(){
+
+    char girdi[20]; // 19 karakterlik bir girdi değişkenimiz
+
+    scanf("%s", &girdi); // İşte tam bu kısımda bellek taşması olayı söz konusudur. Eğer kullanıcı 19 karakter yerine 40 karakter girerse bellek taşıcaktır
+
+    printf("%s", girdi);
+
+    return 0;
+}</code></pre>
+ 
         <h2>Kaynakça</h2>
         <ul>
             <li><a href="https://barisalgul.medium.com/stack-ve-heap-nedir-farkları-nelerdir-180f56c0716b">https://barisalgul.medium.com/stack-ve-heap-nedir-farkları-nelerdir-180f56c0716b</a></li>
             <li><a href="https://www.geeksforgeeks.org/c/memory-layout-of-c-program/">https://www.geeksforgeeks.org/c/memory-layout-of-c-program/</a></li>
             <li><a href="https://apiup.com.tr/c-programlama-dili-ve-segmentation-fault-hatasi-nedir-ve-nasil-cozulur">https://apiup.com.tr/c-programlama-dili-ve-segmentation-fault-hatasi-nedir-ve-nasil-cozulur</a></li>
+            <li><a href="https://www.geeksforgeeks.org/c/dynamic-memory-allocation-in-c-using-malloc-calloc-free-and-realloc/">https://www.geeksforgeeks.org/c/dynamic-memory-allocation-in-c-using-malloc-calloc-free-and-realloc/</a></li>
+            <li><a href="https://www.wscubetech.com/resources/c-programming/dangling-pointer">https://www.wscubetech.com/resources/c-programming/dangling-pointer</a></li>
         </ul>    
     </div>
 
