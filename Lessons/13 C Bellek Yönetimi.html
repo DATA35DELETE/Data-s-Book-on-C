@@ -373,6 +373,67 @@ int main(){
 
     return 0;
 }</code></pre>
+
+        <h2>RAM'de İletişim (Shared Memory)</h2>
+        <pre id="preh2">Shared Memory, bir bilgisayarda iki veya ikiden fazla program için ayrılan özel bellek alanlarına RAM'de iletişim nedir.</pre>
+
+        <pre id="preh2">Peki RAM'de iletişim bizim için ne katkısı olucak? Tabikide iki programın aralarında özel bir iletişim hattı için hayati önem taşır. Örneğin; İki adet programımın olsun. Birisi kullanıcıdan girdileri alsın, diğeri ise o programın aldığı girdiği RAM'de iletişim sağlayarak gelen veriyi işlesin ve tekrar aynı hattan bir sonuç göndersin. Bu mimari sıkça devlet ve banka hizmetlerindeki bilgisayarlar ve bilgi işlem merkezlerinde kullanılır. İşte bu yüzden RAM'de iletişim, güvenli bir şekilde programlar arasında veri alış-verişini sağlar.</pre>
+
+        <h3>Mmap</h3>
+        <pre id="preh3">Mmap; bellekde özel yer ayrırken, Malloc veya Calloc ile ayrılan belleklerden aksine Kernel yani çekirdek seviyesinde bellek ayırmamızı sağlar. İşlevin sonucu bir Pointer dönmektedir.</pre>
+
+        <pre id="codeh3"><code class="language-c">türü *mmapKullanimi = mmap(NULL, 5 * sizeof(türü), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, 0, 0);</code>
+
+<code class="language-c">türü</code>: Mmap'in açacağı bellek alanın hangi tür değişkenden olcağını belirler
+<code class="language-c">NULL</code>: Mmap'in isterksek spesifik bir bellek alanında açılmasını istiyebilmemizi sağlar. NULL girilirse Mmap otomatik ayarlamaktadır.
+<code class="language-c">5 * sizeof(türü)</code>: Mmap'in bellekte kaç bayt yer açacağını belirler.
+<code class="language-c">PROT_READ | PROT_WRITE</code>: Mmap'in bellekte açtığı kısımda hangi işlemlere izin verilip verilmeyeceğini belirler. (PROT_READ: Okumayı Kabul Eder. PROT_WRITE: Yazmayı Kabul Eder.)
+<code class="language-c">MAP_PRIVATE | MAP_ANON</code>: Mmap'in görünürlüğü ve erişimliğini belirler. (MAP_PRIVATE: Özel. MAP_SHARED: Paylaşımlı. MAP_ANON: Anonimlik sağlanır.)
+
+şeklinde tanımlanmaktadır.
+
+Ayrıca eğer bellek ayırma işlemi başarısız olursa MAP_FAILED değişlenini döner.
+
+Ayrıca Malloc ve Calloc'da olduğu gibi bu sistemde de Free edilmesi gerekir. Bu konuda Free'nin karşılığı Munmap fonksiyonudur. Eğer bu fonksiyon başarısız olur ise sıfır döner.
+
+<code class="language-c">munmap(mmapKullanimi, 5 * sizeof(türü));</code>
+
+<code class="language-c">mmapKullanimi</code>: Ayrılacak Mmap Pointer'ı
+<code class="language-c">5 * sizeof(türü)</code>: Serbert bırakılacak bayt sayısı. Genelde tüm Mmap'i kapsıcak şekilde yazılır. Örnekte olduğu gibi...</pre>
+
+        <pre id="preh3">Şimdi Malloc ve Calloc'da veridiğimiz örneği Mmap ile yapalım. Ancak dikkat! Bu işlemler sadece Unix(Linux ve MacOS) tabanlı işletim sistemlerinde çalışmaktadır. Windows için ayrı bir konumuz olucaktır.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+#include &lt;sys/mman.h>
+
+int main(){
+
+    int *mmapKullanimi = mmap(NULL, 5 * sizeof(int), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, 0, 0);
+    if (mmapKullanimi == MAP_FAILED)
+    {
+        perror("Bir boklar döndü aga\n");
+
+        return 1;
+    }
+    
+
+    mmapKullanimi[0] = 10;
+    *(mmapKullanimi + 1) = 20;
+    *(mmapKullanimi + 2) = 30;
+    *(mmapKullanimi + 3) = 40;
+    *(mmapKullanimi + 4) = 50;
+
+    printf("%d\n", *(mmapKullanimi + 0));
+
+    if (munmap(mmapKullanimi, 5 * sizeof(int)) != 0)
+    {
+        printf("Gene bir boklar döndü");
+
+        return 1;
+    }
+
+    return 0;
+}</code></pre>
  
         <h2>Kaynakça</h2>
         <ul>
@@ -381,6 +442,9 @@ int main(){
             <li><a href="https://apiup.com.tr/c-programlama-dili-ve-segmentation-fault-hatasi-nedir-ve-nasil-cozulur">https://apiup.com.tr/c-programlama-dili-ve-segmentation-fault-hatasi-nedir-ve-nasil-cozulur</a></li>
             <li><a href="https://www.geeksforgeeks.org/c/dynamic-memory-allocation-in-c-using-malloc-calloc-free-and-realloc/">https://www.geeksforgeeks.org/c/dynamic-memory-allocation-in-c-using-malloc-calloc-free-and-realloc/</a></li>
             <li><a href="https://www.wscubetech.com/resources/c-programming/dangling-pointer">https://www.wscubetech.com/resources/c-programming/dangling-pointer</a></li>
+            <li><a href="https://stackoverflow.com/questions/3642021/what-does-mmap-do">https://stackoverflow.com/questions/3642021/what-does-mmap-do</a></li>
+            <li><a href="https://www.delftstack.com/howto/c/use-mmap-function-to-write-to-the-memory-in-c/">https://www.delftstack.com/howto/c/use-mmap-function-to-write-to-the-memory-in-c/</a></li>
+            <li><a href="https://www.geeksforgeeks.org/linux-unix/posix-shared-memory-api/">https://www.geeksforgeeks.org/linux-unix/posix-shared-memory-api/</a></li>
         </ul>    
     </div>
 
