@@ -403,8 +403,120 @@ Ayrıca Malloc ve Calloc'da olduğu gibi bu sistemde de Free edilmesi gerekir. B
 
         <pre id="preh3">Şimdi Malloc ve Calloc'da veridiğimiz örneği Mmap ile yapalım. Ancak dikkat! Bu işlemler sadece Unix(Linux ve MacOS) tabanlı işletim sistemlerinde çalışmaktadır. Windows için ayrı bir konumuz olucaktır.</pre>
 
-        <pre id="codeh3"><code class="language-c"></code></pre>
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+#include &lt;sys/mman.h> // Mmap bu kütüphanede yer almaktadır
+
+int main(){
+
+	int *bellegimiz = (int *)mmap(NULL, 2 * sizeof(int), PROT_WRITE | PROT_WRITE, MAP_ANON | MAP_PRIVATE, 0 ,0);
+	if (bellegimiz == MAP_FAILED)
+	{
+		printf("Mmap belleği ayrımadı!"); // Linux'da Türkçe karakter destiği mevcuttur
+		return 1;
+	}
+
+	*bellegimiz = 12;
+
+	printf("Ozel ayrilan bellek alaninda 0. Index'deki deger: %d\n", *(bellegimiz)); // Çıktı 12 olucaktır
+    printf("Ozel ayrilan bellek alaninda 1. Index'deki deger: %d\n", *(bellegimiz + 1)); // Çıktı 0 olucaktır. Çünkü Mmap aynı Calloc gibi çalışır
+
+	if (munmap(bellegimiz, 2 * sizeof(int)) != 0) // Eğer serbest bırakılma başarız ise
+	{
+		printf("Mmap belleği serbest bırakılamdı!");
+		return 1;
+	}
  
+	return 0;
+}</code>
+
+Şeklinde yeniden yazılır.</pre>
+
+        <h3>POSIX Shared Memory</h3>
+        <pre id="preh3">Shared Memory, başta da anlattığımız gibi Shared Memory iki uygulamın iletişimi için bellekte açtığımız alanlardır. Mmap, bizlere bu altyapıyı sunar fakat iki uygulama arasında iletişim yani Shared Memory yapabilmemizi sağlamaz. İşte bu durumda POSIX standartı altındaki Shared Memory kütüphanesine başvururuz.</pre>
+
+        <pre id="preh3">Tabi Shared Memory tek başına yetmez. İlk belleği talep ederiz. Ardından ftruncate adından bir fonksiyon ile biçimlendirme ve bayt cinsinden talep edeceğimiz alan için boyutu ayarlarız. Ardından Mmap aracığılı ile yazdırma işlemlerimizi gerçekleştiriz. Shared Memory yapmamız için şu kütüphaneleri kurmamız gerek;.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;fcntl.h>
+#include &lt;sys/shm.h>
+#include &lt;sys/stat.h>
+#include &lt;sys/mman.h>
+#include &lt;unistd.h></code>
+
+Bu kütüphaneler lazım olucaktır.</pre>
+
+        <pre id="preh3">Bu kütüphaneleri içeren kodlarımız için;</pre>
+
+        <pre id="codeh3"><code class="language-c">gcc kodDosyasi.c -pthread -lrt- o ciktiDosyasi</code>
+        
+Şeklinde derlenmesi gerekir.</pre>
+
+        <pre id="preh3">Shared Memory ile açtığmız belleği serbest bırakmak için shm_unlink ile yapılır.</pre>
+ 
+        <pre id="preh3">Şimdi Shared Memory ile iki ayrı uygulama olucak şekilde yeniden yazalım. Sistemimiz klasik bir mesaj olan "Hello World" olsun. Birinci uygulamanın ismi "acan.c", kendisi Shared Memory'i açsın ve veriyi yazsan fakat açılan belleği kapatmasın. İkinci uygulamanın ismi ise "kapatan.c" olsun, orda belleği açsın ve veriyi ekrana yazdırsın ve belleği serbest bıraksın.</pre>
+
+        <pre id="preh3">İlk olarak acan.c kod dosyasını yazalım;</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+#include &lt;stdlib.h>
+#include &lt;fcntl.h>
+#include &lt;sys/shm.h>
+#include &lt;sys/stat.h>
+#include &lt;sys/mman.h>
+#include &lt;unistd.h>
+
+int main(){
+
+    int shm_bolme = shm_open("Isim", O_CREAT | O_RDWR, 0666);
+    // "Isim"; Shm isim tabanlı bellek iletişimi sağlar. Açılacak olan Shared Memory'i "Isim" ile açar
+    // O_CREAT | O_RDWR; O_CREAT: Yoksa oluştur. O_RDWR: Yazılabilir yap
+    // 0666; Açılma modu
+
+    ftruncate(shm_bolme, 20 * sizeof(char)); // Biçimlendirmek
+    // shm_bolme; Biçimlendirelecek Shm ögesi
+    // 20 * sizeof(char); Özel alan için ne kadar bayt ayrılmalı. Hello World için 20 Char'lık bir alan ayırdık
+
+    char *bellegimiz = (char *)mmap(NULL, 20 * sizeof(char), PROT_WRITE, MAP_SHARED, shm_bolme, 0); // Bağlanma
+
+    sprintf(bellegimiz, "%s", "Hello World"); // Veri yazma işlemi
+
+    return 0;
+}</code>
+
+Şimdi ise yeni bir kod dosyası(kapatan.c) oluşturalım ve içeriğini yazalım;</pre>
+
+        <pre id="preh3"><code class="language-c">#include &lt;stdio.h>
+#include &lt;stdlib.h>
+#include &lt;fcntl.h>
+#include &lt;sys/shm.h>
+#include &lt;sys/stat.h>
+#include &lt;sys/mman.h>
+#include &lt;unistd.h>
+
+int main(){
+
+    int shm_bolme = shm_open("Isim", O_RDONLY, 0666);
+
+    ftruncate(shm_bolme, 20 * sizeof(char));
+
+    char *bellegimiz = (char *)mmap(NULL, 20 * sizeof(char), PROT_READ, MAP_SHARED, shm_bolme, 0);
+
+    printf("%s", bellegimiz); // İçeriği okuma
+
+    shm_unlink("Isim"); // İşimiz bittiği için belleğimizi serbest bırakıyoruz
+
+    return 0;
+}</code>
+
+<code class="language-c">gcc acan.c -pthread -lrt acan
+gcc kapatan.c -pthread -lrt kapatan
+
+./acan
+./kapatan</code>
+
+Komutlar sırayla çalıştırıldığında ekranda yazılacak veri "Hello World" olucaktır.</pre>
+
+        
+
         <h2>Kaynakça</h2>
         <ul>
             <li><a href="https://barisalgul.medium.com/stack-ve-heap-nedir-farkları-nelerdir-180f56c0716b">https://barisalgul.medium.com/stack-ve-heap-nedir-farkları-nelerdir-180f56c0716b</a></li>
