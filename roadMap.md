@@ -175,9 +175,6 @@
     - **File Mapping Nedir?**: CreateFileMapping. Tanım. Parametreler.
     - **Belleğe Bağlama**: MapViewOfFile. Tanım. Örnek.
     - **Bağlantıyı Kesme**: UnmapViewOfFile. CloseHandle. Örnek.
-    - **Süreçler Arası Paylaşım**: Named File Mapping. Örnek.
-    - **Mutex ile Senkronizasyon**: CreateMutex. WaitForSingleObject. ReleaseMutex. Örnek.
-    - **Event ile Senkronizasyon**: CreateEvent. SetEvent. WaitForSingleObject. Örnek.
  
 ---
  
