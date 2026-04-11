@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data's Book on C</title>
+
+    <link rel="icon" type="image/x-icon" href="../Sources/favicon.png">
+
+    <script src="../Sources/JS/setBackgroundMedia.js"></script>
+
+    <link rel="stylesheet" href="../Sources/JS/hljs/vs2015.css">
+    <script src="../Sources/JS/hljs/highlight.min.js"></script>
+    <script>
+        window.onload = function() {
+            hljs.highlightAll();
+        };
+    </script>
+
+    <link rel="stylesheet" href="../Sources/CSS/main.css">
+</head>
+<body>
+    <h1>Dinamik Liste Yapımı</h1>
+
+    <div style="height: 100px;"></div>
+    
+    <div id="mainDiv">
+        <h2>Dinamik Liste</h2>
+        <pre id="preh2">Dinamik liste; boyutu değişebilien, eleman ekleme ve çıkarma gibi işlemleri yapabilceğimiz listelere dinamik liste denir.</pre>
+
+        <pre id="preh2">Peki "dinamik ile normal listelerin arasındaki fark ne " diye sorucak olursanız işte tam da budur. Diğer programlama dillerinde(C'nin geliştirilmiş hali olan C++ bile) dinamik listeler vardır. Fakat yine C'nin manuelliği burada da kendini gösteriyor ve bizlere bir dinamik liste yapısını hazır olarak vermiyor. İşte bu gibi durumlarda kendimiz böyle bir yapı yapma durumunda kalırız.</pre>
+
+        <pre id="preh2">Peki neden dinamik liste? Çünkü başta eleman sayısı belli olmayan listeleri, baştan belli etmemiz gereken normal listelerde depolaman imkansızdır. Eğer elemanların sayısı, listenin alabilceği maksimum eleman sayısından bir fazla olursa Buffer Overflow oluşur ve verileriniz hiç istemediğimiz belleğe gidebilir. İşte bunu önlemek ve sorunu çözmek için dinamik listeler kullanılır.</pre>
+
+        <h2>Kaynakça</h2>
+        <ul>
+        </ul>    
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <footer style="position: fixed; left: 0; bottom: 0; width: 100%; background: transparent; text-align: center; padding: 10px 0; z-index: 100;">
+        <div>
+            <a href="./13 C Bellek Yönetimi.html" style="margin-right: 20px; cursor:pointer;">
+                &larr; Önceki
+            </a>
+            <a href="" style="cursor:pointer;">
+                Sonraki &rarr;
+            </a>
+        </div>
+        <div>
+            <p>&copy; 2026 Data's Book</p>
+        </div>
+
+        <div style="position: absolute; right: 1px; bottom: 20px; display: flex; align-items: center;">
+            <a href="./1 C İçindekiler.html" style="text-decoration: none;">
+                İçindekiler
+            </a>
+        </div>
+    </footer>
+</body>
+</html>
+
+<!-- Muhammet Enes nam-ı diğer Data Delete tarafından sevgi ile yapıldı <3 -->

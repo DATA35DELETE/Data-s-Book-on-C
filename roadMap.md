@@ -177,7 +177,7 @@
  
 ---
  
-### C : Kendi Dinamik Listeni Yap
+### C : Dinamik Liste Yapımı
 - **Dinamik Liste Nedir?**: Tanım. Array ile Farkı. Kullanım Senaryoları.
 - **Linked List**: Tanım. Node Yapısı. Örnek.
   - **Tek Yönlü (Singly)**: Tanım. Örnek.
