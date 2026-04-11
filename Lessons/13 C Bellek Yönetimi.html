@@ -484,7 +484,7 @@ int main(){
 
 Şimdi ise yeni bir kod dosyası(kapatan.c) oluşturalım ve içeriğini yazalım;</pre>
 
-        <pre id="preh3"><code class="language-c">#include &lt;stdio.h>
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
 #include &lt;stdlib.h>
 #include &lt;fcntl.h>
 #include &lt;sys/shm.h>
@@ -514,6 +514,146 @@ gcc kapatan.c -pthread -lrt kapatan
 ./kapatan</code>
 
 Komutlar sırayla çalıştırıldığında ekranda yazılacak veri "Hello World" olucaktır.</pre>
+
+        <h2>Windows Shared Memory</h2>
+        <pre id="preh2">Windows'da Shared özelliği Linux'daki kadar kolay değildir. Windows'da ilk önce bir Handle, daha sonra ise Map tanımlamamız gerekir. İki fonksiyonda başarısız olursa ise NULL dönerler. Ayrıca Windows'un kütüphanesi olan <code class="language-c">#include &lt;Windows.h></code> kullanılır.</pre>
+
+        <h3>HANDLE</h3>
+        <pre id="codeh3"><code class="language-c">HANDLE hnd = CreateFileMapping
+(
+    INVALID_HANDLE_VALUE,
+    NULL,
+    PAGE_READWRITE,
+    0,
+    10 * sizeof(int),
+    "Local\\Hnd"
+);
+
+CloseHandle(hnd); // Handle'ı kapatır.</code>
+
+INVALID_HANDLE_VALUE: Dosya sayfalama yapma.
+NULL: Varsayılan güvenlik özelliklerini kullan.
+PAGE_READWRITE: Okumaya ve yazmaya izin ver.
+0: Boyutunun en üsteki DWORD'u.
+10 * sizeof(int): İstenilen bayt.
+"Local\\Hnd": Paylaşılan belleğin ismi. Tıpkı Linux'da olduğu gibi tanımlanır. Lakin bu "Local\\" şeklinde kullanılır.</pre>
+
+        <h3>Map</h3>
+        <pre id="codeh3"><code class="language-c">int* shrd = (int *)MapViewOfFile    
+(
+    hnd,
+    FILE_MAP_ALL_ACCESS,
+    0,
+    0,
+    10 * sizeof(int)
+);
+
+UnmapViewOfFile(shrd); // Map'i serbest bırakır.</code>
+
+hnd; HANDLE'nın ismi.
+FILE_MAP_ALL_ACCESS; Okuma ve yazmaya izin ver.
+0; Yüksek mertebeden kaydırma.
+0; Düşük mertebeden kaydırma.
+10 * sizeof(int); İstenilen bayt. Genelde Handle ile aynı olur.</pre>
+    
+        <pre id="preh2">Şimdi ise öğrendiklerimizi bir uygulamay dökelim. Örneğimiz önceki gibi bir "acan.c" diğeri ise "kapatan.c" olucak. "acan.c" Handle ve Map'i açıcak ve Integer olarak bizlere kırk iki ve sekiz sayılarını yazıcak. "kapatan.c" ise o yazılan verileri aynı Shared Memory'den çekicek ekrana toplamları olan elli sonucu yazdırıcak.</pre>
+
+        <pre id="preh2">İlk olarak acan.c;</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+#include &lt;Windows.h>
+
+int main()
+{
+    HANDLE hnd = CreateFileMapping
+    (
+        INVALID_HANDLE_VALUE,
+        NULL,
+        PAGE_READWRITE,
+        0,
+        10 * sizeof(int),
+        "Local\\Hnd"
+    );
+    if (hnd == NULL)
+    {
+        perror("HATA!");
+        return 1;
+    }
+
+    int* shrd = (int *)MapViewOfFile    
+    (
+        hnd,
+        FILE_MAP_ALL_ACCESS,
+        0,
+        0,
+        10 * sizeof(int)
+    );
+    if (shrd == NULL)
+    {
+        perror("HATA!");
+        return 1;
+    }
+    
+    *shrd = 4;
+    *(shrd + 1) = 34;
+
+    getchar(); // Programı bekletiyoruz. Çünkü Windows'da bir Shared Memory ile işlem yapan son işlemde kapanırsa otomatik Windows bizim açtığımız Shared Memory'ide kapatıyor. Biz 2 dosyalı bir sistem kuracağımız için program beklemeli
+
+    return 0;
+}</code></pre>
+
+        <pre id="codeh2">Şimdi kapatan.c;</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+#include &lt;Windows.h>
+
+int main(){
+    HANDLE hnd = CreateFileMapping
+    (
+        INVALID_HANDLE_VALUE,
+        NULL,
+        PAGE_READWRITE,
+        0,
+        10 * sizeof(int),
+        "Local\\Hnd"
+    );
+    if (hnd == NULL)
+    {
+        perror("HATA!");
+        return 1;
+    }
+
+    int* shrd = (int *)MapViewOfFile    
+    (
+        hnd,
+        FILE_MAP_ALL_ACCESS,
+        0,
+        0,
+        10 * sizeof(int)
+    );
+    if (shrd == NULL)
+    {
+        perror("HATA!");
+        return 1;
+    }
+    
+    printf("%d + %d = %d", *shrd, *(shrd + 1), *shrd + *(shrd +1)); // Yazdığımız verileri ekrana yazdırıyoruz. Çıktı "42 + 8 = 50" şeklinde olmalı. Eğer "0 + 0 = 0" şeklinde ise acan.c kapanmış demektir
+
+    UnmapViewOfFile(shrd);
+    CloseHandle(hnd);
+
+    return 0;
+}</code></pre>
+
+        <pre id="codeh2">Şimdi ise derliyelim.
+<code class="language-bash">gcc acan.c -o acan
+gcc kapatan.c -o kapatan
+
+acan
+kapatan # Ayrı bir terminalde çalıştırılmalı
+</code>
+
+Böylelikle Windows'da Shared Memory yapmış olduk.</pre>
 
         <h2>Kaynakça</h2>
         <ul>

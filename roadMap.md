@@ -170,7 +170,6 @@
 - **RAM'de İletişim (Shared Memory)**: Tanım. Kullanım Senaryoları.
   - **mmap**: Tanım. Örnek.
   - **POSIX Shared Memory**: shm_open. shm_unlink. Örnek.
-  - **Semaphore ile Senkronizasyon**: Tanım. Örnek.
   - **Windows Shared Memory**:
     - **File Mapping Nedir?**: CreateFileMapping. Tanım. Parametreler.
     - **Belleğe Bağlama**: MapViewOfFile. Tanım. Örnek.
