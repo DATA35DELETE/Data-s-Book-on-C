@@ -594,8 +594,8 @@ int main()
         return 1;
     }
     
-    *shrd = 4;
-    *(shrd + 1) = 34;
+    *shrd = 42;
+    *(shrd + 1) = 8;
 
     getchar(); // Programı bekletiyoruz. Çünkü Windows'da bir Shared Memory ile işlem yapan son işlemde kapanırsa otomatik Windows bizim açtığımız Shared Memory'ide kapatıyor. Biz 2 dosyalı bir sistem kuracağımız için program beklemeli
 
