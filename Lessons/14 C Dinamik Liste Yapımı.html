@@ -32,8 +32,153 @@
 
         <pre id="preh2">Peki neden dinamik liste? Çünkü başta eleman sayısı belli olmayan listeleri, baştan belli etmemiz gereken normal listelerde depolaman imkansızdır. Eğer elemanların sayısı, listenin alabilceği maksimum eleman sayısından bir fazla olursa Buffer Overflow oluşur ve verileriniz hiç istemediğimiz belleğe gidebilir. İşte bunu önlemek ve sorunu çözmek için dinamik listeler kullanılır.</pre>
 
+        <h2>Linked List</h2>
+        <pre id="preh2">Linked List yani bağlantılı liste, birbiri ardına sıralanmış veriler bütününe denir.</pre>
+
+        <pre id="preh2">Bağlantılı listelerde temelde üç tür vardır.</pre>
+
+        <h3>Tek Bağlantılı Listeler</h3>
+        <pre id="preh3">Tek bağlantılı listelerde; Elemanlarda iki veri bulunur. Kendi verisinin değeri ve kendisinin sonraki elemanı işaret eden bir işaretçi bulunur. Elemanları Struct ile tanımlanır.</pre>
+
+        <pre id="preh3">Evet... Şimdi ise artık C'nin gerçek tarafını görebiliriz. Aslında evet C programalama dilinin temelini neredeyse bitirdik. Artık programalama mantığı ile konularımız ilerlemektedir. Şimdi ise yaptığım tanımı biraz daha açalım; Aslında C'de dediğimiz gibi hazır yapılar olmadığın biz yine ve yeniden kendi mantığımızı kullanarak bir yapı kuracağız. Şöyle ki bir Struct ile bir elemanı tanımlıcaz; Elemanın içeriğinin verisi ve kendisinden bir sonrakini işaret etmek üzere olan bir Pointer olucak. Daha sonra önceden öğrendiğimiz Calloc ile bellekte yer ayıracağız ve Struct'daki "Sonraki" elemanı işaret eden Pointer ile elemanlar arasında gezineceğiz. Sondaki eleman ise listenin sonunu belirtmek için NULL işaret eder.</pre>
+
+        <pre id="preh3">Şimdi ise tek bağlantılı bir liste yapalım. Az önce anlattığım mantık ile bir sistem yazalım listemizi "Hello" yazdırmak için kullanalım.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+#include &lt;stdlib.h>
+
+typedef struct lmn       //
+{                        // Elemanlar için
+    char veri;           //      Struct yapımız
+    struct lmn *sonraki; //
+} eleman;                //
+
+
+int main()
+{
+    // "Hello" 5 harflik bir kelimedir. Bu yüzden 5 tane "eleman" tanımlıyoruz
+    eleman *harf1 = (eleman *)calloc(1, sizeof(eleman));
+    eleman *harf2 = (eleman *)calloc(1, sizeof(eleman));
+    eleman *harf3 = (eleman *)calloc(1, sizeof(eleman));
+    eleman *harf4 = (eleman *)calloc(1, sizeof(eleman));
+    eleman *harf5 = (eleman *)calloc(1, sizeof(eleman));
+
+    // 5 harfe değerlerini verelim \\
+
+    harf1->veri = 'H';      // Değeri
+    harf1->sonraki = harf2; // Sonraki değer
+
+    harf2->veri = 'e';      // Değeri
+    harf2->sonraki = harf3; // Sonraki değer
+
+    harf3->veri = 'l';      // Değeri
+    harf3->sonraki = harf4; // Sonraki değer
+
+    harf4->veri = 'l';      // Değeri
+    harf4->sonraki = harf5; // Sonraki değer
+
+    harf5->veri = 'o';      // Değeri
+    harf5->sonraki = NULL;  // Son değer olduğundan NULL
+
+    // Listemiz oluşmuştur
+    // Şimdi ise bastıralım
+
+    eleman *temp = harf1; // Harfleri almak için bir "geçici" tanımlayalım. Eğer harf1 yerine harf2 alırsak ekranda "ello" yazdığını görebiliriz. Bunun sebebi yazmaya başladığı elemanın harf1 yerine harf2 olması. Dolasıyla birinci olarak tanılmadığımız "H" elemanı atlar
+    while (temp != NULL) // Sonraki elemanı NULL olmadığı süreççe dön
+    {
+        printf("%c", temp->veri); // Temp hangi elemanda ise içindeki veriyi yaz
+        temp = temp->sonraki; // Temp'i bir sonraki elemana geçir
+    }
+
+    // Ekrana yazdırdık şimdi bellek yönetimi için
+    // Listedeki elemanları serbest bırakalım
+
+    temp = harf1; // İlk harfe alıyoruz ki baştan sona doğru silelim
+    while (temp != NULL)
+    {
+        eleman *temp2 = temp; // Temp'deki elemanı bellekten temizledikten sonra, sonraki elemana geçilemedeğinden bir tane daha temp oluşturuyoruz
+        free(temp); // Mevcut tempdekini serbest bıraktık
+        temp = temp2->sonraki; // Temizleme işlemi ardından sonrakine geçtik
+        free(temp2); // Temp2'yi serbest bıraktık
+    }
+    
+    return 0;
+}</code>
+
+Çıktımız ise "Hello" olucaktır.</pre>
+
+        <pre id="preh3">Şimdi ise kurduğumuz liste yapısını iyi anlamak için şöyle bir resim verebiliriz;</pre>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/14 C Dinamik Liste Yapımı.html/1.svg" alt="14.1" width="800px">
+        </div>
+
+        <pre id="preh3">Bağlantılı liste yapısı gereği dağınık bir yapıdadır. Dolasıyla normal listelerdeki "*(list + i)" kullanılamaz ki bu mantık Pointer aritmatiğine dayanırken, bağlantılı listelerde Pointer aritmetiği kullanılamaz. Bunu ispatlamak için kodumuzu şöyle değiştirelim;</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+#include &lt;stdlib.h>
+
+typedef struct lmn
+{
+    char veri;
+    struct lmn *sonraki;
+} eleman;
+
+
+int main()
+{
+    eleman *harf1 = (eleman *)calloc(1, sizeof(eleman));
+    eleman *harf2 = (eleman *)calloc(1, sizeof(eleman));
+    eleman *harf3 = (eleman *)calloc(1, sizeof(eleman));
+    eleman *harf4 = (eleman *)calloc(1, sizeof(eleman));
+    eleman *harf5 = (eleman *)calloc(1, sizeof(eleman));
+
+    harf1->veri = 'H';
+    harf1->sonraki = harf2;
+
+    harf2->veri = 'e';
+    harf2->sonraki = harf3;
+
+    harf3->veri = 'l';
+    harf3->sonraki = harf4;
+
+    harf4->veri = 'l';
+    harf4->sonraki = harf5;
+
+    harf5->veri = 'o';
+    harf5->sonraki = NULL;
+
+    eleman *temp = harf1;
+    while (temp != NULL)
+    {
+        printf("%c Harfinin tutuldugu bellek adresi => %p\n", temp->veri, temp); // Değerlerin tutulduğu "veri" kısmının bellek adresinide alalım
+        temp = temp->sonraki;
+    }
+
+    temp = harf1;
+    while (temp != NULL)
+    {
+        eleman *temp2 = temp;
+        free(temp);
+        temp = temp2->sonraki;
+        free(temp2);
+    }
+    
+    return 0;
+}</code>
+
+Çıktı;</pre>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/14 C Dinamik Liste Yapımı.html/2.png" alt="14.2" width="800px">
+        </div>
+
+        <pre id="preh3">Çıktıdaki bellek adresleri farklı olasada Pointer mantığına uymamaktadır.</pre>
+     
         <h2>Kaynakça</h2>
         <ul>
+            <li><a href="https://www.geeksforgeeks.org/c/linked-list-in-c/">https://www.geeksforgeeks.org/c/linked-list-in-c/</a></li>
+            <li><a href="https://www.tutorialspoint.com/data_structures_algorithms/linked_list_algorithms.htm">https://www.tutorialspoint.com/data_structures_algorithms/linked_list_algorithms.htm</a></li>
         </ul>    
     </div>
 
