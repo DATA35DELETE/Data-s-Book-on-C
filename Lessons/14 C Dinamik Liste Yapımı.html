@@ -175,10 +175,364 @@ int main()
 
         <pre id="preh3">Çıktıdaki bellek adresleri farklı olasada Pointer mantığına uymamaktadır.</pre>
      
+        <h3>Çift Bağlantılı Listeler</h3>
+        <pre id="preh3">Çift bağlantılı listeler, tek bağlantılardan farklı olarak "sonraki" mantığını ek olarak "önceki" mantığı eklenmiştir.</pre>
+
+        <pre id="preh3">Şimdi ise mevcut örneğimizi "Hello" yazısını hem düz hemde tersten yazdıracak şeklinde değiştirelim. Ayrıca listenin en başındaki elemanın önceki gösterdiği eleman ise NULL olmalıdır.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &ltstdio.h>
+#include &lt;stdlib.h>
+
+typedef struct lmn
+{
+    struct lmn *onceki; // Önceki özelliği
+    char veri;
+    struct lmn *sonraki;
+} eleman;
+
+
+int main()
+{
+    eleman *harf1 = (eleman *)calloc(1, sizeof(eleman));
+    eleman *harf2 = (eleman *)calloc(1, sizeof(eleman));
+    eleman *harf3 = (eleman *)calloc(1, sizeof(eleman));
+    eleman *harf4 = (eleman *)calloc(1, sizeof(eleman));
+    eleman *harf5 = (eleman *)calloc(1, sizeof(eleman));
+
+    // Ek olarak önceki elemanlarıda gösterecek şeklinde düzenliyelim
+
+    harf1->onceki = NULL; // İlk eleman olduğu için NULL
+    harf1->veri = 'H';
+    harf1->sonraki = harf2;
+
+    harf2->onceki = harf1;
+    harf2->veri = 'e';
+    harf2->sonraki = harf3;
+
+    harf3->onceki = harf2;
+    harf3->veri = 'l';
+    harf3->sonraki = harf4;
+
+    harf4->onceki = harf3;
+    harf4->veri = 'l';
+    harf4->sonraki = harf5;
+
+    harf5->onceki = harf4;
+    harf5->veri = 'o';
+    harf5->sonraki = NULL;
+
+    eleman *temp = harf1;
+    while (temp != NULL)
+    {
+        printf("%c", temp->veri);
+        temp = temp->sonraki;
+    }
+
+    printf("\n");
+
+    // Tersini yazdıralım
+    temp = harf5; // Sondaki eleman ile başlıyalım
+    while (temp != NULL)
+    {
+        printf("%c", temp->veri); // Mevcut veriyi yazdır
+        temp = temp->onceki; // Öncekine geç
+    }
+
+    temp = harf1;
+    while (temp != NULL)
+    {
+        eleman *temp2 = temp;
+        free(temp);
+        temp = temp2->sonraki;
+        free(temp2);
+    }
+    
+    return 0;
+}</code>
+
+Çıktımız;</pre>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/14 C Dinamik Liste Yapımı.html/3.png" alt="14.3" width="800px">
+        </div>
+
+        <pre id="preh3">Şimdi ise çift bağlantılı örneğimizi bir görsel ile açıklayabiliriz.</pre>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/14 C Dinamik Liste Yapımı.html/4.svg" alt="14.4" width="800px">
+        </div>
+
+        <h3>Dairesel Bağlantılı Listeler</h3>
+        <pre id="preh3">Dairesel bağlantılı ise tek bağlantılı listelerin son elemanındaki sonraki Pointer'a, ilk elemanı işaretinin atanmış şeklidir. Görsel şekilde anlatalım;</pre>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/14 C Dinamik Liste Yapımı.html/5.svg" alt="14.5" width="800px">
+        </div>
+
+        <pre id="preh3">Şimdi ise beş kere "Hello" yazacak bir sistem yazalım.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+#include &lt;stdlib.h>
+
+typedef struct lmn
+{
+    char veri;
+    struct lmn *sonraki;
+} eleman;
+
+
+int main()
+{
+    eleman *harf1 = (eleman *)calloc(1, sizeof(eleman));
+    eleman *harf2 = (eleman *)calloc(1, sizeof(eleman));
+    eleman *harf3 = (eleman *)calloc(1, sizeof(eleman));
+    eleman *harf4 = (eleman *)calloc(1, sizeof(eleman));
+    eleman *harf5 = (eleman *)calloc(1, sizeof(eleman));
+
+    harf1->veri = 'H';
+    harf1->sonraki = harf2;
+
+    harf2->veri = 'e';
+    harf2->sonraki = harf3;
+
+    harf3->veri = 'l';
+    harf3->sonraki = harf4;
+
+    harf4->veri = 'l';
+    harf4->sonraki = harf5;
+
+    harf5->veri = 'o';
+    harf5->sonraki = harf1; // Son eleman olduğuğu için, ilk elemanı işaret eder
+
+    eleman *temp;
+    for (int i = 0; i < 5; i++) // 5 kere dönecek for döngümüz
+    {
+        printf("\n"); // "Hello" yazıları bitişik olmaması için
+
+        temp = harf1; // Her sereferinde harf1'den başlat
+        while (temp != NULL)
+        {
+            printf("%c", temp->veri);
+            temp = temp->sonraki;
+
+            if (temp == harf5) // Eğer sonuncu eleman olan harf5'e geldi ise
+            {
+                printf("%c", temp->veri); // Son harfi yazdır
+                break; // While'ı kır. Eğer konulmazsa, dairesel bir yapıda olduğuıdan döngü durmucak ve kısır döngü olucaktır
+            }
+        }   
+    }
+    
+
+    temp = harf1;
+    while (temp != NULL)
+    {
+        eleman *temp2 = temp;
+        free(temp);
+        temp = temp2->sonraki;
+        free(temp2);
+    }
+    
+    return 0;
+}</code>
+
+Çıktımız;</pre>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/14 C Dinamik Liste Yapımı.html/6.png" alt="14.6" width="800px">
+        </div>
+
+        <h2>Stack Liste</h2>
+        <pre id="preh2">Bellek yönetiminde bahsettiğimiz Stack bellek alanında depolanan listelere Stack liste denir.</pre>
+
+        <pre id="preh2">Stack'da mantık şudur; İlk giren son çıkar. Biz bu durumu bir elma sepeti metaforundan anlatmıştık. Şimdi ise pratik olarak görelim...</pre>
+
+        <pre id="preh2">Şöyle ki bir Struct tanımlıyoruz. Struct içerisinde bir dizi ve en üstdeki elemanın Index'ini tutmak üzere bir Integer değer saklar. Ardından biz kendi yazdığımız fonksiyonlar ile işlemlerimizi gerçekleştireceğiz.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+
+typedef struct
+{
+    int veriler[10]; // "10" Maksimum Stack listesinde yer alıcak veri
+    int ustdekiEleman;
+} benimStackListem; // Stack listesi için yapımız
+
+// Fonksiyonlarımız
+
+void stackListeOlustur(benimStackListem *lst) // Struct içerisinde veri atayamıyoruz ama"ustdekiEleman" değişkenine -1 değerini atamamız gerekiyor
+{
+    lst->ustdekiEleman = -1; // -1 değerini atıyoruz. Çünkü listede herhangi bir veri yok. 0 veremeyiz çünkü Index'de 1. elemana tekabul eder. Bu yüzden -1
+}
+
+// Listemizin dolu mu boş mu olduğunu kontrol etmek için bu fonksiyonu yazalım
+int stackDolu_mu(benimStackListem *lst){
+    if (lst->ustdekiEleman == 9) // Eğer "ustdekiEleman" maksimum değer olan 9 değerine eşit ise dolmuş demektir(0-9 arası)
+        return 1;
+    else // Eşit değilse dolmamış demektir
+        return 0;
+}
+
+// Stack listesine üstüne veri ekleme
+void stackVeriEkle(benimStackListem *lst, int veri){
+    if (!stackDolu_mu(lst)) // Dolu değil mi diye kontrol edelim
+    {
+        lst->ustdekiEleman++; // Bir ekliyelim ki üstde ekleme yapabilelim
+        lst->veriler[lst->ustdekiEleman] = veri; // Üste veri ekleme
+    }
+}
+
+// Stack listesinden üstdeki veriyi çıkarma
+void stackVeriSilme(benimStackListem *lst){
+    if (lst->ustdekiEleman != -1) // Boş mu diye kontrol edelim
+    {
+        lst->veriler[lst->ustdekiEleman] = 0; // Üste veri sıfıra eşitleme yani silme
+        lst->ustdekiEleman--; // Bir eksiltelim ki üstde çıkarma yapabilelim
+    }
+}
+
+// Üstdeki veriyi alma
+int stackVeriGetir(benimStackListem *lst){
+    if (lst->ustdekiEleman != -1) // Boş mu diye kontrol edelim
+    {
+        return lst->veriler[lst->ustdekiEleman];
+    }
+}
+
+int main(){
+    benimStackListem liste; // Listemizi oluşturalım
+    stackListeOlustur(&liste); // Listemizi kullanımını ayarlıyoruz
+
+    stackVeriEkle(&liste, 6); // 6 verisini ekliyelim
+    printf("En ustdeki veri; %d\n",stackVeriGetir(&liste)); // 6
+
+    stackVeriEkle(&liste, 45); // 45 verisini ekliyelim
+    printf("En ustdeki veri; %d\n",stackVeriGetir(&liste)); // 45
+
+    stackVeriEkle(&liste, 12); // 12 verisini ekliyelim
+    printf("En ustdeki veri; %d\n",stackVeriGetir(&liste)); // 12
+
+    // Şimdi ise sırayla verileri çıkartalım
+    
+    stackVeriSilme(&liste); // En üstdeki veriyi çıkartalım
+    printf("En ustdeki veri; %d\n",stackVeriGetir(&liste)); // 45
+
+    stackVeriSilme(&liste);
+    printf("En ustdeki veri; %d\n",stackVeriGetir(&liste)); // 6
+
+    return 0;
+}</code>
+
+Çıktımız;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/14 C Dinamik Liste Yapımı.html/7.png" alt="14.7" width="800px">
+        </div>
+
+        <pre id="preh2">Stack listenin kullanım alanları ise;</pre>
+
+        <ul>
+            <li>Kopyala yapıştır mantığı bu listeden gelir.</li>
+            <li>İnternet tarayıcılarında sayfalar arasında ileri ve geri gitmizi sağlar.</li>
+        </ul>
+
+        <h2>Queue</h2>
+        <pre id="preh2">Queue ise ilk giren son çıkar prensibi ile çalışan, bellek alanlarındaki Heap'e benzer bir veri yapısıdır.</pre>
+
+        <pre id="preh2">Qeueu, Stack'den farklı olarak baştaki ve sondaki elemanların Index'lerini tutan Integer'lar vardır. Ekleme için sondaki eleman ile eklenir, çıkarma ise baştaki eleman ile yapılır.</pre>
+
+        <pre id="preh2">Stack ile yaptığımız örneğimizi şimdi Queue ile tekrar yapalım...</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+
+typedef struct
+{
+    int veriler[10];
+    int ondeki;
+    int sondaki;
+} benimQueueListem; // Queue yapımız
+
+void queueBaslat(benimQueueListem *lst){
+    lst->ondeki = -1; // -1 değerini atıyoruz çünkü çıkarma işlemleri için 0'dan başlatılır. 0 tanımlamamaz
+    lst->sondaki = 0; // İlk veri için 0 değeri atanır
+}
+
+int queueBos_mu(benimQueueListem *lst){
+    if (lst->ondeki == lst->sondaki - 1) // Sondakinin değerinin Index'ini tutan elemanın bir eksiği öndeki değerim Index'i ile aynı ise Queue boştur
+        return 1;
+    else
+        return 0;
+}
+
+void queueVeriEkle(benimQueueListem *lst, int veri){
+    if (lst->sondaki != 9) // Dolu değil mi diye kontrol
+    {
+        lst->veriler[lst->sondaki] = veri; // Sona veri ekleme
+
+        lst->sondaki++; // Bir sonraki veri için bir arttır
+    }     
+}
+
+void queueVeriSil(benimQueueListem *lst){
+    if (!queueBos_mu(lst)) // Boş değil mi diye kontrol
+    {
+        lst->ondeki++; // Bir arttıralım ki diğer veri geçersiz kılınsın
+    }
+    
+}
+
+int queueVeriGetir(benimQueueListem *lst){
+    if (!queueBos_mu(lst)) // Boş değil mi diye kontrol
+    {
+        return lst->veriler[lst->ondeki + 1];
+    }
+}
+
+int main(){
+    benimQueueListem liste; // Listemiz
+    queueBaslat(&liste); // Listemizi başlatalım
+
+    queueVeriEkle(&liste, 6); // 6 verisini ekliyelim
+    printf("Ondeki veri; %d\n",queueVeriGetir(&liste)); // 6
+
+    queueVeriEkle(&liste, 45); // 6 verisini ekliyelim
+    printf("Ondeki veri; %d\n",queueVeriGetir(&liste)); // 6
+
+    queueVeriEkle(&liste, 12); // 6 verisini ekliyelim
+    printf("Ondeki veri; %d\n",queueVeriGetir(&liste)); // 6
+
+    // Şimdi ise sırayla verileri çıkartalım
+    
+    queueVeriSil(&liste); // Baştaki veriyi çıkartır
+    printf("Ondeki veri; %d\n",queueVeriGetir(&liste)); // 45
+
+    queueVeriSil(&liste);
+    printf("Ondeki veri; %d\n",queueVeriGetir(&liste)); // 12
+
+    return 0;
+}</code>
+
+Çıktımız;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/14 C Dinamik Liste Yapımı.html/8.png" alt="14.8" width="800px">
+        </div>
+
+        <pre id="preh2">Queue'nin ise kullanım alanları;</pre>
+        
+        <ul>
+            <li>CPU komut yürütme sistemi için Queue kullanır.</li>
+            <li>Ağ programlamada paket yönetimi için kullanılır.</li>
+        </ul>
+
+
+
         <h2>Kaynakça</h2>
         <ul>
             <li><a href="https://www.geeksforgeeks.org/c/linked-list-in-c/">https://www.geeksforgeeks.org/c/linked-list-in-c/</a></li>
             <li><a href="https://www.tutorialspoint.com/data_structures_algorithms/linked_list_algorithms.htm">https://www.tutorialspoint.com/data_structures_algorithms/linked_list_algorithms.htm</a></li>
+            <li><a href="https://www.geeksforgeeks.org/c/implement-stack-in-c/">https://www.geeksforgeeks.org/c/implement-stack-in-c/</a></li>
+            <li><a href="https://enpopulersorular.com/library/lecture/read/64563-stack-nerelerde-kullanilir#0">https://enpopulersorular.com/library/lecture/read/64563-stack-nerelerde-kullanilir#0</a></li>
+            <li><a href="https://www.geeksforgeeks.org/c/queue-in-c/"></a>https://www.geeksforgeeks.org/c/queue-in-c/</li>
         </ul>    
     </div>
 
