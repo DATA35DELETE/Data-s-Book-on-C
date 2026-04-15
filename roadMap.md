@@ -188,7 +188,8 @@
 - **Queue (Kuyruk)**: Tanım. FIFO. Örnek.
   > Metodları
 - **Generic Liste**: void pointer ile genel liste. Örnek.
- 
+- **Dinamik Liste Yapımı**
+
 ---
  
 ### C : Dosya İşlemleri

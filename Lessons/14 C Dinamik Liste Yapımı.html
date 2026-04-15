@@ -524,7 +524,61 @@ int main(){
             <li>Ağ programlamada paket yönetimi için kullanılır.</li>
         </ul>
 
+        <h2>Generic Liste</h2>
+        <pre id="preh2">Generic liste, tür bağımsız listelerdir.</pre>
 
+        <pre id="preh2">Biz önceden statik bir veri tipi olan(int, double, ...) listeler oluşturduk ve kurduk. Generic ise bir üst seviyeye taşıyarak tür bağımsız yani bir listede aynı anda hem Integer bir değer hem de Double bir değer tutalbilceği algoritmadır.</pre>
+
+        <pre id="preh2">Mantığı ise aslen boş veri türüne ait olan void(Void'li fonksiyonlardan hatırlayabilirsiniz ki geriye hiç bir değer döndürmeyen fonksiyonlardır) veri türü ile C programlama dilinin, sorgulamaksızın verileri bir dinamik belleğe kayıt edip, Linked List ile işlem yapılmasıdır.</pre>
+
+        <pre id="preh2">Şimdi ise hem bir Integer hem de bir Double veri türünden veri tutabilen bir Generic Linked listesi yazalım.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+#include &lt;stdlib.h>
+#include &lt;string.h>
+
+struct genericLinked
+{
+    void *data; // Void'li değişken
+    struct genericLinked *sonraki; // Tek bağlantılı bir Linked Liste
+}; // Yapımız
+
+// Başa ekleme yapıyoruz
+struct genericLinked* basaEkle(struct genericLinked* lst, void *data, int size){
+    struct genericLinked *temp = (struct genericLinked *)malloc(sizeof(struct genericLinked)); // Ekleme yapacağımız liste yapısı
+    
+    temp->data = malloc(size); // İşte Generic bu işlem ile mümkün olur. Buradaki mantık ise "size" kadar baytı temp'in içerisindeki "data" değişkeni için bir bellek alanı oluşturuyor. Örnek Integer için 4 bayt, Double için 8 baytlık yer ayrıltılır
+    temp->sonraki = lst; // Linked için sonrakini işaret edecek elemanı atuyoruz
+
+    memcpy(temp->data, data, size); // Bu kısım ise eklenmek istenen "data"'yı temp'in data'sına kopyalayıp yapıştırıyor(Bir nevi atıyor)
+
+    return temp; // Temp'i döndür
+}
+
+int main(){
+    struct genericLinked *myList = NULL; // Generic listemiz
+
+    int integerDegerler[1] = {12}; // Eklencek verilerimizi liste şeklinde eklemeliyiz. Yoksa program çöker
+    double doubleDegerler[1] = {423.659};
+
+    myList = basaEkle(myList, integerDegerler, sizeof(int)); // malloc ile temp->data açacağımız bellek miktarını sizeıf ile göndeririz ki hata olmasın
+    myList = basaEkle(myList, doubleDegerler, sizeof(double)); // Direkt dizinin ismini yazdık çünkü doubleDegerler[0] ile doubleDegerler aynı veriyi verir. Bunun sebebi dizilerin asasen bir Pointer olmaları ve bu ifade birince Pointer'ı ifade etmekte
+
+    printf("%f  \n", *(double *)myList->data); // Verimizi çekiyoruz. Çıktı: "423.659000"
+    myList = myList->sonraki; // Sonraki veriye geç
+
+    printf("%d", *(int *)myList->data); // Verimizi çekiyoruz. Çıktı: "12"
+
+    return 0;
+}</code>
+
+Çıktı;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/14 C Dinamik Liste Yapımı.html/9.png" alt="14.9" width="800px">
+        </div>
+
+        <pre id="preh2">Şeklinde olucaktır. Artık bir yapının içerisinde hem Integer hem de Double içerebiliyor.</pre>
 
         <h2>Kaynakça</h2>
         <ul>
@@ -533,6 +587,7 @@ int main(){
             <li><a href="https://www.geeksforgeeks.org/c/implement-stack-in-c/">https://www.geeksforgeeks.org/c/implement-stack-in-c/</a></li>
             <li><a href="https://enpopulersorular.com/library/lecture/read/64563-stack-nerelerde-kullanilir#0">https://enpopulersorular.com/library/lecture/read/64563-stack-nerelerde-kullanilir#0</a></li>
             <li><a href="https://www.geeksforgeeks.org/c/queue-in-c/">https://www.geeksforgeeks.org/c/queue-in-c/</a></li>
+            <li><a href="https://www.geeksforgeeks.org/c/generic-linked-list-in-c-2/">https://www.geeksforgeeks.org/c/generic-linked-list-in-c-2/</a></li>
         </ul>    
     </div>
 
