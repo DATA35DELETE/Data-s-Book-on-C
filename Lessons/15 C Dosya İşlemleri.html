@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data's Book on C</title>
+
+    <link rel="icon" type="image/x-icon" href="../Sources/favicon.png">
+
+    <script src="../Sources/JS/setBackgroundMedia.js"></script>
+
+    <link rel="stylesheet" href="../Sources/JS/hljs/vs2015.css">
+    <script src="../Sources/JS/hljs/highlight.min.js"></script>
+    <script>
+        window.onload = function() {
+            hljs.highlightAll();
+        };
+    </script>
+
+    <link rel="stylesheet" href="../Sources/CSS/main.css">
+</head>
+<body>
+    <h1>Dosya İşlemleri</h1>
+
+    <div style="height: 100px;"></div>
+    
+    <div id="mainDiv">
+        <h2>Dosya Nedir?</h2>
+        <pre id="preh2">Dosya; bilgisayarın fiziksel diskinde bulunan verileri sanal ortamda temsil etmek için kullanılan, aksi bir durum yaşanmaz ise sounsuza kadar depolanabilen bilgilerdir.</pre>
+
+        <pre id="preh2">Dosya işlemleri ise bu bilgilerin üzerinde işlem yapılması demektir.</pre>
+
+        <pre id="preh2">C programlama dilinde dosya işlemleri <code class="language-c">#include &lt;stdio.h></code> kütüphanesindeki "f" harfi ile başlayan fonksiyonlarla gerçekleşir.</pre>
+
+        <h2>Dosya Açma ve Kapatma</h2>
+        <pre id="preh2">Dosya üzerinde işlem yapabilmemiz için ilk önce dosyayı açmamız gerekir. Bunun için ise fopen ile dosyamızı <code class="language-c">FILE</code> adlı özel bir değişken türüne ait bir değişken tanımlıyoruz. Ayrıca modlar ile dosyanın üzerinde ne tür işlemler yapabilceğimizi yazıyoruz. Ayrıca dosya açma işlemi başarısız olursa fonksiyonun değeri NULL olucaktır.</pre>
+
+        <pre id="codeh2"><code>FILE* file = fopen("dosyaIsmi.dosyaUzantisi", "açilmaModu");</code></pre>
+
+        <pre id="preh2">Dosya açma modları ise aşşağıdaki tabloda, amaçlarıyla beraber verilmiştir.</pre>
+
+        <table id="tableh2" border="1">
+            <thead>
+                <tr>
+                    <th>Açma Kodu</th>
+                    <th>Amacı</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>r</td>
+                    <td>Dosyaları okumak için açar. Yoksa NULL döndürür.</td>
+                </tr>
+                <tr>
+                    <td>rb</td>
+                    <td>Dosyaları Binary şeklinde okumak için açar. Yoksa NULL döndürür.</td>
+                </tr>
+                <tr>
+                    <td>w</td>
+                    <td>Dosyaları yazmak için açar. Üzerine yazar. Yoksa oluşturur.</td>
+                </tr>
+                <tr>
+                    <td>wb</td>
+                    <td>Dosyaları Binary şeklinde okumak için açar. Üzerine yazar. Yoksa NULL döndürür.</td>
+                </tr>
+                <tr>
+                    <td>a</td>
+                    <td>Dosyaları içeriğine eklemek için açar. Yoksa oluşturur.</td>
+                </tr>
+                <tr>
+                    <td>r+</td>
+                    <td>Dosyaları hem yazma hem okuma için açar. Yoksa NULL döndürür.</td>
+                </tr>
+                <tr>
+                    <td>rb+</td>
+                    <td>Dosyaları Binary şeklinde hem yazma hem okuma için açar. Yoksa NULL döndürür.</td>
+                </tr>
+                <tr>
+                    <td>w+</td>
+                    <td>Dosyaları hem yazma hem okuma için açar. Yoksa oluşturur.</td>
+                </tr>
+                <tr>
+                    <td>wb+</td>
+                    <td>Dosyaları Binary şeklinde hem yazma hem okuma için açar. Yoksa oluşturur.</td>
+                </tr>
+                <tr>
+                    <td>a+</td>
+                    <td>Dosyaları eklemek şeklinde hem yazma hem okuma için açar. Yoksa oluşturur.</td>
+                </tr>
+                <tr>
+                    <td>ab+</td>
+                    <td>Dosyaları Binary'le eklemek şeklinde hem yazma hem okuma için açar. Yoksa oluşturur.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <pre id="preh2">Fopen dosyayı RAM'e yüklediğinden fclose ile yüklediği dosyayı RAM'de serbest bırakmamız gerekir. Bu işlem bellek yönetimi için kritik önem arz eder.</pre>
+
+        <pre id="codeh2"><code class="language-c">fclose(file);</code></pre>
+
+        <h3>Dosya Oluşturma</h3>
+        <pre id="preh3">Dosya oluşturmak için, dosya yoksa oluşturucu yeteneğine sahip dosya açma modları kullanılır.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+
+int main(){
+    FILE* file = fopen("dosyaIsmi.dosyaUzantisi", "w"); // Klasörde bulunmayan bir dosya oluşturuyoruz. w, dosya yoksa oluşturma yeteneğine sahiptir
+
+    fclose(file); // Bellek yönetimi için gereklidir
+
+    return 0;
+}</code>
+
+Derlenip çalıştırıldığında uygulamın bulunduğu klasörde dosyamızı görebiliriz.</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/15 C Dosya İşlemleri.html/1.png" alt="15.1" width="800px">
+        </div>
+
+        <h3>Dosya Silme</h3>
+        <pre id="preh3">Dosya silme işlemi için ise <code>remove("dosyaIsmi.dosyaUzantisi");</code> fonksiyonu ile yapılır.</pre>
+
+        <pre id="preh3">Şimdi ise oluşturduğumuz dosyayı silelim;</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+
+int main(){
+    //FILE* file = fopen("dosyaIsmi.dosyaUzantisi", "w");
+
+    remove("dosyaIsmi.dosyaUzantisi"); // Silme işlemi
+
+    return 0;
+}</code>
+
+Derleyip çalıştırdığımızda dosyamızın kaybolduğunu görebiliriz.</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/15 C Dosya İşlemleri.html/2.png" alt="15.2" width="800px">
+        </div>
+
+        <h2>Dosya Yazma İşlemleri</h2>
+        <pre id="preh2">Dosya yazma işlemleri, dosyanın içeriğine bilgiler yazma işlemlerine denir.</pre>
+
+        <pre id="preh2">Dosyaya veri yazmak için bir çok fonksiyon bulunur. Şimdi ise teker teker tüm fonksiyonları görebilceğimiz bir kod yazalım.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+
+int main(){
+    FILE* file = fopen("dosyaIsmi.dosyaUzantisi", "w"); // Dosyamızı yazma modunda açalım
+
+    fprintf(file, "Kullanıcının İmsi: %s\n", "Data"); // printf gibi dosyaya yazı yazmamızı sağlar. Ayrıca göründüğü üzere formatlı bir şekilde yazılabilir.
+    fputs("Kullanıcının Soyismi: Delete", file); // fprintf'in formatsız yazdıran halidir
+    fputc('\n', file); // Tek bir karakter yazar
+
+    fclose(file);
+    
+    return 0;
+}</code>
+
+Çalıştırıldıktan sonra dosyanın içeriği ise;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/15 C Dosya İşlemleri.html/3.png" alt="15.3" width="800px">
+        </div>
+
+        <h2>Dosya Okuma İşlemleri</h2>
+        <pre id="preh2">Dosya okuma işlemleri, dosya içeriğini okuma işlemleridir.</pre>
+
+        <pre id="preh2">Dosya okuma için fgets fonksiyonu vardır. Fgets ise satırdaki verilen sınır kadar okur ve verilen Char dizesine atar. Şimdi ise okuma örneğimizdeki yazdığımız bilgileri okuyalım ve konsola yazdıralım.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+
+int main(){
+    FILE* file = fopen("dosyaIsmi.dosyaUzantisi", "r"); // Dosyamızı okuma modunda açalım
+    if (file == NULL) // Hata kontrolü
+    {
+        perror("HATA");
+
+        return 1;
+    }
+    
+    char yazilar[100]; // Okumak için Char dizesi. 100 karakterlik bir sınır koydum
+
+    while (fgets(yazilar, 100, file) != NULL) // fgets dosyanın sonuna geldiğinde NULL döndürür.
+    {
+        printf("%s", yazilar); // Bulunan yazıları konsola yazdır
+    }
+
+    fclose(file);
+    
+    return 0;
+}</code>
+
+Çıktımız;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/15 C Dosya İşlemleri.html/4.png" alt="15.4" width="800px">
+        </div>
+
+        <pre id="preh2">Bozuk bir çıktı elde etsekte dosyamızın içeriğini bu şekilde okuruz.</pre>
+
+        <h2>Dosya Konumlandırma İşlemi</h2>
+        <pre id="preh2">Dosya konumlandırma, dosyamızın üzerinde işlem yaparken hangi satır ve sütünda yaptığımızı ayarlamak için yapılan işlemdir.</pre>
+
+        <pre id="preh2">Dosya üzerinde işlem yaparken mesela dosyaya yazı yazıyor olalım. İşlem bittiğinde o işlemin bittiği yerden diğer işlemler devam eder. Konumlandırma için fseek kullanılır.</pre>
+
+        <pre id="codeh2"><code class="language-c">fseek(file, kaydirilacakDeger, kaydirilcagiYer);</code>
+        
+file; Konumalandırma yapılacak dosya
+kaydirilacakDeger; Kaydırlacak bayt sayısı, pozitif ise ileri, negatif ise geriye olur.
+kaydirilcagiYer; Kaydırmaya nereden başlıcağını belirtir.
+    SEEK_END; Dosyanın sonundan
+    SEEK_SET; Dosyanın başından
+    SEEK_CUR; Mevcut konumundan</pre>
+
+        <pre id="preh2">Şimdi ise bu özelliği kullanarak, üzerinde işlem yaptığımız dosyamızın 2. satırındaki yazıyı "Kullanıcının parası: 100" şeklinde değiştirelim.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+
+int main(){
+    FILE* file = fopen("dosyaIsmi.dosyaUzantisi", "w");
+
+    fprintf(file, "Kullanıcının İmsi: %s\n", "Data");
+    fputs("Kullanıcının Soyismi: Delete", file);
+
+    printf("İşlemlerin başladığı konum: %d\n", ftell(file)); // ftell ile dosyadaki mevcut konumu öğrenebilirsiniz
+    fseek(file, -31, SEEK_END); // Dosyanın sonundan 31 karakter geriye çünkü "Kullanıcının Soyismi: Delete" o kadar karakteri var. Hesaplama ise her karakter 1 bayt fakat İngilizce olmayan karakterler 2 bayt ediyor
+    printf("İşlemlerin başladığı konum: %d\n", ftell(file)); // ftell ile dosyadaki mevcut konumu öğrenebilirsiniz
+    
+    // Yeniden yazma
+    fputs("Kullanıcının parası: 100   ", file);
+
+    fclose(file);
+    
+    return 0;
+}</code>
+
+Dosyamızın içeriği;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/15 C Dosya İşlemleri.html/5.png" alt="15.5" width="800px">
+        </div>
+
+        <h2>Kaynakça</h2>
+        <ul>
+            <li><a href="https://tr.wikipedia.org/wiki/Bilgisayar_dosyası">https://tr.wikipedia.org/wiki/Bilgisayar_dosyası</a></li>
+            <li><a href="https://www.geeksforgeeks.org/c/basics-file-handling-c/">https://www.geeksforgeeks.org/c/basics-file-handling-c/</a></li>
+            <li><a href="https://stackoverflow.com/questions/5769785/how-to-remove-a-file-in-c-program">https://stackoverflow.com/questions/5769785/how-to-remove-a-file-in-c-program</a></li>
+        </ul>    
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <footer style="position: fixed; left: 0; bottom: 0; width: 100%; background: transparent; text-align: center; padding: 10px 0; z-index: 100;">
+        <div>
+            <a href="./14 C Dinamik Liste Yapımı.html" style="margin-right: 20px; cursor:pointer;">
+                &larr; Önceki
+            </a>
+            <a href="" style="cursor:pointer;">
+                Sonraki &rarr;
+            </a>
+        </div>
+        <div>
+            <p>&copy; 2026 Data's Book</p>
+        </div>
+
+        <div style="position: absolute; right: 20px; bottom: 20px;">
+            <a href="./1 C İçindekiler.html" style="text-decoration: none;">
+                İçindekiler
+            </a>
+        </div>
+    </footer>
+</body>
+</html>
+
+<!-- Muhammet Enes nam-ı diğer Data Delete tarafından sevgi ile yapıldı <3 -->

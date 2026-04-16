@@ -188,7 +188,6 @@
 - **Queue (Kuyruk)**: Tanım. FIFO. Örnek.
   > Metodları
 - **Generic Liste**: void pointer ile genel liste. Örnek.
-- **Dinamik Liste Yapımı**
 
 ---
  
@@ -202,6 +201,24 @@
   > Metodları
 - **Dosya Konumlandırma**: fseek. ftell. rewind. Örnek.
 - **İkili (Binary) Dosyalar**: Tanım. Örnek.
+- **Klasör İşlemleri**: Tanım. Kullanım Senaryoları.
+  - **Linux — Klasör Operasyonları**:
+    - **Klasör Oluşturma**: mkdir. Tanım. Parametreler. Örnek.
+    - **Klasör Silme**: rmdir. Tanım. Örnek.
+    - **Klasör İçeriğini Listele**: opendir. readdir. closedir. Örnek.
+    - **Dosya/Klasör İstatistikleri**: stat. lstat. Tanım. Örnek.
+    - **Dosya Türü Kontrolü**: S_ISREG. S_ISDIR. S_ISLNK. Örnek.
+    - **Özyinelemeli Klasör Taraması**: Örnek.
+    - **Çalışan Klasör**: getcwd. chdir. Örnek.
+  - **Windows — Klasör Operasyonları**:
+    - **Klasör Oluşturma**: CreateDirectoryA. Tanım. Parametreler. Örnek.
+    - **Klasör Silme**: RemoveDirectoryA. Tanım. Örnek.
+    - **Klasör İçeriğini Listele**: FindFirstFileA. FindNextFileA. FindClose. Örnek.
+    - **Dosya Bilgisi**: GetFileAttributesA. Tanım. Örnek.
+    - **Dosya/Klasör Kontrolü**: FILE_ATTRIBUTE_DIRECTORY. Örnek.
+    - **Özyinelemeli Klasör Taraması**: Örnek.
+    - **Çalışan Klasör**: GetCurrentDirectoryA. SetCurrentDirectoryA. Örnek.
+  - **Cross-Platform Klasör İşlemleri**: Platform Soyutlama. Örnek.
 - **Native Dosya İşlemleri**: Tanım. stdio.h vs OS API. Kullanım Senaryoları.
   - **Linux — .so Dosyaları**:
     - **Shared Object Nedir?**: .so ve .a Farkı. Dinamik vs Statik.
