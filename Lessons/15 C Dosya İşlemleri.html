@@ -67,30 +67,6 @@
                     <td>a</td>
                     <td>Dosyaları içeriğine eklemek için açar. Yoksa oluşturur.</td>
                 </tr>
-                <tr>
-                    <td>r+</td>
-                    <td>Dosyaları hem yazma hem okuma için açar. Yoksa NULL döndürür.</td>
-                </tr>
-                <tr>
-                    <td>rb+</td>
-                    <td>Dosyaları Binary şeklinde hem yazma hem okuma için açar. Yoksa NULL döndürür.</td>
-                </tr>
-                <tr>
-                    <td>w+</td>
-                    <td>Dosyaları hem yazma hem okuma için açar. Yoksa oluşturur.</td>
-                </tr>
-                <tr>
-                    <td>wb+</td>
-                    <td>Dosyaları Binary şeklinde hem yazma hem okuma için açar. Yoksa oluşturur.</td>
-                </tr>
-                <tr>
-                    <td>a+</td>
-                    <td>Dosyaları eklemek şeklinde hem yazma hem okuma için açar. Yoksa oluşturur.</td>
-                </tr>
-                <tr>
-                    <td>ab+</td>
-                    <td>Dosyaları Binary'le eklemek şeklinde hem yazma hem okuma için açar. Yoksa oluşturur.</td>
-                </tr>
             </tbody>
         </table>
 
@@ -240,6 +216,45 @@ Dosyamızın içeriği;</pre>
         <div id="divh2Img">
             <img src="../Bibliography/15 C Dosya İşlemleri.html/5.png" alt="15.5" width="800px">
         </div>
+
+        <h2>İkili(Binary) Dosya İşlemleri</h2>
+        <pre id="preh2">Binary dosyaları için ise "rb" ve "wb" kullanırız. Bu modlar bizlere dosyamızı ikili biçimde değer yazdırmamızı sağlarlar.</pre>
+
+        <pre id="preh2">Şimdi ise Binary şeklinde bir dosyamıza "selam" yazalım ve okuyalım.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+
+int main(){
+    FILE *filew = fopen("binary.bin", "wb"); // Binary dosyaları .bin uzantısına sahip olmalı. Dosyamızı yazma işlemiyle açıp Binary şeklinde işlem yapıcağımızı belirtiyoruz
+
+    fwrite("selam", sizeof(char), 5, filew);
+    // "selam"; Binary dosyasına yazılacak değer. Eğer sayı yazdıracaksak (int n; &n)
+    // sizeof(char); Her bir elemana ayrılacak bayt sayısı
+    // 5; Tüm elemanlara ayrılacak bayt
+    // file; Yazdıralacak dosya
+
+    fclose(filew);
+
+    FILE *filer = fopen("binary.bin", "rb"); // Dosyamızı okuma işlemiyle açıp Binary şeklinde işlem yapıcağımızı belirtiyoruz
+    
+    char binaryDosyasidakiDeger[6];
+
+    fread(binaryDosyasidakiDeger, sizeof(char), 5, filer);
+    // binaryDosyasidakiDeger; Çıktının atacak değişkeni. Eğer sayı yazdıracaksak (int n; &n)
+    // sizeof(char); Her bir elemana ayrılacak bayt sayısı
+    // 5; Tüm elemanlara ayrılacak bayt
+    // file; Okunacak dosya
+
+    printf("Binary'nin degeri; %s", binaryDosyasidakiDeger);
+
+    fclose(filer);
+
+    return 0;
+}</code>
+
+Çıktımız "Binary'nin degeri; selam" olucaktır.</pre>
+
+        
 
         <h2>Kaynakça</h2>
         <ul>
