@@ -254,13 +254,85 @@ int main(){
 
 Çıktımız "Binary'nin degeri; selam" olucaktır.</pre>
 
+        <h2>Linux'da Klasör İşlemleri</h2>
+        <pre id="preh2">Klasör işlemleri, dosyaların bulunabilceği konumlara denir. Klasörün diğer ismi dizindir.</pre>
+
+        <pre id="preh2">C dilinin platform bağımlığı yüzünden dosya işlemleri Linux'da ve Windows'da farklıdır.</pre>
+
+        <pre id="preh2">Peki klasörleri neden kullanalım? Tabiki de gerçek hayatta olduğu gibi dosyaları sınıflandırmak ve birbirlerinden ayrımaktır. Mesela Github Repo'larına aşınaysanız README.md dsoyalarını görmüşsünüzdür. Mesela o dosyanın ismi her Repo'da aynı, her REAMDE.md dosyasınında bulunduğu Repo'da farklıdır. Aynı zamanda bir klasör içerisinde aynı isme ve uzantıya sahip iki dosya bulunamaz. İşte bu yüzden dosyaları sınıflandırmak ve düzenlemek için klasörleri kullanırız.</pre>
+
+        <h3>Klasör Oluşturma</h3>
+        <pre>Klasör oluşturma için Linux tarzı işletim sistemlerinde bulunan <code class="language-c">#include &lt;sys/stat.h></code> kütüphenasinde bulunan <code class="language-c">mkdir</code> fonkisiyonu ile oluşturulur. Eğer başarılı olursa sıfır, başarısız olursa eksi bir dönmektedir. Böylelikle hata yönetimi sağlanır.</pre>
+
+        <pre id="codeh2"><code class="language-c">mkdir("klasörİsmi", 0755);</code>
         
+"klasörİsmi"; Oluşturulacak klasörün isminin ne olucağını belirtir.
+0755; Modudur. 0755 hem okuma hem yazma hem de yürütme yetkisine sahibine verirken, diğerlerine okuma ve yürütme yetkisi vermektedir.</pre>
+
+        <h3>Klasör Silme</h3>
+        <pre id="preh3">Klasör silmek için ise <code class="language-c">#include &lt;unistd.h></code> kütüphanemizde bulunan <code>rmdir</code> fonksiyonu kullanılır. Eğer başarılı olursa sıfır, başarısız olursa eksi bir dönmektedir.</pre>
+
+        <pre id="codeh3"><code class="language-c">rmdir("klasörİsmi");</code>
+
+"klasörİsmi"; Silinecek klasörün ismidir.    
+</pre>
+
+        <h3>Klasör İçeriğini Listeleme</h3>
+        <pre id="preh3">Klasör içerğini listemek için şu kodları yazarız;</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+#include &lt;dirent.h> // Kütüphanemiz
+
+int main(){
+
+    struct dirent *Dirent; // Bilgileri alacağımız yapı değişkeni
+    DIR *dir = opendir("klasörİsmi"); // Bilgileri alacağımız klasör. opendir, aynı fopen gibi bir Pointer döndürür ve bir akış gibi çalışır
+
+    while ((Dirent = readdir(dir)) != NULL) // readdir ile de klasörümüz içerisindeki dosya ve klasörleri aynı fgets gibi okuyabiliyoruz
+    {
+        printf("%s\n", Dirent->d_name); // Yapının içerisinden d_name ile ismi alıyoruz
+    }
+    
+    closedir(dir); // Aynı fclose gibi de dir'i kapatıyoruz
+
+    return 0;
+}</code>
+
+Çıktı ise(Tabi klasör içeriğini ben kendim oluşturdum);</pre>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/15 C Dosya İşlemleri.html/6.jpeg" alt="15.6" width="800px">
+        </div>
+
+        <h3>Dosya Bilgisi Alma</h3>
+        <pre id="preh3">Dosya bilgisini almak için aşşağıdaki kodları yazabiliriz;</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+#include &lt;sys/stat.h> // Kütüphanemiz
+
+int main(){
+
+    struct stat fileStat; // Bilgileri alacağımız yapı
+    stat(".logo", &fileStat); // .logo adlı dosyanın bilgilerini yapımıza aktarıyoruz
+
+    printf(".logo dosyasının boyutu: %ld\n", fileStat.st_size); // st_size ile boyutunu alıyoruz
+
+    return 0;
+}</code>
+
+Çıktı ise ".logo dosyasının boyutu: 325" olucaktır.</pre>
+
+
 
         <h2>Kaynakça</h2>
         <ul>
             <li><a href="https://tr.wikipedia.org/wiki/Bilgisayar_dosyası">https://tr.wikipedia.org/wiki/Bilgisayar_dosyası</a></li>
             <li><a href="https://www.geeksforgeeks.org/c/basics-file-handling-c/">https://www.geeksforgeeks.org/c/basics-file-handling-c/</a></li>
             <li><a href="https://stackoverflow.com/questions/5769785/how-to-remove-a-file-in-c-program">https://stackoverflow.com/questions/5769785/how-to-remove-a-file-in-c-program</a></li>
+            <li><a href="https://www.delftstack.com/howto/c/mkdir-in-c/">https://www.delftstack.com/howto/c/mkdir-in-c/</a></li>
+            <li><a href="https://coderscratchpad.com/c-program-to-remove-a-directory/">https://coderscratchpad.com/c-program-to-remove-a-directory/</a></li>
+            <li><a href="https://stackoverflow.com/questions/3554120/open-directory-using-c">https://stackoverflow.com/questions/3554120/open-directory-using-c</a></li>
+            <li><a href="https://codeforwin.org/c-programming/c-program-find-file-properties-using-stat-function">https://codeforwin.org/c-programming/c-program-find-file-properties-using-stat-function</a></li>
         </ul>    
     </div>
 
