@@ -216,7 +216,6 @@
     - **Dosya Bilgisi**: GetFileAttributesA. Tanım. Örnek.
     - **Dosya/Klasör Kontrolü**: FILE_ATTRIBUTE_DIRECTORY. Örnek.
     - **Çalışan Klasör**: GetCurrentDirectoryA. SetCurrentDirectoryA. Örnek.
-  - **Cross-Platform Klasör İşlemleri**: Platform Soyutlama. Örnek.
 - **Native Dosya İşlemleri**: Tanım. stdio.h vs OS API. Kullanım Senaryoları.
   - **Linux — .so Dosyaları**:
     - **Shared Object Nedir?**: .so ve .a Farkı. Dinamik vs Statik.
