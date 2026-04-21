@@ -376,6 +376,24 @@ int main(){
             <img src="../Bibliography/15 C Dosya İşlemleri.html/8.png" alt="15.8dos" width="800px">
         </div>
 
+        <h2>Windows Klasör İşlemleri</h2>
+        <pre id="preh2">Şimdi ise Windows tarfına bakalım. Windows'da çoğu <code class="language-c">#include &lt;windows.h</code> kütüphanesinde bulunur.</pre>
+
+        <h3>Klasör Oluşturma</h3>
+        <pre id="preh3">Klasör oluşturmak için <code>CreateDirectoryA()</code> komutunu kullanıyoruz.</pre>
+
+        <pre id="codeh3"><code class="language-c">CreateDirectoryA("klasorIsmi", NULL);</code>
+        
+"klasorIsmi"; Oluşturulacak klasörün ismi.
+NULL; Güvenlik paramtresi. İstemedeğimden NULL.</pre>
+
+        <h3>Klasör Silme</h3>
+        <pre id="preh3">Klasör silmek için CreateDirectoryA fonksiyonu kullanılır.</pre>
+
+        <pre id="codeh3"><code class="language-c">RemoveDirectoryA("klasorIsmi");</code>
+        
+"klasorIsmi"; Silinecek klasörün ismi.</pre>
+
         <h2>Kaynakça</h2>
         <ul>
             <li><a href="https://tr.wikipedia.org/wiki/Bilgisayar_dosyası">https://tr.wikipedia.org/wiki/Bilgisayar_dosyası</a></li>
@@ -385,6 +403,7 @@ int main(){
             <li><a href="https://coderscratchpad.com/c-program-to-remove-a-directory/">https://coderscratchpad.com/c-program-to-remove-a-directory/</a></li>
             <li><a href="https://stackoverflow.com/questions/3554120/open-directory-using-c">https://stackoverflow.com/questions/3554120/open-directory-using-c</a></li>
             <li><a href="https://codeforwin.org/c-programming/c-program-find-file-properties-using-stat-function">https://codeforwin.org/c-programming/c-program-find-file-properties-using-stat-function</a></li>
+            <li><a href="https://aljensencprogramming.wordpress.com/tag/createdirectory/">https://aljensencprogramming.wordpress.com/tag/createdirectory/</a></li>
         </ul>    
     </div>
 
