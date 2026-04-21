@@ -322,7 +322,59 @@ int main(){
 
 Çıktı ise ".logo dosyasının boyutu: 325" olucaktır.</pre>
 
+        <h3>Dosya Türü Kontrol</h3>
+        <pre id="preh3">Bu işlem ise ele aldığımız veriyi dosya mı yoksa klasör mü olduğunu kontorl etmemizi sağlar.</pre>
 
+        <pre id="codeh3">Şimdi ise bir önceki örneğimize ek olarak, dosya mı klasör mü sembol dosyası mı kontrol edelim.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include <stdio.h>
+#include <sys/stat.h>
+
+int main(){
+
+    struct stat fileStat;
+    stat(".logo", &fileStat);
+
+    printf(".logo dosyasının boyutu: %ld\n", fileStat.st_size);
+
+    printf(".logo yapısı bir dosya mı: %d\n", S_ISREG(fileStat.st_mode)); // Dosya mı kontrolu. Kontrol etmek için stat yapısındaki st_mode kullanılır
+    printf(".logo yapısı bir klasör mü: %d\n", S_ISDIR(fileStat.st_mode)); // Klasör mü
+    printf(".logo yapısı bir sembol dosyası mı: %d\n", S_ISLNK(fileStat.st_mode)); // Bir sembol dosyası mı
+
+    return 0;
+}</code>
+
+Çıktı ise;</pre>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/15 C Dosya İşlemleri.html/7.png" alt="15.7" width="800px">
+        </div>
+
+        <h3>Çalışma Dizini</h3>
+        <pre id="preh3">Çalışan dizin ise programın dosya ve klasör işlemlerini yürüttüğü klasördür. Varsayılan olarak program kendi dizini(yani .)'yı baz alır. Ancak biz <code class="language-c">#include &lt;unistd.h></code> kütüphanesinde bulunan <code>chdir</code> fonksiyonu kullanılır. Chdir, girilen dizini çalışma dizini haline getirir.</pre>
+
+        <pre id="preh3">Şimdi ise "benimKlasör" adlı bir klasör oluşturalım, onu çalışma dizini haline getirelim ve bir dosya oluşturalım. Bakalım hangi dizinde oluştuğunu tree komutu ile görelim.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+#include &lt;unistd.h>
+#include &lt;sys/stat.h>
+
+int main(){
+
+    mkdir("benimKlasör", 0755);
+
+    chdir("benimKlasör");
+
+    fclose(fopen("dosya", "w"));
+    
+    return 0;
+}</code>
+
+Çıktı ise;</pre>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/15 C Dosya İşlemleri.html/8.png" alt="15.8dos" width="800px">
+        </div>
 
         <h2>Kaynakça</h2>
         <ul>
