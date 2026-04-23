@@ -501,13 +501,65 @@ int main(){
 
         <pre id="preh3">Dinamik kütüphaneler ise statiklerin tam tersidir. Ana program içerisine gömülmek yerine ayrı bir dosya olarak depolanırlar. Dosya uzantıları .so'dur. Avantajı ise ana program güncelleme alacağı zaman kütüphaneye dokunmak gerekmez. Dezavantajı ise de program dizisinde, eğer büyük bir proje ise çok fazla kütüphane dosyası olur.</pre>
 
-        <h3>Kütüphane Oluşturma ve Kullanımı</h3>
+        <h3>Statik Kütüphane Oluşturma ve Kullanımı</h3>
         <pre id="preh3">İlk olarak statik bir kütüphane yazalım;</pre>
 
         <pre id="codeh3">main.c
-<code class="language-c"></code>
-</pre>
+<code class="language-c">#include &lt;stdio.h>
 
+int top(int, int); // Statik kütüphanede tanımlı fonksiyonlar
+int cik(int, int);
+
+int main(){
+    printf("%d\n", top(5,5));   // 10
+
+    printf("%d\n", cik(23, 3)); // 20
+
+    return 0;
+}
+</code>
+
+top.c
+<code class="language-c">int top(int a, int b)
+{
+    return a+b;
+}</code>
+
+cik.c
+<code class="language-c">int cik(int a, int b)
+{
+    return a-b;
+}
+</code>
+
+Şimdi cik.c ve top.c adlı iki kod dosyasını bir statik kütüphane haline getiriceğiz. Ardından main.c dosyamızı kütüphanemiz ile derleyip programımız elde edeceğiz.
+
+Şimdi ilk adım olan cik.c ve top.c dosyalarını sadece derlenmiş(.o dosyaları) elde edelim.
+<code class="language-bash">cc -Wall -c top.c cik.c</code>
+cc; C derleyicisi. GCC'e benzer.
+-Wall; Bağlama fastını yapma.
+-c; Kaynak dosyaları.
+
+Ardından derlenen dosyaları bir arşiv yapalım.
+<code class="language-bash">ar -cvq libkutuphanem.a top.o cik.o</code>
+libkutuphanem.a; İşlem sonucu çıkacak dosya. Kütüphane dosyasının isimlerinin her zamna başına "lib" eki getirilmelidir. Çünkü bir C standartıdır.
+
+Sonra ranlib ile sıkıştırılan dosyayı, ana progamımın okuması için bir sembol tablosu haline getirelim.
+<code class="language-bash">ranlib libkutuphanem.a</code>
+
+Son olarak da ana programımı kütüphanemiz ile derliyelim.
+<code class="language-bash">cc main.c -L. -lkutuphanem -o main</code>
+-L.; Kütüphanenin dizini.
+-lkutuphanem; Kütüphanenin ismi("lib" ön eki yerine "l" yazıyoruz).
+
+Şimdi çalıştıralım.
+<code class="language-bash">./main</code>
+Çıktı;
+<code>20
+30</code></pre>
+
+        <h3>Dinamik Kütüphane</h3>
+        <pre id="preh3"></pre>
 
         <h2>Kaynakça</h2>
         <ul>
