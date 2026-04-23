@@ -488,6 +488,27 @@ int main(){
             <img src="../Bibliography/15 C Dosya İşlemleri.html/11.png" alt="15.11" width="800px">
         </div>
 
+        <h2>Native Dosyalar</h2>
+        <pre id="preh2">Native dosyalar, kodların bir çalıştırabilir dosya yerine işlevleri içeren bir tür dosyalara denir. Genelde Windows'da ".dll" iken Linux'da ise ".so" olmak üzere uzantıları vardır.</pre>
+
+        <pre id="preh2">Native dosyalarda önce standart kütüphaneleri ve OS API'larından bahsedelim. Standart kütüphaneleri belirli yıllarda toplanan C programalama konferanslarında tartışmalar sonucu oluşan belirli kütüphanelerdir. C90, C99, C11, C17 ve C23 belirnen standartlardır. Çoğu zaman C17 veya C23 projelerde kullanılırken bazı gömülü sistemlerde C99 kullanılır. İşte bu standart kütüphanelerinden en bilinen <code>stdio.</code>'dır işlevi ise G/Ç olaylarını standartize etmek. Eğer öyle olmazsayda Windows ve Linux'da farklı yazdırnma komutları giriyor olurduk. Standart kütüphaneler arada bir katman görevi yaparak yazılıcının kod yazmasını kolaylaştırmaktadır. Fakat bazı işlevler(Örneğin Shared Memory) standart bir kütüphane çıkartmak hem teknik hem de pratik olarak çok zordur. O yüzden Windows'da Shared Memory için <code>windows.h</code> kütüphanesini kullanırkne Linux'da <code>sys/shm.h</code> kullanılır. İşte bu gibi kütüphanlere de OS API denir.</pre>
+
+        <h2>Linux'da Native Dosya İşlemleri</h2>
+        <pre id="preh3">Linux'da Native dosya işlemleri için ilk öncelikle dinamik ve statik Native dosyaları anlatalım.</pre>
+
+        <h3>Statik ve Dinamik Kütüphaneler?</h3>
+        <pre id="preh3">Statik kütüphaneler derlenen ana programa gömülen kütüphanelerdir. Yani ayrı bir dosyada depolanmak yerine ana programın içerisinde depolanırlar. Dosya uzantıları .a'dur. Avantajı ise program dizininde kütüphane dosyaları olmaz. Dezavatantajı ise de ana programın boyutu şişer.</pre>
+
+        <pre id="preh3">Dinamik kütüphaneler ise statiklerin tam tersidir. Ana program içerisine gömülmek yerine ayrı bir dosya olarak depolanırlar. Dosya uzantıları .so'dur. Avantajı ise ana program güncelleme alacağı zaman kütüphaneye dokunmak gerekmez. Dezavantajı ise de program dizisinde, eğer büyük bir proje ise çok fazla kütüphane dosyası olur.</pre>
+
+        <h3>Kütüphane Oluşturma ve Kullanımı</h3>
+        <pre id="preh3">İlk olarak statik bir kütüphane yazalım;</pre>
+
+        <pre id="codeh3">main.c
+<code class="language-c"></code>
+</pre>
+
+
         <h2>Kaynakça</h2>
         <ul>
             <li><a href="https://tr.wikipedia.org/wiki/Bilgisayar_dosyası">https://tr.wikipedia.org/wiki/Bilgisayar_dosyası</a></li>
@@ -501,9 +522,10 @@ int main(){
             <li><a href="https://www.experts-exchange.com/questions/10185091/FindFirstFile-and-FindNextFile-Example.html">https://www.experts-exchange.com/questions/10185091/FindFirstFile-and-FindNextFile-Example.html</a></li>
             <li><a href="https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-findfirstfilea">https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-findfirstfilea</a></li>
             <li><a href="https://wiki.srpcs.com/display/ProgrammingTechniques/Reading+File+Attributes">https://wiki.srpcs.com/display/ProgrammingTechniques/Reading+File+Attributes</a></li>
-            <li><a href="https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getcurrentdirectory"></a>https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getcurrentdirectory</li>
+            <li><a href="https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getcurrentdirectory">https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getcurrentdirectory</a></li>
             <li><a href="https://learn.microsoft.com/en-us/windows/win32/fileio/changing-the-current-directory">https://learn.microsoft.com/en-us/windows/win32/fileio/changing-the-current-directory</a></li>
             <li><a href="https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setcurrentdirectory">https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setcurrentdirectory</a></li>
+            <li><a href="https://www.yolinux.com/TUTORIALS/LibraryArchives-StaticAndDynamic.html">https://www.yolinux.com/TUTORIALS/LibraryArchives-StaticAndDynamic.html</a></li>
         </ul>    
     </div>
 
