@@ -559,7 +559,78 @@ Son olarak da ana programımı kütüphanemiz ile derliyelim.
 30</code></pre>
 
         <h3>Dinamik Kütüphane</h3>
-        <pre id="preh3"></pre>
+        <pre id="preh3">Aynı kodları şimdi ise dinamik bir kütüphane yapalım kullanalım.</pre>
+
+        <pre id="codeh3">Sadece main.c kod dosyasının içeriğini bununla değiştirelim.
+<code class="language-c">#include <stdio.h>
+
+extern int top(int, int); // Extern ifadesi kullanılmalıdır
+extern int cik(int, int);
+
+int main(){
+   printf("%d\n", top(5,5));
+
+   printf("%d\n", cik(23, 3));
+
+   return 0;
+}
+</code>
+
+İlk olarak statikte olduğu gibi derlenmemiş obje kodlarına ihtiyacımız var.
+<code class="language-bash" >gcc -c -FPIC cik.c top.c</code>
+
+Daha sonra .so dosaysına çevirelim.
+<code class="language-bash">gcc -shared -o libmymath.so top.o cik.o</code>
+
+Ardından aynı statikte olduğu gibi kütüphanemiz ile derliyelim
+<code class="language-bash">gcc -o main main.c -L./ -lmymath</code>
+
+Sonra ise main'i çalıştırsakda hata vericektir çünkü kütüphaneler Linux'da LD_LIBRARY_PATH adlı bir değişkende aranır. Şimdi ise ekliyelim.
+<code class="language-bash">export export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH</code>
+
+Son olarak main'i çalıştırdığımızda statik ile ayno olucaktır.</pre>
+
+        <pre id="preh3">Bu sistem çalışıcaktır. Eğer LD_LIBRARY_PATH'e eklemek istemezsek <code class="language-c">#include &lt;dlfcn.h></code> kütüphanesiyle dlopen, dlsym ve dlclose fonksiyonlarını kullanabiliriz. Çünkü LD_LIBRARY_PATH'e eklemek geçici bir çözümdür. Konsol kapatıldıktan sonra işlevini kaybeder.</pre>
+
+        <pre id="codeh3">Aynı kodlarımı kullanalım. Fakat yine main.c'nin içeriğini değiştirmemiz gerekecek.
+<code class="language-c">#include &lt;stdio.h>
+#include &lt;dlfcn.h> // Kütüphanemiz
+
+int (*top)(int, int); // Fonksiyonlarımızı bu şekil tanımlayalım
+int (*cik)(int, int); 
+
+int main()
+{
+    void* ktp = dlopen("./libmymath.so", RTLD_LAZY);
+    // "./libmymath.so"; Kütüphanenin ismi
+    // RTLD_LAZY; Kullanım olmadığı süreççe çözümleme(Bellek yönetimi açısından)
+
+    top = dlsym(ktp, "top");
+    // tkp; Kütüphane nesnesi
+    // "top"; Çözümlenmesi gereken fonksiyon ismi
+    cik = dlsym(ktp, "cik");
+
+    printf("%d\n", top(5,5));
+
+    printf("%d\n", cik(23, 3));
+
+    dlclose(ktp); // Kullanımı bittiği için serbest bırakıyoruz
+
+    return 0;
+}</code>
+
+Tekrar kütüphane ile derlediğip çalıştırdığımızda LD_LIBRARY_PATH'ye kütüphaneyi eklemizi gerek kalmadı.</pre>
+
+        <h3>ldd</h3>
+        <pre id="preh3">ldd komutu ise Linux'da bir programın bağımlılıklarını yani ihtiyaç duyduğu kütüphanelerini göstermek için kullanılan bir araçtır.</pre>
+
+        <pre id="preh3">Kullanmak için Linux terminalinden <code class="language-bash">ldd main</code> yazalım ve çıktıyı inceleyelim.</pre>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/15 C Dosya İşlemleri.html/12.png" alt="15.12" width="800px">
+        </div>
+
+        <pre id="preh3">Çıktıda gördüğünüz gibi programın bağımlılıkları gözükmektedir.</pre>
 
         <h2>Kaynakça</h2>
         <ul>
@@ -578,6 +649,8 @@ Son olarak da ana programımı kütüphanemiz ile derliyelim.
             <li><a href="https://learn.microsoft.com/en-us/windows/win32/fileio/changing-the-current-directory">https://learn.microsoft.com/en-us/windows/win32/fileio/changing-the-current-directory</a></li>
             <li><a href="https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setcurrentdirectory">https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setcurrentdirectory</a></li>
             <li><a href="https://www.yolinux.com/TUTORIALS/LibraryArchives-StaticAndDynamic.html">https://www.yolinux.com/TUTORIALS/LibraryArchives-StaticAndDynamic.html</a></li>
+            <li><a href="https://www.cylab.be/blog/234/creating-a-dynamic-library-in-c">https://www.cylab.be/blog/234/creating-a-dynamic-library-in-c</a></li>
+            <li><a href="https://man7.org/linux/man-pages/man3/dlopen.3.html">https://man7.org/linux/man-pages/man3/dlopen.3.html</a></li>
         </ul>    
     </div>
 
