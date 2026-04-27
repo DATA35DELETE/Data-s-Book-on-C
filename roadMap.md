@@ -235,10 +235,6 @@
     - **Hata Yönetimi**: GetLastError. FreeLibrary. Örnek.
     - **DllMain**: Tanım. DLL_PROCESS_ATTACH / DETACH. Örnek.
     - **Dependency Walker / dumpbin**: Bağımlılık Analizi. Örnek.
-  - **Cross-Platform Kullanım**:
-    - **Platform Soyutlama**: Tanım. \#ifdef ile Yönetim. Örnek.
-    - **Ortak Arayüz Tasarımı**: Tanım. Örnek.
-    - **Plugin Sistemi Kurma**: Tanım. Örnek.
 - **JSON Dosyası**: JSON Nedir?
   - **JSON Mantığı**: Tanım. Yapısı.
   - **cJSON Kütüphanesi**: Kurulum. Örnek.
@@ -324,11 +320,11 @@
  
 ---
  
-### C : Veritabanı İşlemleri (PostgreSQL)
+### C : Veritabanı İşlemleri (SQLite)
 - **Veritabanı Nedir?**: Tanım. Kullanım Senaryoları.
-- **PostgreSQL Nedir?**: Tanım. Kurulum.
-- **libpq Kütüphanesi**: Tanım. Kurulum. Örnek.
-- **Bağlantı Kurma**: PQconnectdb. Connection String. Örnek.
+- **SQLite Nedir?**: Tanım. Kurulum.
+- **sqlite3 Kütüphanesi**: Tanım. Kurulum. Örnek.
+- **Bağlantı Kurma**: sqlite3_open. Database Dosyası. Örnek.
 - **Veri Ekleme (INSERT)**: Tanım. Örnek.
   > Metodları
 - **Veri Sorgulama (SELECT)**: Tanım. Örnek.
