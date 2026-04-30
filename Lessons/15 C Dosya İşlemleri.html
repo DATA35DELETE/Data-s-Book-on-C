@@ -687,6 +687,119 @@ cd build</code>
         Şeklinde -lcjson eki kullanılırız. Aksi takdirde hata vericektir.
         </pre>
 
+        <h3>Json Dosyası OLuşturma ve Yazma</h3>
+        <pre id="preh3">Json oluşturma ve yazmak için hem cJson API'larını hem de fopen fonksiyonunu kullanırız.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+#include &lt;cjson/cJSON.h> // Kütüphanemiz
+
+int main(){
+    cJSON *json = cJSON_CreateObject(); // İlk olarak Json dosyamız için JSON objesi oluşturuyoruz
+
+    cJSON_AddBoolToObject(json, "buKosulTrue", 1);
+    // json; JSON objesi
+    // "buKosulTrue"; İfadenin ismi
+    // 1; İfadenin değeri
+
+    // Bu format diğer eleman ekleme fonksiyonları için geçerlidir
+
+    cJSON_AddStringToObject(json, "kosulIsmi", "buKosul");
+    cJSON_AddNumberToObject(json, "buKosulId", 326);
+
+    char* charsJson = cJSON_Print(json); // Bu kısımda oluşturduğumuz JSON objesini, dosya olarak yazdırmak için uygun bir şekilde char dizesi haline getiriyoruz
+
+    FILE *fjson = fopen("veriler.json", "w"); // Dosyamızı açıyoruz
+    fprintf(fjson, charsJson); // Char dizesini yazdırıyoruz
+    fclose(fjson);
+
+    cJSON_free(charsJson); // Char dizesini bellek yönetimi için serbest bırakıyoruz
+    cJSON_Delete(json); // JSON objemizi serbest bırakıyoruz
+
+    return 0;
+}</code>
+
+Aynı klasör içerisinde oluşacak dosya olan "veriler.json" içeriği;</pre>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/15 C Dosya İşlemleri.html/13.png" alt="15.13" width="800px">
+        </div>
+
+        <h3>Json Dosyası Okuma</h3>
+        <pre id="preh3">cJson'da veri okuma ise isim-değer tabanlı arama ile veri geitirilir.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include 6lt;stdio.h>
+#include &lt;cjson/cJSON.h>
+
+int main(){
+    FILE *fjson = fopen("veriler.json", "r"); // Mevcut veriler.json dosyasını okuma
+    if (fjson == NULL)
+    {
+        return 1;
+    }
+    
+    char buffer[2048]; // Maksimum çıkarılacak veri
+    fread(buffer, 1, sizeof(buffer), fjson); // fread ile okuma
+    fclose(fjson);
+
+    cJSON *json = cJSON_Parse(buffer); // Okunan veriyi düzenliyor
+
+    cJSON *kosulIsmi = cJSON_GetObjectItemCaseSensitive(json, "kosulIsmi"); // JSON objemizde ismi "kosulIsmi" olan bir değer arıyor
+    if (kosulIsmi == NULL) // Eğer mevcut değil ise NULL değeri döndürür
+        return 1;
+
+    printf("kosulIsmi = \"%s\"", kosulIsmi->valuestring); // Çıkarılan veriyi ekrana yazdırma 
+
+    cJSON_Delete(json);
+
+    return 0;
+}</code>
+
+Çıktı ise "kosulIsmi = "buKosul"" şeklinde olmalıdır.</pre>
+
+        <h3>Json Dosyasında Vâr Olan Veriyi Değiştirme</h3>
+        <pre id="preh3">cJson'da bu işlemlem cJSON_ReplaceItemInObjectCaseSensitive fonksiyonu ile gerçekleştirilir.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+#include %lt;cjson/cJSON.h>
+
+int main(){
+    FILE *fjson = fopen("veriler.json", "r"); // Mevcut veriler.json dosyasını okuma
+    if (fjson == NULL)
+    {
+        return 1;
+    }
+    
+    char buffer[2048]; // Maksimum çıkarılacak veri
+    fread(buffer, 1, sizeof(buffer), fjson); // fread ile okuma
+
+    cJSON *json = cJSON_Parse(buffer); // Okunan veriyi düzenliyor
+
+    cJSON_ReplaceItemInObjectCaseSensitive(json, "kosulIsmi", cJSON_CreateString("suKosul"));
+    // json; JSON objesi
+    // "kosulIsmi"; Değeri değiştirilecek verinin ismi
+    // cJSON_CreateString("suKosul"); Verinin yeni değeri
+
+    char *charsJson = cJSON_Print(json);
+
+    fjson = fopen("veriler.json", "w"); // Mevcut veriler.json yazma
+    if (fjson == NULL)
+    {
+        return 1;
+    }
+    fprintf(fjson, charsJson); // Değişiklik uygunlanmış JSON objesinin char dizeli halini yazdırma
+
+    cJSON_Delete(json);
+    fclose(fjson);
+
+    return 0;
+}</code>
+
+veriler.json dosyasının yeni hali ise;</pre>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/15 C Dosya İşlemleri.html/14.png" alt="15.14" width="800px">
+        </div>
+
         <h2>Kaynakça</h2>
         <ul>
             <li><a href="https://tr.wikipedia.org/wiki/Bilgisayar_dosyası">https://tr.wikipedia.org/wiki/Bilgisayar_dosyası</a></li>
