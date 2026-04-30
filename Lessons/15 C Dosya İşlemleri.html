@@ -499,7 +499,7 @@ int main(){
         <h3>Statik ve Dinamik Kütüphaneler?</h3>
         <pre id="preh3">Statik kütüphaneler derlenen ana programa gömülen kütüphanelerdir. Yani ayrı bir dosyada depolanmak yerine ana programın içerisinde depolanırlar. Dosya uzantıları .a'dur. Avantajı ise program dizininde kütüphane dosyaları olmaz. Dezavatantajı ise de ana programın boyutu şişer.</pre>
 
-        <pre id="preh3">Dinamik kütüphaneler ise statiklerin tam tersidir. Ana program içerisine gömülmek yerine ayrı bir dosya olarak depolanırlar. Dosya uzantıları .so'dur. Avantajı ise ana program güncelleme alacağı zaman kütüphaneye dokunmak gerekmez. Dezavantajı ise de program dizisinde, eğer büyük bir proje ise çok fazla kütüphane dosyası olur.</pre>
+        <pre id="preh3">Dinamik kütüphaneler ise statiklerin tam tersidir. Ana program içerisine gömülmek yerine ayrı bir dosya olarak depolanırlar. Dosya uzantıları .so'dur. Avantajı ise ana program güncelleme alacağı zaman kütüphaneye dokunmak gerekmez ve eğer genel yani başka programlarda aynı kütüphaneyi kullanıcak ise disk alanından tasaruf yapmamızı sağlar. Dezavantajı ise de program dizisinde, eğer büyük bir proje ise çok fazla kütüphane dosyası olur. Bu durumun diğer bir adı ise DllHell(Dll Cehennemi) adı verilir.</pre>
 
         <h3>Statik Kütüphane Oluşturma ve Kullanımı</h3>
         <pre id="preh3">İlk olarak statik bir kütüphane yazalım;</pre>
@@ -632,6 +632,37 @@ Tekrar kütüphane ile derlediğip çalıştırdığımızda LD_LIBRARY_PATH'ye 
 
         <pre id="preh3">Çıktıda gördüğünüz gibi programın bağımlılıkları gözükmektedir.</pre>
 
+        <h2>Windows'da Native Dosya İşlemleri</h2>
+        <pre id="preh2">Windows'da Native dosyalar olan .dll ve .lib dosyalar ile işlemleri gerçekleştirilir. .dll dinamik olurken .lib ise statik kütüphanedir.</pre>
+
+        <pre id="preh2">Derleme ve kullanım ise Linux'la tamamiyle aynıdır. Sadece dlopen Windows'da bulunmaz. Fakat zaten Windows'da bir uygulama kütüphanesini arıyor ise kendi klasörü içerisinde aramaktadır.</pre>
+
+        <h2>Json Dosyaları</h2>
+        <pre id="preh2">Json dosyları, .json uzantısı olan ve verileri serileştirmek için kullanılan bir dosya formatıdır. Json'nun açılımı ise JavaScript Object Notation</pre>
+
+        <h3>Json Mantığı</h3>
+        <pre id="preh3">Json'nın mantığı ise girdiğimiz verileri aynı değişken ve dizi tanımlar gibi bir formata çevirerek hem insanlar hem de makineler tarafından kolayca okuyabilmesi sağlar. API dediğimiz sunucu ve istemci arasındaki iletişimi sağlayan, veri alışverişi yapan ara katman bile Json dosyası formatında veriyi getirir. Yani Json genel olarak kabul görmüş ve çokça kullanılan bir dosya formatıdır.</pre>
+
+        <h3>cJson Kütüphanesini Kurma</h3>
+        <pre id="preh3">cJson bizlere Json dosyaları üzerinde işlem yapmamızı kolaştıran bir kütüphanedir. Ayrıca bu kütüphane yerel olarak bizlere kurulu gelmemekte. Yani bizim bu kütüphaneyi derlememiz ve projemize dahil etmemiz için Mingw64'e katmamız gerekiyor.</pre>
+
+        <pre id="preh3">İlk olarak Windows işletim sisteminde nasıl kurulduğunu görelim.</pre>
+
+        <pre id="codeh3">Bu ve bunun gibi kütüphaneleri Windows için yüklerken genellikle bir paket yöneticisi olan Vcpkg kullanılır. İlk olarak Git Bash üzerinden Vcpkg'nin Github deposunu bilgisayarımıza çekelim.
+<code class="language-cmd">git clone https://github.com/Microsoft/vcpkg.git
+cd vcpkg</code>
+
+        Ardından çektiğimiz depodaki Vcpkg'yi kurmamız gerekir.
+<code class="language-cmd">./bootstrap-vcpkg.sh
+./vcpkg integrate install</code>
+
+        Son olarak cJson kütüphanesini Vcpkg'de indirip derliyelim.
+<code class="language-cmd">vcpkg install cjson</code>
+
+        Derlenmiş dosyaları tabiki Mingw64'e eklemeliyiz. Vcpkg'deki derlenmiş dosyalar <code>\vcpkg\installed\x64-windows</code> dizininde bulunur. Dizindeki tüm klasörleri kopyalayıp Msys2'deki <code>\mingw64</code> dizinine yapıştıralım.</pre>
+
+        <pre id="preh3">Linux'da ise Cmake ile kurulur. Cmake, C ve C++ için bir derleme otomasyok aracıdır. Cmake'i ilerleyen sayfalarda daha detaylı işlemekte olcağız. Şimdilik cJson kütüphanesini derliyelim.</pre>
+
         <h2>Kaynakça</h2>
         <ul>
             <li><a href="https://tr.wikipedia.org/wiki/Bilgisayar_dosyası">https://tr.wikipedia.org/wiki/Bilgisayar_dosyası</a></li>
@@ -653,6 +684,10 @@ Tekrar kütüphane ile derlediğip çalıştırdığımızda LD_LIBRARY_PATH'ye 
             <li><a href="https://man7.org/linux/man-pages/man3/dlopen.3.html">https://man7.org/linux/man-pages/man3/dlopen.3.html</a></li>
             <li><a href="https://learn.microsoft.com/tr-tr/troubleshoot/windows-client/setup-upgrade-and-drivers/dynamic-link-library">https://learn.microsoft.com/tr-tr/troubleshoot/windows-client/setup-upgrade-and-drivers/dynamic-link-library</a></li>
             <li><a href="https://filext.com/tr/dosya-uzantisi/LIB">https://filext.com/tr/dosya-uzantisi/LIB</a></li>
+            <li><a href="https://www.geeksforgeeks.org/c/cjson-json-file-write-read-modify-in-c/">https://www.geeksforgeeks.org/c/cjson-json-file-write-read-modify-in-c/</a></li>
+            <li><a href="https://github.com/DaveGamble/cJSON">https://github.com/DaveGamble/cJSON</a></li>
+            <li><a href="https://learn.microsoft.com/tr-tr/vcpkg/get_started/overview">https://learn.microsoft.com/tr-tr/vcpkg/get_started/overview</a></li>
+            <li><a href="https://www.yusufsezer.com.tr/cmake/">https://www.yusufsezer.com.tr/cmake/</a></li>
         </ul>    
     </div>
 
