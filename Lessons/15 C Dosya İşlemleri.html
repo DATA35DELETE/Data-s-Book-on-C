@@ -661,7 +661,31 @@ cd vcpkg</code>
 
         Derlenmiş dosyaları tabiki Mingw64'e eklemeliyiz. Vcpkg'deki derlenmiş dosyalar <code>\vcpkg\installed\x64-windows</code> dizininde bulunur. Dizindeki tüm klasörleri kopyalayıp Msys2'deki <code>\mingw64</code> dizinine yapıştıralım.</pre>
 
-        <pre id="preh3">Linux'da ise Cmake ile kurulur. Cmake, C ve C++ için bir derleme otomasyok aracıdır. Cmake'i ilerleyen sayfalarda daha detaylı işlemekte olcağız. Şimdilik cJson kütüphanesini derliyelim.</pre>
+        <pre id="codeh3">Linux'da ise Cmake ile kurulur. Cmake, C ve C++ için bir derleme otomasyok aracıdır. Cmake'i ilerleyen sayfalarda daha detaylı işlemekte olcağız. Şimdilik cJson kütüphanesini derliyelim.
+
+        İlk olarak cJson kütüphanesinin Github deposunu çekmemiz gerekiyor.
+<code class="language-bash">git clone https://github.com/DaveGamble/cJSON.git
+cd cJSON</code>
+
+        Ardından derlenen dosyaların bulunacağı klasör olan Build'i oluşturalım.
+<code class="language-bash">mkdir build
+cd build</code>
+
+        Sonra, Cmake içerisinde bulunan Make adlı derlici için bazı talimatlat gerekir. Programcı olarak bizim yazmamız çok uzun süreceği için Cmake bizlere otomatik bir kod sunar.
+<code class="language-bash">cmake .. -DENABLE_CJSON_UTILS=On -DENABLE_CJSON_TEST=Off -DCMAKE_INSTALL_PREFIX=/usr</code>
+
+        <pre>Ardından derliyelim.</pre>
+        <code class="language-bash">make</code>
+
+        <pre>Son olarak Linux sistemine cJson'u yüklemek için</pre>
+        <code class="language-bash">make install</code>
+</pre>
+
+        <pre id="preh3">Artık hem Linux hem de Windows işletim sistemlerine kurabildiğimze göre cJson ile işlemleri geçelim. Geçemden önce cJson olmasından kaynaklı kod dosyalarımızı derlemek için;
+<code class="language-bash">gcc main.c -o main -lcjson</code>
+        
+        Şeklinde -lcjson eki kullanılırız. Aksi takdirde hata vericektir.
+        </pre>
 
         <h2>Kaynakça</h2>
         <ul>
