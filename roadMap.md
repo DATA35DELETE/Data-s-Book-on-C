@@ -352,18 +352,26 @@
  
 ---
  
-### C : Multimedya İşlemleri
-- **Multimedya Nedir?**: Tanım. Kullanım Senaryoları.
-- **Görüntü İşleme**:
-  - **stb_image**: Kurulum. PNG/JPG Okuma. Örnek.
-  - **Piksel Manipülasyonu**: Tanım. Örnek.
-  - **Görüntü Kaydetme**: stb_image_write. Örnek.
-- **Ses İşleme**:
-  - **miniAudio**: Kurulum. Ses Çalma. Örnek.
-  - **WAV Dosyası Okuma**: Tanım. Örnek.
-- **Video İşleme**:
-  - **FFmpeg (libav)**: Kurulum. Tanım. Örnek.
-  - **Video Kare Okuma**: Örnek.
+### C : GTK
+- **GTK Nedir?**: Tanım. GObject Altyapısı. Kurulum. Kullanım Senaryoları.
+- **Pencere Oluşturma**: GtkApplication. Olay Döngüsü (Event Loop). Örnek.
+- **Pencere Bileşenleri (Widgets)**
+  - **GtkButton**: Tanım. Sinyaller ve Callback Bağlama. Örnek.
+  - **GtkLabel ve GtkEntry**: Metin gösterme ve kullanıcıdan veri alma. Örnek.
+  - **Düzenleyiciler (Konteynerlar)**: GtkBox, GtkGrid. Tanım. Örnek.
+  - **GtkScale (Slider)**: Kaydırıcı ile değer alma. Tanım. Örnek.
+- **CSS ile Arayüz Tasarımı (GtkCssProvider)**: Tanım. C Koduna CSS Dosyası Yükleme. Sınıf (Class) ve ID Mantığıyla Elemanları Özelleştirme. Örnek.
+- **FFmpeg ile Ses İşlemleri**: FFmpeg Nedir? Kurulum. Kullanım Senaryoları.
+  - **Medya Dosyası Açma**: AVFormatContext. Tanım. Örnek.
+  - **Codec İşlemleri**: AVCodec, AVCodecContext. Tanım. Örnek.
+  - **Veri Çözümleme (Decoding)**: Packet ve Frame yapıları. Ham PCM verisi elde etme. Örnek.
+- **GTK'da Ses Çalma ve Kontrol**
+  - **Ses Çalma Motoru**: GStreamer entegrasyonu (playbin). Tanım. Örnek.
+  - **Ses Artır/Azalt (Volume Kontrol)**: GtkScale değerini ses seviyesine bağlama. Tanım. Örnek.
+  - **Duraklat / Devam Et**: Pipeline durum yönetimi (PAUSED/PLAYING). Örnek.
+- **GTK'da Video Oynatma**
+  - **GtkVideo Bileşeni (GTK 4)**: Hazır bileşen ile kolay video oynatma. Tanım. Örnek.
+  - **GStreamer ile Gelişmiş Oynatıcı**: Özelleştirilmiş video penceresi gömme. Örnek.
  
 ---
  
