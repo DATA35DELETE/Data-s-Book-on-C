@@ -800,6 +800,99 @@ veriler.json dosyasının yeni hali ise;</pre>
             <img src="../Bibliography/15 C Dosya İşlemleri.html/14.png" alt="15.14" width="800px">
         </div>
 
+        <h2>Xml Dosyaları</h2>
+        <pre id="preh2">Xml dosyaları aynı Json gibi veri serileştirme ve yönetmek için kullanılan bir dosya formatıdır.Yazılma şekli olarak Html diline benzerdir. Html'deki gibi etiket değer ilişkisi ile veriler yazılır. Ağaç benzeri bir mimarisi vardır.</pre>
+
+        <pre id="preh2">Xml dosyalarını okumak ve yazmak için GNOME tarafından geliştirilen libxml2 kütüphanesi kullanılır.</pre>
+
+        <h3>Libxml2 Kütüphanesini İndirme</h3>
+        <pre id="preh3">Libxml2, Linux işletim sisteminde varsayılan olarak gelsede Windows işletim sisteminde ayrı olarak kurulması gerekir.</pre>
+
+        <pre id="codeh3">İndirmek oldukça basittir. Mingw64 konsolunu açalım. Ardından şu komutu çalıştıralım.
+<code class="language-bash">pacman -Syu mingw-w64-x86_64-libxml2</code>
+
+İndirmenin ardıdan kütüphanemizi kullanabiliriz.</pre>
+
+        <h3>Xml Dosyası Yazma ve Okuma</h3>
+        <pre id="preh3">Aynı kod dosyasında hem yazma hem de okuma gerçekleştiriceğiz.</pre>
+
+        <pre id="codeh3"><code>#include &lt;stdio.h>
+#include &lt;string.h>
+#include &lt;libxml/parser.h>    // Genel kütüphanemiz
+#include &lt;libxml/xmlreader.h> // Okuma için kütüphane
+
+int main()
+{
+    // OKUMA \\
+
+    xmlDocPtr doc = xmlNewDoc(BAD_CAST "1.0"); // Xml belgeisini değişken olarak oluşturma
+    xmlNodePtr root = xmlNewNode(NULL, BAD_CAST "root"); // Her bileşenin bulunacağı Root etiketi
+    xmlDocSetRootElement(doc, root); // Xml belgesinin ana dizini root'a bağlama
+
+    xmlNodePtr child = xmlNewChild(root, NULL, BAD_CAST "İsim", BAD_CAST "Data");
+    // Bir xml döğümü/bileşeni
+    // root; Hangi bileşenin altında yer alıcak
+    // NULL; xmlNS
+    // BAD_CAST "İsim"; Bileşenin ismi. BAD_CAST ifadesi ise libxml2 kütüphanesine özel bir char dizesidir
+    // BAD_CAST "Data"; Bileşenin içeriği
+    xmlNodePtr child2 = xmlNewChild(root, NULL, BAD_CAST "Soyisim", BAD_CAST "Delete");
+
+
+    xmlNodePtr child3 = xmlNewChild(root, NULL, BAD_CAST "İletişim", NULL);
+    xmlNodePtr child4 = xmlNewChild(child3, NULL, BAD_CAST "Tell", BAD_CAST "05XX XXX XX XX");
+    xmlNodePtr child5 = xmlNewChild(child3, NULL, BAD_CAST "E-Mail", BAD_CAST "data.delete3509@gmail.com");
+    // Bu şekil bir yapıda oluşturulabilir
+    
+    xmlSaveFormatFileEnc("bilgilerim.xml", doc, "UTF-8", 1);
+    // Doc değişkenine eklenen bileşenleri bir .xml dosyasına yazdırma
+    // "bilgilerim.xml"; Oluşturulacak dosya ismi
+    // doc; Kayıt edilecek xmlDocPtr değişkeni
+    // "UTF-8"; Karakter kodlama(Türkçe karakter için UTF-8 kullanılır)
+    // 1; Format türü
+
+    xmlFreeDoc(doc); // libxml2 kendi özel bellek yönetimine sahiptir
+
+
+    xmlTextReaderPtr readDoc = xmlReaderForFile("bilgilerim.xml", "UTF-8", 1);
+    // Bir Xml okuyucu oluşturma(Tüm okuma işlemleri için kullanılması için)
+    // "bilgilerim.xml"; Okunacak .xml dosyası
+    // "UTF-8"; Okuma için hangi kodlama
+    // 1; Format türü
+
+    int ret;                                        // xmlTextReaderRead fonksiyonu, sırayla tüm düğümlerde gezinmek için kullanılır. Eğer bir düğüm bulursa 1, bulamazsa yani belge bitmiş ise 0 döner. Ayrıca alt bileşenlerede erişir
+    while ((ret = xmlTextReaderRead(readDoc)) == 1) // Ret değişkeni ile bu durumu kontrol ederiz
+    {
+        const xmlChar *nodeName = xmlTextReaderConstName(readDoc); // Mevcut bileşenin ismini alma
+        int nodeTuru = xmlTextReaderNodeType(readDoc); // Bileşen tür numarasu. 1 = Bileşenin kendisi, 3 = Bileşenin değeri, 15 = Bileşenin kapanma etketi, 14 = Bileşenin kapanma etketin değeri
+        const xmlChar *nodeDegeri = xmlTextReaderConstValue(readDoc); // Bileşenin değerini alma
+
+        // Terminale, düğümün ismini ve değeri yazdıralım
+
+        if (nodeTuru == 1)
+        {   
+            if (nodeDegeri == NULL)
+                printf("\n");
+            printf("%s", nodeName);
+        }
+        else if (nodeTuru == 3)
+            printf(" -> %s\n", nodeDegeri);
+    }
+    
+    xmlFreeTextReader(readDoc); // libxml2 kütüphanesinde TextReader için özel bir bellek yönetimi
+
+    return 0;
+}</code>
+
+Çıktılar ise</pre>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/15 C Dosya İşlemleri.html/15.png" alt="15.15" width="800px">
+        </div>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/15 C Dosya İşlemleri.html/16.png" alt="15.16" width="800px">
+        </div>
+
         <h2>Kaynakça</h2>
         <ul>
             <li><a href="https://tr.wikipedia.org/wiki/Bilgisayar_dosyası">https://tr.wikipedia.org/wiki/Bilgisayar_dosyası</a></li>
@@ -827,6 +920,7 @@ veriler.json dosyasının yeni hali ise;</pre>
             <li><a href="https://www.yusufsezer.com.tr/cmake/">https://www.yusufsezer.com.tr/cmake/</a></li>
             <li><a href="https://deepwiki.com/GNOME/libxml2/2-core-xmlhtml-processing">https://deepwiki.com/GNOME/libxml2/2-core-xmlhtml-processing</a></li>
             <li><a href="https://web.mit.edu/outland/share/doc/libxml2-2.4.30/html/tutorial/xmltutorial.pdf">https://web.mit.edu/outland/share/doc/libxml2-2.4.30/html/tutorial/xmltutorial.pdf</a></li>
+            <li><a href="https://github.com/GNOME/libxml2/tree/master/example">https://github.com/GNOME/libxml2/tree/master/example</a></li>
         </ul>    
     </div>
 
