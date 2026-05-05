@@ -900,8 +900,69 @@ int main()
 
         <pre id="preh2">Kütüphane GCC ile varsayılan olarak kurulu gelmektedir.</pre>
 
-        <h3>Dosyaları Sıkıştırma</h3>
-        <pre id="preh3"></pre>
+        <h3>Dosyaları Sıkıştırma ve Çözme</h3>
+        <pre id="preh3">Libxml2 kütüphanesini öğrenirken oluşturduğumuz bilgilerim.xml dosyasını ilk önce bilgilerim.zip adlı bir sıkıştırılmış dosyaya, ardından unZipBilgilerim.xml adında çözünmüş olan dosyayı oluşturalım.</pre>
+
+        <pre id="preh3">Ben bu iş için zlib'in içinde olan compress ve uncompress fonksiyonlarını kullanıcağım. Ancak daha gelişmiş bir sistem istersek influte ve deflate fonksiyonlarını kullanabiliriz. Ancak bu fonksiyonlar karmaşık olduklarından ben compress ve uncompress fonksiyonlarını tercih ettim. Mantıkları neredeyse aynıdır.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &lt;stdio.h>
+#include &lt;stdlib.h>
+#include &lt;string.h>
+#include &lt;zlib.h> // Kütüphanemiz
+
+int main()
+{
+    FILE *file = fopen("bilgilerim.xml", "rb"); // Sıkıştırılacak dosya
+    FILE *zipFile = fopen("bilgilerim.zip", "wb"); // Sıkıştırılmış dosya
+    FILE *unZipFile = fopen("unZipBilgilerim.xml", "wb"); // Çözünmüş dosya
+
+    fseek(file, 0, SEEK_END);      //
+    uLong sourceLeg = ftell(file); // Kaynak yani sıkıştırılacak dosyanın boyutunu hesaplama
+    fseek(file, 0, SEEK_SET);      //
+
+    uLong destLeg = compressBound(sourceLeg); // Hedef yani sıkıştırılmış dosya için gerekecek boyutunu kaynak dosyadan hesaplama. İşlemler ardından değişicektir 
+
+    char *sourceData = (char *)calloc(sourceLeg, sizeof(char));
+    char line[1024];
+    while ((fread(line, sizeof(char), 1024, file))) // Kaynak dosyanın verisini ikili kodlama sistemi düzeyinde okuma
+        strcat(sourceData, line);
+    
+    char *destData = (char *)calloc(destLeg, sizeof(char)); // Sıkıştırılmış verilerin konulcağı bellek
+
+    compress((Bytef *)destData, &destLeg, (Bytef *)sourceData, sourceLeg);
+    // Sıkıştırma işlemi
+    // (Bytef *)destData; Sıkıştırılmış verinin kayıt edilceği kısım
+    // &destLeg; Sıkıştırılmış verinin boyutu. Bellek adresi gönderilir çünkü süreç içinde değişir
+    // (Bytef *)sourceData; Sıkıştırılacak dosyanın verisi
+    // sourceLeg; Sıkıştırılacak dosyanın boyutu
+
+    fwrite(destData, sizeof(char), destLeg, zipFile); // Sıkıştırılmış veriyi dosyaya yazdırma
+
+    uncompress((Bytef *)sourceData, &sourceLeg, (Bytef *)destData, destLeg);
+    // Çözme işlemi
+    // (Bytef *)sourceData; Çözünmüş verinin kayıut edilceği kısım
+    // &sourceLeg; Çözünmüş verinin boyutu
+    // (Bytef *)destData; Sıkıştırılmış dosyanın verisi
+    // destLeg; Sıkıştırılmış dosyanın boyutu
+
+    fwrite(sourceData, sizeof(char), sourceLeg, unZipFile); // Çözünmüş verinin yazdırılıması
+
+    // Bellek alanlarını boşaltma
+    free(destData);
+    free(sourceData);
+
+    fclose(file);
+    fclose(zipFile);
+    fclose(unZipFile);
+
+    return 0;
+}</code>
+
+Çıktı ise;</pre>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/15 C Dosya İşlemleri.html/17.png" alt="15.17" width="800px">
+        </div>
 
         <h2>Kaynakça</h2>
         <ul>
