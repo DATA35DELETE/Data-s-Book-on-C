@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data's Book on C</title>
+
+    <link rel="icon" type="image/x-icon" href="../Sources/favicon.png">
+
+    <script src="../Sources/JS/setBackgroundMedia.js"></script>
+
+    <link rel="stylesheet" href="../Sources/JS/hljs/vs2015.css">
+    <script src="../Sources/JS/hljs/highlight.min.js"></script>
+    <script>
+        window.onload = function() {
+            hljs.highlightAll();
+        };
+    </script>
+
+    <link rel="stylesheet" href="../Sources/CSS/main.css">
+</head>
+<body>
+    <h1>Önişlemciler</h1>
+
+    <div style="height: 100px;"></div>
+    
+    <div id="mainDiv">
+        <h2>Önişlemci Nedir?</h2>
+        <pre id="preh2">Önişlemci, program derlenmeden önce bir aşaması olan önişleme kısımdaki koşula göre kodun derlenecek kısımlarının belirlendiği yapılardır. Sonlarında noktalı virgül konulmamaktadır.</pre>
+
+        <pre id="preh2">Giriş sayfasında da anlattığımız gibi önişlemciler bizlere bir nevi "tüm platformlar tek kod" metodu sunar. Yani kaynak kodu hem Windows hem de Linux için kodları içerir fakat önişlemciler sayesinde hangi işletim sistemi bulunursa, ona yönelik olan kod derleme sürecine girer. Diğer kod ise derlenme sürecine girmez.</pre>
+
+        <h2>Include</h2>
+        <pre id="preh2">Include, kaynak koduna hazır olarak yazılmış veya kendimizin yazdığı bağlık dosyaları(Headrs olarak bilinir) eklemizi sağlar. Sıkça benzettiğim "Kütüphane ekleme" teriminin ilkel halidir.</pre>
+
+        <pre id="preh2">İki şekilde Include kullanılabilir. Küçüktür ve büyüktür içerisinde dosya ismini belirtme ve çift tırnaklar içerisine dosya adı belirtme şeklindedir.</pre>
+
+        <h3>Küçüktür ve büyüktür ile Include</h3>
+        <pre id="preh3">Dosyayı ana "Include" adlı bir klasörde arar.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include &ltstdio.h>
+// Merak ederseniz eğer Mingw64 klasörün içerisindeki Include adlı klasörün içinde stdio.h dosyasını görebilirsiniz</code></pre>
+
+        <h3>Çift Tırnaklar ile Include</h3>
+        <pre id="preh3">Diğerinde farkı ise dosyayı ana Include klasöründense kaynak kodunun bulunduğu dizinde arar. Kendi yazdığımız başlık dosyalarını çift tırnaklı Include içerisinde tanımlayabiliriz.</pre>
+
+        <pre id="codeh3"><code class="language-c">#include "benimBaslikDosyam.h"</code></pre>
+
+        <h2>Define</h2>
+        <pre id="preh2">Değişkenler sayfasında gördüğümüz ve sabit değişken tanımlamanın başka bir türü olduğunu bildiğimiz Define'nın kullanım amacı ise "makro" denilen ve sık kullanılan değerleri direk değişken isimleriyle çağırmamızı sağlamaktadır. Bu bir zorunluluk değildir fakat diğer normal ve sabit değişkenlerle karışmasın diye büyük harfle yazılır.</pre>
+
+        <pre id="codeh3"><code class="language-c">#define DEGER_ISMI DEGER
+//Türü belirtilmez çünkü C tarafından otomatik en uygun veri türü atanır</code></pre>
+
+        <h2>Koşullu Derleme</h2>
+        <pre id="preh2">Koşulle derleme ise bahsettiğimiz gibi belirli koşullarda bazı kodları derleme bazılarını es geçmek için kullandığımız bir yapıdır. Genellikle tek kodu tüm platformlarda çalıştırmak için kullanılır. 
+<code>#ifdef</code>, makro tanımlıysa kodu kat.
+<code>#ifndef</code>, makro tanımlı değilse kodu kat.
+<code>#endif</code>, ifdef ve ifndef sonunu bildirir.
+<code>#else</code>, hiç biri anlamına göre kodu katar.</pre>
+
+        <pre id="preh2">İşletim sistemlerinin başlık dosyalarında her zaman kendi işletim sistemlerini belirten bir makro değeri vardır. Genellikle C kodları Windows ve Linux işletim sistemlerinde kodlandığı için derleme modeli "Windows mu değil mi" şeklinde gider. Windows işletim sisteminin makrosunun ismi ise WIN32'dir.</pre>
+
+        <pre id="preh2">Şimdi ise eğer Windows işletim sisteminde derlendiyse konsola "Windows'dayim", Windows dışı bir işletim sisteminde derlendiyse ise de "Windows'da değilim" yazan bir kod yazalım.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+
+int main()
+{
+
+    #ifdef WIN32 // Windows işletim sistemiyse eğer
+
+    printf("Windows'dayim\n");
+
+    #else // Windows işletim dışı bir sistemdeyse
+
+    printf("Windows'da değilim\n");
+
+    #endif
+
+    return 0;
+}</code>
+
+Sırasıyla Windows ve Linux çıktıları</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/16 C Önişlemciler.html/1.png" alt="16.1" width="800px">
+        </div>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/16 C Önişlemciler.html/2.jpeg" alt="16.2" width="800px">
+        </div>
+
+        <h2>Kaynakça</h2>
+        <ul>
+            <li><a href="https://learn.microsoft.com/tr-tr/cpp/preprocessor/hash-include-directive-c-cpp?view=msvc-170">https://learn.microsoft.com/tr-tr/cpp/preprocessor/hash-include-directive-c-cpp?view=msvc-170</a></li>
+            <li><a href="https://learn.microsoft.com/tr-tr/cpp/preprocessor/macros-c-cpp?view=msvc-170">https://learn.microsoft.com/tr-tr/cpp/preprocessor/macros-c-cpp?view=msvc-170</a></li>
+            <li><a href="https://ismetkerem.com/makrolar-ve-kosullu-derleme-define-ve-ifdef-mantigi/">https://ismetkerem.com/makrolar-ve-kosullu-derleme-define-ve-ifdef-mantigi/</a></li>
+        </ul>
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <footer style="position: fixed; left: 0; bottom: 0; width: 100%; background: transparent; text-align: center; padding: 10px 0; z-index: 100;">
+        <div>
+            <a href="./15 C Dosya İşlemleri.html" style="margin-right: 20px; cursor:pointer;">
+                &larr; Önceki
+            </a>
+            <a href="" style="cursor:pointer;">
+                Sonraki &rarr;
+            </a>
+        </div>
+        <div>
+            <p>&copy; 2026 Data's Book</p>
+        </div>
+
+        <div style="position: absolute; right: 20px; bottom: 20px;">
+            <a href="./1 C İçindekiler.html" style="text-decoration: none;">
+                İçindekiler
+            </a>
+        </div>
+    </footer>
+</body>
+</html>
+
+<!-- Muhammet Enes nam-ı diğer Data Delete tarafından sevgi ile yapıldı <3 -->
