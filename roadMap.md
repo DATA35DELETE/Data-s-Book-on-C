@@ -266,7 +266,6 @@
 - **Header Dosyaları (.h)**: Tanım. Oluşturma. Kullanım. Örnek.
 - **Makro Fonksiyonlar**: Tanım. Inline ile Farkı. Örnek.
 - **Önceden Tanımlı Makrolar**: __FILE__, __LINE__, __DATE__, __TIME__. Örnek.
-- **X-Macro Tekniği**: Tanım. Gelişmiş Kullanım. Örnek.
  
 ---
  
