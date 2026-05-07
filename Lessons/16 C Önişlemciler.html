@@ -91,11 +91,122 @@ Sırasıyla Windows ve Linux çıktıları</pre>
             <img src="../Bibliography/16 C Önişlemciler.html/2.jpeg" alt="16.2" width="800px">
         </div>
 
+        <h2>Başlık Dosyaları</h2>
+        <pre id="preh2">İngilizcesiyle Headers, kendi kod içi kütüphanemizi oluşturuken kullandığımız bir dosya formatıdır.</pre>
+
+        <pre id="preh2">Başlık dosyaları, kendi isimleriyle isimlendirelen ve .c uzantılı dosyanın diğer kaynak dosyalarına kodlarını paylaşmasını sağlar. C kaynak kodunda fonksiyon yazılırken, H kaynak kodunda ise fonksiyonların gövdesiz halini halini yazılır.</pre>
+
+        <pre id="preh2">Eğer bir program içerisinde iki kere başlık dosyasını çağırma durumunda derliyiciler hata vermektedir. Çünkü tanımlanan bir dosyayı tekrar tanımlamak hem bilgisayarın hem de derliyicinin kafasını karıştırmaktadır. Aynı bir değişkeni tekrar sanki ilk defa tanımlıyomuş gibi yapmak gibi... Bu durumu önlemek için <code>#ifndef</code>, <code>#define</code> ve <code>#endif</code> ile tekrar tanımlama önlenir.</pre>
+
+        <pre id="preh2">Derleme yapılırken ise sürece diğer dosyalarda katılır. Aksi taktirde hata vericektir.</pre>
+
+        <pre id="codeh2">Şimdi ise 3 adet dosya oluşturalım. main.c, topla.c ve topla.h olsun. main.c içerisinde topla.c'nin "topla" fonksiyonun topla.h ile erişelim ve ekrana yazdıralım.
+main.c
+<code class="language-c">#include &ltstdio.h>
+#include "topla.h" // Kütüphanemiz
+
+int main(){
+
+    printf("2 + 2 = %d", topla(2, 2)); // Kullanımı
+
+    return 0;
+}</code>
+
+topla.h
+<code class="language-c">#ifndef _TOPLA_H // Eğer _TOPLA_H isimli bir macro tanımlanmadıysa
+#define _TOPLA_H // Tanımla
+
+int topla(int a, int b); // topla.c'deki fonksiyonun gövdesiz hali
+
+#endif</code>
+
+topla.c
+<code class="language-c">int topla(int a, int b) // Fonksiyonumuz
+{
+    return a + b;
+}</code>
+
+Çıktımız ise "2 + 2 = 4" şeklinde olucaktır.</pre>
+
+        <h2>Makro Fonksiyonlar</h2>
+        <pre id="preh2">Makro fonksiyonlar, aynı normal makrolar gibi tanımlanır ve değer verilir. Inline yani normal fonksiyonlar arasındaki fark ise yazılan fonksiyon isminin direkt fonksiyonun içerisindeki işleme bellekte dönüşür.</pre>
+
+        <pre id="codeh2">Başlık dosyası örneğimizi makro fonksiyonlar ile yapalım.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+
+#define TOPLA(a, b) a+b // Makrı fonksiyonumuz
+
+int main(){
+
+    printf("2 + 2 = %d", TOPLA(2, 2)); // Kullanımı
+
+    return 0;
+}</code>
+
+Çıktısı aynı olucaktır.</pre>
+
+        <h2>Önceden Tanımlı Makrolar</h2>
+        <pre id="preh2">C içerisinde önceden tanımlı olan bazı makrolar vardır. Bazıları;</pre>
+        
+        <table id="tableh2">
+            <thead>
+                <tr>
+                    <th>Makro</th>
+                    <th>Açıklama</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>__FILE__</td>
+                    <td>Çalıştığı C kaynak kodunun ismini verir. Char dizesi verir.</td>
+                </tr>
+                <tr>
+                    <td>__TIME__</td>
+                    <td>Derlendiği saati Char dizesi verir.</td>
+                </tr>
+                <tr>
+                    <td>__DATE__</td>
+                    <td>Derlendiği tarihi Char dizesi verir.</td>
+                </tr>
+                 <tr>
+                    <td>__STDC_</td>
+                    <td>Kodlanan C kodunu derleyem derliyici C standartlarına uyuyor mu? Uyuyorsa bir değil ise sıfır.</td>
+                </tr>
+                <tr>
+                    <td>__LINE_</td>
+                    <td>Çağrılan satırı >Int türünde değeri döndürür.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <pre id="codeh2">Şimdi ise bu makroları içeren bir program yazalım.
+
+<code class="language-c">#include <stdio.h>
+
+int main(){
+
+    printf("Tarihi ve saat: %s %s\n", __DATE__, __TIME__);
+    printf("Calisan C kaynak kodu ismi: %s\n", __FILE__);
+    printf("Bu program C standartlarina uygun mu? Cevap, %s\n", __STDC__ ? "evet" : "değil");
+    printf("Bu mesaji yazdiran kodun satiri: %d", __LINE__);
+
+    return 0;
+}</code>
+
+Çıktısı;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/16 C Önişlemciler.html/3.png" alt="16.3" width="800px">
+        </div>
+
         <h2>Kaynakça</h2>
         <ul>
             <li><a href="https://learn.microsoft.com/tr-tr/cpp/preprocessor/hash-include-directive-c-cpp?view=msvc-170">https://learn.microsoft.com/tr-tr/cpp/preprocessor/hash-include-directive-c-cpp?view=msvc-170</a></li>
             <li><a href="https://learn.microsoft.com/tr-tr/cpp/preprocessor/macros-c-cpp?view=msvc-170">https://learn.microsoft.com/tr-tr/cpp/preprocessor/macros-c-cpp?view=msvc-170</a></li>
             <li><a href="https://ismetkerem.com/makrolar-ve-kosullu-derleme-define-ve-ifdef-mantigi/">https://ismetkerem.com/makrolar-ve-kosullu-derleme-define-ve-ifdef-mantigi/</a></li>
+            <li><a href="https://medium.com/@enesmuzaffer22/ba%C5%9Fl%C4%B1k-dosyalar%C4%B1-header-files-c-ve-c-608b9d0ceec4">https://medium.com/@enesmuzaffer22/ba%C5%9Fl%C4%B1k-dosyalar%C4%B1-header-files-c-ve-c-608b9d0ceec4</a></li>
+            <li><a href="https://www.programiz.com/c-programming/c-preprocessor-macros">https://www.programiz.com/c-programming/c-preprocessor-macros</a></li>
         </ul>
     </div>
 
