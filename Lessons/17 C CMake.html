@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data's Book on C</title>
+
+    <link rel="icon" type="image/x-icon" href="../Sources/favicon.png">
+
+    <script src="../Sources/JS/setBackgroundMedia.js"></script>
+
+    <link rel="stylesheet" href="../Sources/JS/hljs/vs2015.css">
+    <script src="../Sources/JS/hljs/highlight.min.js"></script>
+    <script>
+        window.onload = function() {
+            hljs.highlightAll();
+        };
+    </script>
+
+    <link rel="stylesheet" href="../Sources/CSS/main.css">
+</head>
+<body>
+    <h1>CMake</h1>
+
+    <div style="height: 100px;"></div>
+    
+    <div id="mainDiv">
+        <h2>CMake Nedir?</h2>
+        <pre id="preh2">CMake; C, C++ vb. dillerin için geliştirmiş ve açık kaynak olan bir derleme otomasyon aracıdır.</pre>
+
+        <pre id="preh2">CMake büyük ve kapsamlı projelerde kod ve derleme yönetimi için kritik önem arz etmektedir. Bu sayfadan önce sürekli gcc ile derleme ve kütüphane bağlama yaptık. Bu şuan kolay olsada ileride bir proje için yüzlerce kütüphane içericek olursa o gcc komutu yazmak çok ama çok uğraştırıcı olucaktır. İşte bu durumda CMake devreye girer. CMake bizlere "CMakeLists.txt" adında bir derleme talimatlarını içeren bir dosya formatı sağlar. Biz bu talimatları CMake'e özgü bir yazılış stili ile yazarız. Bir kere yazarız ve tek ve basit bir komut ile her seferinde gcc'de olduğu gibi yazmamız gerekmez. Böylelikle zamandan tasaruf etmiş oluruz.</pre>
+
+        <pre id="preh2">Aslında CMake, Makefiles adında bir otomasyon aracının üstüne kurulu bir sistemdir. Hatta Build klasöründe Makefile dosyasını görebilirsiniz.</pre>
+
+        <pre id="preh2">Bu eğitimde serisi boyunca kullandığımız Visual Studio Code'u kullanmayı devam ediceğim.</pre>
+
+        <pre id="preh2">CMake derlenen uygulamalardan tam olarak sorumlu değildir. CMake'de arka planda derleme işini yapan yapılar ise "Generators" olarak adlandırılan derliyicilerdir. CMake ise bu derliyicileri doğru şekilde yönetip derleme yapması onu derleme otomasyonu olmasını sağlar.</pre>
+
+        <h2>CMake Kurulumu</h2>
+        <pre id="preh2">CMake'i kurmak için tabiki de Mingw'i kullanıcağız. Çünkü Gcc ve diğer derliyiciler Mingw'de bulunmaktadır. Tabi sisteminizde Visual Studio C++ SDK'i kurulu ise onun içerisindeki derliyicileride kullanabilirsiniz. Ben Gcc kullanmayı tercih ettim.</pre>
+
+        <pre id="codeh2">Mingw konsolunda bu komutu çalıştıralım:
+<code class="language-bash">pacman -Sy mingw-w64-x86_64-cmake</code>
+
+Güncelleme ve kurulumun ardından cmake sistemize kurulmuş demektir.</pre>
+
+        <pre id="preh2">Artık CMake'i kullanabiliriz.</pre>
+
+        <h3>Build ve Source Klasörleri</h3>
+        <pre id="preh3">CMake ile proje geliştirmeden önce bu iki klasörü anlamamız gerek.</pre>
+
+        <pre id="preh3">Build klasörü, Source klasöründeki kodların derlenmiş ve çalıştırabilir olan dosyaları içerir. Source ise derlenecek kaynak kodların ve CMakeLists.txt talimat dosyasının bulunduğu klasördür. CMake'in görevi ise bu kısımda Source klasöründeki kaynak kodlarını alıp Build klasörüne derlemektir.</pre>
+
+        <pre id="preh3">Bu iki klasörün kullanım şekilleri ile ilgili temelde iki durum ortaya çıkmıştır. Source içi Build ve Source dışı Build. Aynı göreve hizmet eden iki durumdan birisi olan Source içi Build için yapılan işlem Build klasörünün Source içinde olmasıdır. Source dışı Build ise bir ana dizin içerisinde hem Source hem de Build farklı klasörlerde olma durumudur. Bu ve diğer sayfalarda Source dışı Build kullanmakta olacağım.</pre>
+
+        <h2>CMakeLists.txt Talimat Kodları ve CMake ile İlk Derleme</h2>
+        <pre id="preh2">İlk olarak şu klasör yapısını kuralım.</pre>
+
+        <pre id="codeh2"><code>projeDizini
+├───build
+└───source
+        CMakeLists.txt
+        main.c</code></pre>
+
+        <pre id="codeh2">CMakeLists.txt içerini yazalım
+<code>cmake_minimum_required(VERSION 4.3.2) # CMake'in sürümünü belirleyelim
+
+# CMakeLists.txt'de diyez(#) işaret ile yorum satırı yazılabilir
+ 
+project(datasbookonc) # Genel projemizin ismi
+
+add_executable(hello) # Çalıştırabilir bir dosya tanımlama. İsmi "hello" olsun
+target_sources(hello PRIVATE main.c) # CMakeLists.txt'de bir nevi değişken mantığı vardır. "hello" isimli çalıştırabilir olan dosyamızn kaynak dosyasını main.c olarak belirledik</code>
+        </pre>
+
+        <pre id="codeh2">Ardından basit bir örnek için main.c kaynak dosyasını buları yazalım.
+<code class="language-c">#include &lt;stdio.h>
+
+int main()
+{
+    printf("Hello World");
+
+    return 0;
+}</code></pre>
+
+        <pre id="codeh2">Sonra build klasörüne gelip şu komutu çalıştıralım
+<code class="language-bash">cmake -G "MinGW Makefiles" ..\source</code>
+-G "MimGW Makefiles"; Hangi ortam için Makefiles kullanılacak
+..\source; Source klasörünüz
+</pre>
+
+        <pre id="codeh2">Son olarak derleme için ise bu komutu çalıştırıyoruz
+<code class="language-bash">cmake --build .</code>
+
+<code class="language-bash">hello</code>
+
+Çıktı "Hello World" olucaktır.</pre>
+
+        <h2>Çoklu Dosya Derleme</h2>
+        <pre id="preh2">Çoklu dosya derlemek için CMakeLists.txt "hello" adlı çalıştıralabilir dosyaya kaynak dosyası eklememiz gerekir.</pre>
+
+        <pre id="codeh2">Ondan önce diğer dosyaları oluşturalım. Başlık dosyalarındaki örneğimizi CMake ile tekrar yapalım.
+
+main.c
+<code class="language-c">#include &lt;stdio.h>
+#include "topla.h"
+
+int main(){
+
+    printf("2 + 2 = %d", topla(2, 2));
+
+    return 0;
+}</code>
+
+topla.h
+<code class="language-c">#ifndef _TOPLA_H
+#define _TOPLA_H
+
+int topla(int a, int b);
+
+#endif</code>
+
+topla.c
+<code class="language-c">int topla(int a, int b)
+{
+    return a + b;
+}</code>
+
+CMakeLists.txt
+<code>cmake_minimum_required(VERSION 4.3.2)
+ 
+project(datasbookonc)
+
+add_executable(topla)
+target_sources(topla PRIVATE main.c topla.h topla.c)
+# Diğer kaynak dosyalarımızı ekledik</code>
+
+Build edelim ve çıktısı "2 + 2 = 4" olucaktır.</pre>
+
+        <h2>Kaynakça</h2>
+        <ul>
+            <li><a href="https://cmake.org/cmake/help/latest/guide/tutorial/Before%20You%20Begin.html">https://cmake.org/cmake/help/latest/guide/tutorial/Before%20You%20Begin.html</a></li>
+            <li><a href="https://www.mustafayemural.com/cmake-my000034/">https://www.mustafayemural.com/cmake-my000034/</a></li>
+            <li><a href="https://stackoverflow.com/questions/20804468/cmake-multiple-line-comments-block-comment">https://stackoverflow.com/questions/20804468/cmake-multiple-line-comments-block-comment</a></li>
+            <li><a href="https://stackoverflow.com/a/17511705">https://stackoverflow.com/a/17511705</a></li>
+            <li><a href="https://stackoverflow.com/a/43773571">https://stackoverflow.com/a/43773571</a></li>
+        </ul>    
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <footer style="position: fixed; left: 0; bottom: 0; width: 100%; background: transparent; text-align: center; padding: 10px 0; z-index: 100;">
+        <div>
+            <a href="./16 C Önişlemciler.html" style="margin-right: 20px; cursor:pointer;">
+                &larr; Önceki
+            </a>
+            <a href="" style="cursor:pointer;">
+                Sonraki &rarr;
+            </a>
+        </div>
+        <div>
+            <p>&copy; 2026 Data's Book</p>
+        </div>
+
+        <div style="position: absolute; right: 20px; bottom: 20px;">
+            <a href="./1 C İçindekiler.html" style="text-decoration: none;">
+                İçindekiler
+            </a>
+        </div>
+    </footer>
+</body>
+</html>
+
+<!-- Muhammet Enes nam-ı diğer Data Delete tarafından sevgi ile yapıldı <3 -->

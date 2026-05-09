@@ -276,7 +276,6 @@
 - **Çoklu Dosya Projesi**: Tanım. Örnek.
 - **Kütüphane Oluşturma**: Static vs Shared. Örnek.
 - **Dış Kütüphane Bağlama**: find_package. Örnek.
-- **Out-of-Source Build**: Tanım. Örnek.
 - **CMake ile Test Entegrasyonu**: CTest. Örnek.
  
 ---
@@ -289,8 +288,14 @@
   - **Thread Bekleme**: pthread_join. Örnek.
   - **Mutex**: Tanım. Race Condition. pthread_mutex. Örnek.
   - **Condition Variable**: Tanım. Örnek.
+- **Windows Threads**:
+  - **Thread Oluşturma**: CreateThread. Örnek.
+  - **Thread Bekleme**: WaitForSingleObject, WaitForMultipleObjects. Örnek.
+  - **Critical Section**: Tanım. EnterCriticalSection, LeaveCriticalSection. Örnek.
+  - **Event**: CreateEvent, SetEvent, ResetEvent. Örnek.
 - **Non-Blocking I/O**: Tanım. Örnek.
-- **select / poll / epoll**: Tanım. Farkları. Örnek.
+- **select / poll / epoll** (Linux/Unix): Tanım. Farkları. Örnek.
+- **IOCP** (Input/Output Completion Ports - Windows): Tanım. Örnek.
 - **Signal Handling**: Tanım. signal(). Örnek.
  
 ---
