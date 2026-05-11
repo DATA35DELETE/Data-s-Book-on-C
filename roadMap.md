@@ -276,7 +276,6 @@
 - **Çoklu Dosya Projesi**: Tanım. Örnek.
 - **Kütüphane Oluşturma**: Static vs Shared. Örnek.
 - **Dış Kütüphane Bağlama**: find_package. Örnek.
-- **CMake ile Test Entegrasyonu**: CTest. Örnek.
  
 ---
  

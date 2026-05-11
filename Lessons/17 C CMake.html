@@ -137,6 +137,50 @@ target_sources(topla PRIVATE main.c topla.h topla.c)
 
 Build edelim ve çıktısı "2 + 2 = 4" olucaktır.</pre>
 
+        <h2>Kütüphane Oluşturma</h2>
+        <pre id="preh2">CMake'de kütüphane oluşturmak için az önceki örneğimizi hem statik hem de dinamik kütüphane şeklinde CMake ile derliyelim.</pre>
+
+        <pre id="codeh2"><code class="language-cmake">cmake_minimum_required(VERSION 4.3.2)
+ 
+project(datasbookonc)
+
+include_directories(.) # Kütüphanenin başlık dosyalarının bulunduğu klasör.
+add_library(topla STATIC/SHARED topla.c)
+# STATIC; Statik kütüphane oluşturur
+# SHARED; Dinamik kütüphane oluşturur</code></pre>
+
+
+        <h2>Dış Kütüphane Bağlama</h2>
+        <pre id="preh2">Eğer statik veya dinamik bir kütüphane bağlamak istersek;</pre>
+
+        <pre id="codeh2"><code class="language-cmake">cmake_minimum_required(VERSION 4.3.2)
+ 
+project(datasbookonc)
+
+LINK_DIRECTORIES(${PROJECT_SOURCE_DIR})
+# Kütüphane dosyalarıı kaynak dizininde ara
+
+add_executable(main)
+target_link_libraries(main PRIVATE libtopla.dll)
+# Kaynak dizininde bulunan kütüphanemizi main uygulamsına linkle
+
+target_sources(main PRIVATE main.c)
+
+</code></pre>
+
+        <pre id="preh2">Zlib gibi bir kütüphane bağlamak istersek;</pre>
+
+        <pre id="codeh2"><code class="language-c">cmake_minimum_required(VERSION 4.3.2)
+ 
+project(datasbookonc)
+
+find_package(ZLIB REQUIRED)
+# Zlib kütüphanesini bul
+
+add_executable(main main.c)
+target_link_libraries(main PRIVATE ZLIB::ZLIB)
+# Zlib kütüphanesini linkle</code></pre>
+
         <h2>Kaynakça</h2>
         <ul>
             <li><a href="https://cmake.org/cmake/help/latest/guide/tutorial/Before%20You%20Begin.html">https://cmake.org/cmake/help/latest/guide/tutorial/Before%20You%20Begin.html</a></li>
@@ -144,6 +188,8 @@ Build edelim ve çıktısı "2 + 2 = 4" olucaktır.</pre>
             <li><a href="https://stackoverflow.com/questions/20804468/cmake-multiple-line-comments-block-comment">https://stackoverflow.com/questions/20804468/cmake-multiple-line-comments-block-comment</a></li>
             <li><a href="https://stackoverflow.com/a/17511705">https://stackoverflow.com/a/17511705</a></li>
             <li><a href="https://stackoverflow.com/a/43773571">https://stackoverflow.com/a/43773571</a></li>
+            <li><a href="https://stackoverflow.com/questions/58597988/how-to-use-dynamic-link-library-with-cmake">https://stackoverflow.com/questions/58597988/how-to-use-dynamic-link-library-with-cmake</a></li>
+            <li><a href="https://stackoverflow.com/questions/53298492/how-to-link-zlib-with-cmake">https://stackoverflow.com/questions/53298492/how-to-link-zlib-with-cmake</a></li>
         </ul>    
     </div>
 
