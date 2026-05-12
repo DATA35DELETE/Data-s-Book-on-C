@@ -275,7 +275,7 @@
 - **CMakeLists.txt**: Tanım. Temel Yapı. Örnek.
 - **Çoklu Dosya Projesi**: Tanım. Örnek.
 - **Kütüphane Oluşturma**: Static vs Shared. Örnek.
-- **Dış Kütüphane Bağlama**: find_package. Örnek.
+- **Dış Kütüphane Bağlama**: find_package. Örnek.-
  
 ---
  
