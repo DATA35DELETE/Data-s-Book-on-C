@@ -33,11 +33,117 @@
 
         <pre id="preh2">Asenkron programlamada bir diğer terim ise Process yani işlemdir. Process'in görevi ise Thread'leri tek bir çatı altında yürütmek ve sistemdeki belirli kaynakları(CPU, RAM, Ekran Kartı, vb.) kendisi için ayrımak ve içerisindeki Thread'leri o kaynaklarla beslemek ve yürütmektir.</pre>
 
+        <h2>Linux'da Çoklu İş Parçacıklı İşlemler</h2>
+        <pre id="preh2">Linux ve Linux benzeri işletim sistemlerinde çoklu iş parçacığı işlemi için POSIX tarafından sağlanan API'lar üzerinden yürümektedir.</pre>
+
+        <pre id="codeh2">Bir örnek üzerinden açıklayalım.
+
+<code class="language-c">#include &lt;stdio.h>
+#include &lt;pthread.h> // Ana kütüphanemiz
+#include &lt;stdlib.h>
+#include &lt;unistd.h>
+
+void* yeni2ThreaddekiFonksiyon(void* bosArguman)
+{
+    for (int i = 0; i < 10; i++)
+    {
+        printf("2. Thread'den mesaj\n");
+
+        sleep(1); // Mevcut olan Thread'i uyutur
+    }
+}
+
+// Yeni açıcağımız Thread'de çalışıcak fonksiyon, dönüş tipi her zaman void* olmalıdır
+void* yeni1ThreaddekiFonksiyon(void* bosArguman)
+{
+    pthread_t thread2;
+
+    pthread_create(&thread2, NULL, yeni2ThreaddekiFonksiyon, NULL);
+
+    for (int i = 0; i < 5; i++)
+    {
+        printf("1. Thread'den mesaj\n");
+
+        sleep(1);
+    }
+
+    pthread_join(thread2, NULL); // Diğer Thread'i beklemek için
+}
+
+// Main fonksiyonu aynı zamanda ana Thread'tir. Her şeyin başlangıcı buradan yapılır
+int main()
+{
+    printf("Ana Thread başladı\n");
+
+    pthread_t thread1; // Her bir Thread'in kendisine özgü bir id içerir. Bu id'ler pthread_t değişken tipinde saklanır
+
+    pthread_create(&thread1, NULL, yeni1ThreaddekiFonksiyon, NULL);
+    // Thread'i tanımlar ve başlatır.
+    // &thread1; Açılacak olan Thread'in id'si
+    // NULL; Açılacak olan Thread'in özellikleri. NULL varsıyalını temsil eder
+    // yeni1ThreaddekiFonksiyon; Thread'e çalışıcak olan fonksiyon
+    // NULL; Fonksiyonun argümanı. Sadece bir adet gönderilebilir
+
+    pthread_join(thread1, NULL);
+    // Thread'leri bitene kadar bekler
+    // thread1; Beklenecek Thread id'si
+    // NULL; Beklenen dönüş tipi
+
+    printf("Ana Thread bitti\n");
+
+    return 0;
+}</code>
+
+Temelde yapılan şey Thread'lerin birbirlerini beklemesidir. Ayrıca bir saniye aralıklarla mesaj gönderip bağımsız çalışabiliyorlar. Çıktı ise;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/18 C Asenkron Programlama.html/1.png" alt="18.1" width="800px">
+        </div>
+
+        <pre id="codeh2">Tabiki bununla sınırlı değil... Diğer işlemler bir örnek yazalım.
+
+<code class="language-c">#include &lt;stdio.h>
+#include &lt;pthread.h> // Ana kütüphanemiz
+#include &lt;stdlib.h>
+#include &lt;unistd.h>
+
+void* yeniThread(void* arg){
+    for (int i = 0; i < 10; i++)
+    {
+        printf("Yeni Thread'den mesaj\n");
+
+        sleep(1);
+    }
+    
+    // 1 saniye arayla işlem
+}
+
+int main(){
+
+    pthread_t thread;
+    pthread_create(&thread, NULL, yeniThread, NULL);
+
+    sleep(5);
+
+    pthread_cancel(thread);
+    // Normalde Thread 10 saniye çalışıcaktı. Fakat biz 5 saniye sonra Thread'i iptal ettik
+    
+    printf("Ana Thread'in id'si: %lu\n", (unsigned long int)(pthread_self()));
+
+    pthread_exit(NULL); // Return ile dönmek yerine ana Thread'i kapatmış olduk. Bu komutta anlaşılcağı üzere mevcut Thread'i kapatır
+}</code>
+Çıktı ise;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/18 C Asenkron Programlama.html/2.png" alt="18.2" width="800px">
+        </div>
+
         <h2>Kaynakça</h2>
         <ul>
             <li><a href="https://sozluk.gov.tr">https://sozluk.gov.tr(Asenkron'un kelime anlamı)</a></li>
             <li><a href="https://en.wikipedia.org/wiki/Thread_(computing)">https://en.wikipedia.org/wiki/Thread_(computing)</a></li>
             <li><a href="https://en.wikipedia.org/wiki/Process_(computing)">https://en.wikipedia.org/wiki/Process_(computing)</a></li>
+            <li><a href="https://www.geeksforgeeks.org/c/multithreading-in-c/">https://www.geeksforgeeks.org/c/multithreading-in-c/</a></li>
         </ul>    
     </div>
 
