@@ -289,8 +289,7 @@
   - **Condition Variable**: Tanım. Örnek.
 - **Windows Threads**:
   - **Thread Oluşturma**: CreateThread. Örnek.
-  - **Thread Bekleme**: WaitForSingleObject, WaitForMultipleObjects. Örnek.
-  - **Critical Section**: Tanım. EnterCriticalSection, LeaveCriticalSection. Örnek.
+  - **Thread Bekleme**: WaitForSingleObject. Örnek.
   - **Event**: CreateEvent, SetEvent, ResetEvent. Örnek.
 - **Non-Blocking I/O**: Tanım. Örnek.
 - **select / poll / epoll** (Linux/Unix): Tanım. Farkları. Örnek.

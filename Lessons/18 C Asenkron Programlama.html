@@ -138,12 +138,72 @@ int main(){
             <img src="../Bibliography/18 C Asenkron Programlama.html/2.png" alt="18.2" width="800px">
         </div>
 
+        <h2>Windows'da Çoklu İş Parçacıklı İşlemler</h2>
+        <pre id="preh2">Windows'da bir çok işlem gibi çoklu iş parçacığı işlemlerinde de Windows API'larını kullanırız.</pre>
+
+        <pre id="codeh2">Yine bir örnek ile açıklayalım
+
+<code class="language-c">#include &lt;stdio.h>
+#include &lt;windows.h>
+#include &lt;stdlib.h>
+
+// Ayrı Thread'e çalışıcak olan fonksiyon
+DWORD WINAPI yeniThread(LPVOID a)
+{
+    printf("Yeni Thread'den mesaj\n");
+
+    Sleep(5000); // Uyutma işlemi, Windows'da milisaniye cinsinden alınır
+
+    return 0;
+}
+
+int main()
+{
+    HANDLE yeniThreadHandle; // Thread değişkeni
+    DWORD yeniThreadId; // Thread İd'si
+    
+
+    yeniThreadHandle = CreateThread(NULL, 0, yeniThread, (int *)(1), 0, &yeniThreadId);
+    // Yeni Thread'i açıyoruz
+    // NULL; Varsayılan güvenlik
+    // 0; Varsayılan Stack sayısı
+    // yeniThread; Yeni Thread'e çalışıcak olan fonksiyon
+    // (int *)(1); Fonksiyonu gidecek olan parametre. NULL olmasın diye 1 gönderdik
+    // 0; Varsayıla n oluşturma ayarları
+    // &yeniThreadId; Yeni Thread için İd değişkeni
+
+    if (yeniThreadHandle != NULL) // Başarılı ise
+    {
+        printf("Yeni Thread başlatıldı...\n");
+
+        printf("Yeni Thread'in bitmesi bekleniyor...\n");
+        WaitForSingleObject(yeniThreadHandle, INFINITE);
+        // Thread bitine kadar bekleme. Sınırısz zaman aşamı
+
+        printf("Thread bitti...");
+
+        CloseHandle(yeniThreadHandle); // Thread'i serbest bırak
+    }
+    
+
+    return 0;
+}</code>
+
+Sonuç olarak Main, yeni açılan Thread'i beklemiş oldu. Çıktı ise;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/18 C Asenkron Programlama.html/3.png" alt="18.3" width="800px">
+        </div>
+
+        <pre id="preh2">Ayrıca <code>ExitThread(0);</code> ile mevcut Thread'en çıkılabilir.</pre>
+
         <h2>Kaynakça</h2>
         <ul>
             <li><a href="https://sozluk.gov.tr">https://sozluk.gov.tr(Asenkron'un kelime anlamı)</a></li>
             <li><a href="https://en.wikipedia.org/wiki/Thread_(computing)">https://en.wikipedia.org/wiki/Thread_(computing)</a></li>
             <li><a href="https://en.wikipedia.org/wiki/Process_(computing)">https://en.wikipedia.org/wiki/Process_(computing)</a></li>
             <li><a href="https://www.geeksforgeeks.org/c/multithreading-in-c/">https://www.geeksforgeeks.org/c/multithreading-in-c/</a></li>
+            <li><a href="https://www.tutorialspoint.com/article/windows-thread-api-in-the-c-program">https://www.tutorialspoint.com/article/windows-thread-api-in-the-c-program</a></li>
         </ul>    
     </div>
 
