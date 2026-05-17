@@ -290,11 +290,6 @@
 - **Windows Threads**:
   - **Thread Oluşturma**: CreateThread. Örnek.
   - **Thread Bekleme**: WaitForSingleObject. Örnek.
-  - **Event**: CreateEvent, SetEvent, ResetEvent. Örnek.
-- **Non-Blocking I/O**: Tanım. Örnek.
-- **select / poll / epoll** (Linux/Unix): Tanım. Farkları. Örnek.
-- **IOCP** (Input/Output Completion Ports - Windows): Tanım. Örnek.
-- **Signal Handling**: Tanım. signal(). Örnek.
  
 ---
  
