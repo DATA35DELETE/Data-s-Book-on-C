@@ -25,10 +25,49 @@
     <div style="height: 100px;"></div>
     
     <div id="mainDiv">
-        
+        <h2>Güvenlik Nedir?</h2>
+        <pre id="preh2">Bilgisayar bilimlerinde güvenlik bilginin korunması anlamına gelir.</pre>
+
+        <pre id="preh2">Güvenlik dediğimizde aslında siber güvenlik ve beyaz şapkalı korsanlar gibi kavramlarla direkt bağlanıtılıdır. Bu sayfa genel olarak nasıl güvenlikten ve C programlama dilinde ise şifreleme konularını ele alıcaktır.</pre>
+
+        <pre id="preh2">C programlama dilinde ise güvenlik genellikle OpenSSL kütüphanesiyle sağlanır.</pre>
+
+        <h2>Buffer Overflow</h2>
+        <pre id="preh2">Türkçesiyle bellek taşması; genellikle önceden belirli bir bellek alanına, alanından fazla bir veri yazılması durumunda gerçekleşen ve kimi zaman veri sızıntısına kimi zaman ise programların beklenmedik bir davranış segilemesine neden olabilir.</pre>
+
+        <pre id="preh2">Örneğin biz programda yüz karakterlik bir Char dizesi için RAM'den yer tahsis edelim. Eğer biz 100 karakterden fazla bir yazı yazdırmaya çalıştığımızda gördüğümüz şey belleğin yüz karakterlik sınırıydı. Ancak fizikte enerjinin kaybolmadığı gibi veride kaybolmaz. İşte bizim orada göremediğimiz olay, Ayrılan belleğin hemen yan tarafında başka bir programa veya bizim programızın farklı işlevler için ayırdığımız alanına yazılır. Bu ne kadar normal olarak görülsede aslında programın beklenmedik davranışlarına şahit oluruz. İşte siyah şapkalı korsanlarda bu durumu bildikleri için bu saldırı tekniğini kullanırlar. Saldırı basitçe, eğer saldırı bir Web sunucusuna yapılcaksa ki Web sunucularıda aynı bizim bilgisayarlarımız gibidirler ve bellek taşması yaşayabilirler. Web sitesinin girdi kısmına sunucuya bellek taşması yaşayacak büyüklükte veri girilir. Sığıyan kısımda herhangi bir zararlı kod içermez lakin verilen taşdığı kısımda bolca zararlı kod içerir ki sızan bir veriyi siz denetleyemezsiniz. Böylelikle korsan sunucunuzda istediği gibi at koşturabilir hale gelir... Tabi günümüzde bu saldırı için bolca önlem alınmıştır.</pre>
+
+        <pre id="preh2">Tabi bu durumdan korunmak için yöntemler geliştirildi ve yıllarca kullanılan yönetim olan kanarya veya çerezlerde karar kılındı. Bu korumanın üç çeşidi olsada temel amacı bellek alanlarının aralarına güvenli bir bolge oluşturmaktır.</pre>
+
+        <pre id="preh2">Bu korumanın ilk çeşidi olan Null çerezi koruması, bellek alanları arasında belirli bir boyutta boş bir alan açmasıdır. Eğer bellek taşması yaşanırsa, taşan veriler o Null olan çerezlere yazılmaktadır. Çerezlerin üzerlerine bir veri yazıldığında bozulurlar ve bozuk çerez olarak anılırlar.</pre>
+
+        <pre id="preh2">Diğer biri ise rastgele çerez korumasıdır. Bu koruma ise Null yerine rastgele verilenden oluşan bir güvenli alan oluşturmadır. Bellek taşması durumunda aynı şekilde güvenli alana yazılır.</pre>
+
+        <pre id="preh2">Tabi bu iki koruma programların birbirlerinin bellek alanlarını işgal etmesini engeller lakin korsanların zaralı yazılım çalıştırmasını engelleyemez... İşte bu yüzden Rastgele XOR çerezleri geliştirdiler. Bu koruma ise rastgele çerez koruması gibi bir güvenli alan oluşturur lakin belirli sürelerlede XOR mantık kapısı ile veriyi kasten bozar. Böylelikle zararlı bir yazılım olsa bile artık rastgele bir sayı veya harf dizininden ibaret olur.</pre>
+
+        <h2>Girdi Doğrulama(Input Validation)</h2>
+        <pre id="preh2">Girdi doğrulama, özellikle formatlı işlemlerde sıkça kullanılan bir yöntemdir. İşlevisi ise kullanıcı tarafından girilen veriyi gerek yazı stili gerek de bağlam olarak değerlendirmek ve uygun ise veriyi işleme katmaktır.</pre>
+
+        <pre id="preh2">Bunu bir veri işleme için ön değerlendirme işlemi olarak görebiliriz. Ana işleme sık sık hata yapabilir. Gerek yanlış gerek eksik veriden bolca hatalar ve sorunlar çıkar. İşte bu gibi durumların oluşmaması için ön değerlendirme ile bu verinin ana işleme katılıp katılmacağı belirlenir.</pre>
+
+        <pre id="preh2">Örnek olarak telefon numarası; Eğer kullanıcı telefon numarasını yanlış ve eksik girerse ana işlem hata vericektir. İşte bu durumda ön değerlendirmede iki ana kontorl mekanizması kullanılır. Bunlardan biri yazı sitili olarak kontrol eden Syntactic ve bağlam olarak kontrol eden Semantic'dir.</pre>
+
+        <pre id="preh2">Aynı örnekten gider isek Syntactic, girilen numaranın kaç haneli olduğunu kontrol ederken, Semantic ise başı artı doksan mı veya bu numara geçerli mi? şekilde kontrol yapar. Eğer iki kontrol mekanizmadanda veri geçer ise ana işleme katılır.</pre>
+
+        <h2>OpenSSL</h2>
+        <pre id="preh2">OpenSSL C programlama dilinde şifreleme için olarak tasarlanmış bir kütüphanedir.</pre>
+
+        <pre id="codeh2">Kütüphaneyi kurmak için Mingw64 konsolunda şu kodu yazalım
+
+<code class="language-bash">pacman -S mingw-w64-x86_64-openssl</code>
+
+Kurulumun ardından kütüphanemiz hazırdır.</pre>
 
         <h2>Kaynakça</h2>
         <ul>
+            <li><a href="https://tr.wikipedia.org/wiki/Bilgisayar_güvenliği">https://tr.wikipedia.org/wiki/Bilgisayar_güvenliği</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Buffer_overflow_protection">https://en.wikipedia.org/wiki/Buffer_overflow_protection</a></li>
+            <li><a href="https://appsec.com.tr/blog/girdi-dogrulama">https://appsec.com.tr/blog/girdi-dogrulama</a></li>
         </ul>    
     </div>
 
@@ -36,7 +75,7 @@
 
     <footer style="position: fixed; left: 0; bottom: 0; width: 100%; background: transparent; text-align: center; padding: 10px 0; z-index: 100;">
         <div>
-            <a href="" style="margin-right: 20px; cursor:pointer;">
+            <a href="./18 C Asenkron Programlama.html" style="margin-right: 20px; cursor:pointer;">
                 &larr; Önceki
             </a>
             <a href="" style="cursor:pointer;">
