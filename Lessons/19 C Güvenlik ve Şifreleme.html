@@ -55,19 +55,51 @@
         <pre id="preh2">Aynı örnekten gider isek Syntactic, girilen numaranın kaç haneli olduğunu kontrol ederken, Semantic ise başı artı doksan mı veya bu numara geçerli mi? şekilde kontrol yapar. Eğer iki kontrol mekanizmadanda veri geçer ise ana işleme katılır.</pre>
 
         <h2>OpenSSL</h2>
-        <pre id="preh2">OpenSSL C programlama dilinde şifreleme için olarak tasarlanmış bir kütüphanedir.</pre>
 
-        <pre id="codeh2">Kütüphaneyi kurmak için Mingw64 konsolunda şu kodu yazalım
+        <h3>Kurulum</h3>
 
-<code class="language-bash">pacman -S mingw-w64-x86_64-openssl</code>
+        <pre id="preh3">OpenSSL C programlama dilinde şifreleme için olarak tasarlanmış bir kütüphanedir.</pre>
 
-Kurulumun ardından kütüphanemiz hazırdır.</pre>
+        <pre id="codeh3">Kütüphaneyi kurmak için Perl'i kurmamız gerekir. Perl OpenSSL'in yazıldığı dil olduğundan ihtiyaç duyulur. İlk önce Perl'i <a href="https://www.perl.org/get.html">resmi sitesinden</a> indirelim. Ardından OpenSSL'in kaynak kodunu Git aracılıyla indirelim.
+        
+<code class="language-bash">git clone https://github.com/openssl/openssl.git
+cd openssl
+</code>
+
+Ardından indirdiğimiz Perl'i kullanma vakti.
+    
+<code class="language-bash">perl Configure mingw64 no-shared no-asm --prefix=/C/OpenSSL-x64</code>
+Bu komut OpenSSL'i derler ve C sürücüsünün OpenSSL-x64 adlı bir klasöre derlenecek dosyaları hazırlar.
+
+Make ile derlemeden önce bağımlılıkları kuralım.
+<code class="language-bash">make depend</code>
+
+Son olarak derleyip yükliyelim.
+<code class="language-bash">make
+make install</code>
+
+Uzun bir derleme ardından dosyaları hazır durumdadır.
+
+OpenSSL-x64 adlı klasöründe bulunan tüm dosyaları MinGW64'dun klasörüne kopyalayalım. Artık kütüphanemiz hazır durumda...
+
+Bir kod derlemek için;
+<code class="language-bash">gcc main.c -o main -lssl -lcrypto</code></pre>
+
+        <h3>Hashing</h3>
+        <pre id="preh3">Hashing, bir matematik algoritmasıdır. Bilişimde genelde verileri benzersiz bir şifrelenmiş verilere dönüştürmek için kullanılır. İki türü vardır MD5 ve SHA256. MD5 128 bittir SHA256 adı üstünde 256 bittir.</pre>
 
         <h2>Kaynakça</h2>
         <ul>
             <li><a href="https://tr.wikipedia.org/wiki/Bilgisayar_güvenliği">https://tr.wikipedia.org/wiki/Bilgisayar_güvenliği</a></li>
             <li><a href="https://en.wikipedia.org/wiki/Buffer_overflow_protection">https://en.wikipedia.org/wiki/Buffer_overflow_protection</a></li>
             <li><a href="https://appsec.com.tr/blog/girdi-dogrulama">https://appsec.com.tr/blog/girdi-dogrulama</a></li>
+            <li><a href="https://stackoverflow.com/questions/1894013/how-to-use-openssl-with-gcc">https://stackoverflow.com/questions/1894013/how-to-use-openssl-with-gcc</a></li>
+            <li><a href="https://stackoverflow.com/a/9379476">https://stackoverflow.com/a/9379476</a></li>
+            <li><a href="https://www.perl.org/get.html">https://www.perl.org/get.html</a></li>
+            <li><a href="https://github.com/openssl/openssl">https://github.com/openssl/openssl</a></li>
+            <li><a href="https://opensource.com/article/19/6/cryptography-basics-openssl-part-2">https://opensource.com/article/19/6/cryptography-basics-openssl-part-2</a></li>
+            <li><a href="https://stackoverflow.com/a/10632725">https://stackoverflow.com/a/10632725</a></li>
+            <li><a href="https://stackoverflow.com/q/62882287">https://stackoverflow.com/q/62882287</a></li>
         </ul>    
     </div>
 
