@@ -88,6 +88,241 @@ Bir kod derlemek için;
         <h3>Hashing</h3>
         <pre id="preh3">Hashing, bir matematik algoritmasıdır. Bilişimde genelde verileri benzersiz bir şifrelenmiş verilere dönüştürmek için kullanılır. İki türü vardır MD5 ve SHA256. MD5 128 bittir SHA256 adı üstünde 256 bittir.</pre>
 
+        <pre id="codeh3">Örnek olarak iki algoritmayıda kullanarak bir örnek yapalım.
+
+<code class="language-c">#include &lt;openssl/sha.h> // SHA256 için kütüphanemiz
+#include &lt;openssl/md5.h> // MD5 için kütüphanemiz
+#include &lt;string.h>
+#include &lt;stdio.h>
+
+int main(){
+
+    char text[] = "Data Delete"; // Orjinal veri
+    unsigned char hash[SHA256_DIGEST_LENGTH]; // SHA256 ile şifrelenecek veri
+
+    SHA256_CTX sha; // SHA256'yı tanımlama
+
+    SHA256_Init(&sha); // Değişkenmizi SHA256 olarak başlatıyoruz
+    SHA256_Update(&sha, text, strlen(text));
+    // SHA256 değişkenimize veriyi veriyoruz
+    // &sha; SHA256 değişkenimiz
+    // text; Orjinal verimiz
+    // strlen(text); Orjinal verinin uzunluğu
+    SHA256_Final(hash, &sha); // Son halini(şifrelenmiş olarak) hash değişkenine atıyoruz
+
+    printf("\"Data Delete \" SHA256 => ");
+    for (size_t i = 0; i < SHA256_DIGEST_LENGTH; i++) // Her bir elemanı tek tek yazdırma 
+    {
+        printf("%x", hash[i]); // Şifreyi yazdırırken %x ile yazılır. Aksi takdirde anlamsız harfler çıkıcaktır. Fakat değer her çalıştırmada orjinal veri aynı olduğu süreççe şifrelenmiş veride aynı olucaktır
+    }
+
+    printf("\n");
+    
+    unsigned char mdHash[MD5_DIGEST_LENGTH]; // MD5 ile şifrelenecek veri
+
+    MD5(text, strlen(text), mdHash);
+    // MD5 algoritması ile şifreleme
+    // text; Orjinal veri
+    // strlen(text); Orjinal verinin uzunluğu
+    // mdHash; Şifrelenmiş verinin atanacağı değişken
+
+    printf("\"Data Delete \" MD5 => ");
+    for (size_t j = 0; j < strlen(text); j++) // Her bir elemanı tek tek yazdırma 
+    {
+        printf("%x", mdHash[j]);
+    }
+
+    return 0;
+}</code>
+
+Çıktı ise;</pre>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/19 C Güvenlik ve Şifreleme.html/1.png" alt="19.1" width="800px">
+        </div>
+
+        <h3>Simetrik Şifreleme</h3>
+        <pre id="preh3">Simetrik şifreleme veya AES, Key denilen berilli değerlerle verileri şifreleyip çözebildiğimiz bir algoritmadır.</pre>
+
+        <pre id="codeh3">Mantığı ise tek bir Public Key vardır. Bu Key hem kilit hem de anahtar görevi görmektedir. Basit bir örnek yapalım
+
+<code class="language-c">#include &lt;stdio.h>
+#include &lt;openssl/aes.h> // Kütüphanemiz
+
+static const unsigned char key[] = {
+    0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77,
+    0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff,
+    0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+    0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f
+}; // Public Key'miz
+
+int main(){
+
+    unsigned char data[] = "Data Delete"; // Orjinal veri
+
+    unsigned char sifrelenmis[256]; // Şifrelenecek verinin değişkeni
+    unsigned char cozulmus[256]; // Şifresi çözülecek değişken
+
+    AES_KEY enc, dec; // Şifreleyici ve çözücü iki değişken
+
+    AES_set_encrypt_key(key, 256, &enc);
+    // Şifreleyici Public Key yapar
+    // key; Public Key'in verisi
+    // 256; Kaç bitti olucak
+    // &enc; Şifrelici olacak olan değişken
+    AES_encrypt(data, sifrelenmis, &enc);
+    // Veriyi şifreliyici ile şifreler
+    // data; Orjinal veri
+    // sifrelenmis; Şifrelenmiş verinin atanacağı değişken
+    // &enc; Şifreleyici Public Key
+
+    AES_set_decrypt_key(key, 128, &dec);
+    // Çözücü Public Key yapar
+    // key; Public Key'in verisi
+    // 256; Kaç bitti olucak
+    // &dec; Çözücü olacak olan değişken
+    AES_decrypt(sifrelenmis, cozulmus, &dec);
+    // Şifrelenmiş veriyi çözer
+    // sifrelenmis; Şifrelenmiş veri
+    // cozulmus; Çözülmüş verinin atanacağı değişken
+    // &dec; Çözücü Public Key
+
+    printf("%s", cozulmus);
+
+    return 0;
+}</code>
+        
+Çıktı ise "Data Delete" olucaktır.</pre>
+
+        <h3>Asimetrik Şifreleme</h3>
+        <pre id="preh3">Asimetrik şifrlemede ise iki farklı anahtar ile veriler şifrelenir ve çözünür.</pre>
+
+        <pre id="preh3">Bu Key'lerden biri Private yani özel, diğeri ise Public yani genel Key'dir.</pre>
+
+        <pre id="codeh3">Genel mantık ise Public ile veri şifrelenir ve Private ile sadece Public'in şifrelidiği veriyi çözer. Bir örnek yapalım.
+
+Her şeyden önce ilk olarak OpenSSL ile Private ve Public Key'leri oluşturalım.
+<code class="language-bash">openssl genrsa -out private.pem 2048</code>
+Bu komut iki bin kırk sekizlik bir Private anahtar dosyası oluşturur. Şimdi ise bu Private Key'lerden Public Key'leri bulalım.
+<code class="language-bash">openssl rsa -in private.pem -outform PEM -pubout -out public.pem</code>
+Artık Key'lerimiz hazır durumda
+
+C kodlarımız;
+<code class="language-c">#include &lt;openssl/rsa.h> // RSA için ana kütüphane
+#include &lt;openssl/pem.h> // PEM yani Key dosyalarını okumak için kütüphane
+#include &lt;stdio.h>
+#include &lt;string.h>
+
+// Key oluşturmak kolay olsun diye fonksiyon yazalım. Eğer parametresi 1 ise Public, diğer ihtimallerde Private Key oluşturur
+RSA *rsaAnahtarOlustur(int isPublic)
+{
+    FILE *publicKeys = fopen("public.pem", "rb");
+    FILE *privateKeys = fopen("private.pem", "rb");
+    // Public ve Private Key dosyalarını okuma modunda aç
+
+    RSA *rsa = RSA_new();
+    // Yeni bir RSA değişkeni oluştur
+
+    if (isPublic) // 1 ise
+    {
+        rsa = PEM_read_RSA_PUBKEY(publicKeys, &rsa, NULL, NULL); // Public Key'lerden birini RSA değişkenimize ayarla
+    }
+    else
+    {
+        rsa = PEM_read_RSAPrivateKey(privateKeys, &rsa, NULL, NULL); // Private Key'lerden birini RSA değişkenimize ayarla
+    }
+
+    fclose(publicKeys);
+    fclose(privateKeys);
+
+    return rsa;
+}
+
+int main()
+{
+    unsigned char data[2048/8] = "Data Delete"; // Orjinal veri
+
+    unsigned char sifreliData[4098]={}; // Şifreli verinin barınacağı değişken
+    RSA *publicRsa = rsaAnahtarOlustur(1); // Public bir Key oluştur
+    int enc_len = RSA_public_encrypt(strlen(data), data, sifreliData, publicRsa, RSA_PKCS1_PADDING);
+    // Public Key ile veriyi şifreler
+    // strlen(data); Orjinal verinin uzunluğu
+    // data; Orjinal veri
+    // sifreliData; Şifrelenmiş verinin atanacağı değişken
+    // publicRsa; Public Key RSA değişkeni
+    // RSA_PKCS1_PADDING; Bu bir dolgu flag'tır. Dolgu ise her şifrelemede, şifrelenmiş veri aynı çıkmasın diye değiştiricilerdir. Güncel projeler için önerilen bu flag'tır
+    
+    unsigned char cozulmus[4098]={}; // Şifreli verinin çözünecek değerinin barınacağı değişken
+    RSA *privateRsa = rsaAnahtarOlustur(0); // Private bir Key oluşturur
+    int dec_len = RSA_private_decrypt(enc_len, sifreliData, cozulmus, privateRsa, RSA_PKCS1_PADDING);
+    // Private Key ile veriyi çözer
+    // enc_len; Şifreli verinin uzunluğu
+    // sifreliData; Şifreli veri
+    // cozulmus; Çözünecek verinin atanacağı değişken
+    // privateRsa; Private Key RSA değişkeni
+    // RSA_PKCS1_PADDING; Dolgu flag'ımız. Bu kısımda hangi flag ile şifrelenmiş ise o flag ile çözebiliriz. Aksi takdirde veri bozuk çıkacakır
+
+    printf("Cozulmus veri: %s", cozulmus);
+
+    return 0;
+}</code>
+
+Çıktı ise;</pre>
+
+        <div id="divh3Img">
+            <img src="../Bibliography/19 C Güvenlik ve Şifreleme.html/2.png" alt="19.2" width="800px">
+        </div>
+
+        <h2>Rastgele Sayı Üretme</h2>
+        <pre id="preh2">C'de gerçek anlamıyla rastgele sayı üretmek istiyorusak Soduim adlı bir kütüphanin randombytes_uniform adlı fonksiyonuna ihtiyaç duyarız.</pre>
+
+        <pre id="codeh3">İlk olarak Sodium'u kuralım;
+<code class="language-bash">pacman -S mingw-w64-x86_64-libsodium</code>
+
+Kurulumun ardından kodumuzu yazabilir hale geliriz.
+<code class="language-c">#include &lt;stdio.h>
+#include &lt;sodium.h> // Kütüphanemiz
+
+int main(){
+    
+    printf("%d", randombytes_uniform(11)); // 10 ila 0 arasında rastgele bir sayı üretir. Her çalıştırıldığında farklı sonuç verir
+
+    return 0;
+}</code>
+        
+Çıktımız ise sıfır ile on arasındaki rastgele bir sayı olucaktır.</pre>
+    
+        <h2>Bellek Temizleme</h2>
+        <pre id="preh2">Bellek temizleme için C programlama dilinde memset adında fonksiyon kullanılır.</pre>
+
+        <pre id="codeh3">Basit bit örnek ile açılayalım
+
+<code class="language-c">#include <stdio.h>
+#include <string.h>
+
+int main(){
+
+    char yazi[] = "Data Delete";
+
+    printf("\"%s\"\n", yazi);
+
+    memset(yazi, 0, strlen(yazi));
+    // Veriyi temizler
+    // yazi; Temizlenecek veri
+    // 0; Ne ile değiştirileceği. 0 Null demektir
+    // strlen(yazi); Kaç veriye uygulanacak
+
+    printf("\"%s\"", yazi);
+
+    return 0;
+}</code>
+
+Çıktı ise;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/19 C Güvenlik ve Şifreleme.html/3.png" alt="19.3" width="800px">
+        </div>
+
         <h2>Kaynakça</h2>
         <ul>
             <li><a href="https://tr.wikipedia.org/wiki/Bilgisayar_güvenliği">https://tr.wikipedia.org/wiki/Bilgisayar_güvenliği</a></li>
@@ -100,6 +335,11 @@ Bir kod derlemek için;
             <li><a href="https://opensource.com/article/19/6/cryptography-basics-openssl-part-2">https://opensource.com/article/19/6/cryptography-basics-openssl-part-2</a></li>
             <li><a href="https://stackoverflow.com/a/10632725">https://stackoverflow.com/a/10632725</a></li>
             <li><a href="https://stackoverflow.com/q/62882287">https://stackoverflow.com/q/62882287</a></li>
+            <li><a href="https://stackoverflow.com/questions/7860362/how-can-i-use-openssl-md5-in-c-to-hash-a-string">https://stackoverflow.com/questions/7860362/how-can-i-use-openssl-md5-in-c-to-hash-a-string</a></li>
+            <li><a href="https://stackoverflow.com/a/29838852">https://stackoverflow.com/a/29838852</a></li>
+            <li><a href="https://hayageek.com/rsa-encryption-decryption-openssl-c/">https://hayageek.com/rsa-encryption-decryption-openssl-c/</a></li>
+            <li><a href="https://stackoverflow.com/a/39475626">https://stackoverflow.com/a/39475626</a></li>
+            <li><a href="https://www.geeksforgeeks.org/c/memset-c-example/">https://www.geeksforgeeks.org/c/memset-c-example/</a></li>
         </ul>    
     </div>
 

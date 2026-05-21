@@ -301,8 +301,8 @@
   - **Hashing**: MD5, SHA-256. Örnek.
   - **Simetrik Şifreleme**: AES. Örnek.
   - **Asimetrik Şifreleme**: RSA. Örnek.
-- **Güvenli Rastgele Sayı**: /dev/urandom. Örnek.
-- **Güvenli Bellek Temizleme**: memset vs explicit_bzero. Örnek.
+- **Rastgele Sayı Üretme**: libsouim ile randombytes_uniform. Örnek.
+- **Bellek Temizleme**: memset. Örnek.
  
 ---
  
