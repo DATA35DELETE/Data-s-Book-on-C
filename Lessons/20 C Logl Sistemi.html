@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data's Book on C</title>
+
+    <link rel="icon" type="image/x-icon" href="../Sources/favicon.png">
+
+    <script src="../Sources/JS/setBackgroundMedia.js"></script>
+
+    <link rel="stylesheet" href="../Sources/JS/hljs/vs2015.css">
+    <script src="../Sources/JS/hljs/highlight.min.js"></script>
+    <script>
+        window.onload = function() {
+            hljs.highlightAll();
+        };
+    </script>
+
+    <link rel="stylesheet" href="../Sources/CSS/main.css">
+</head>
+<body>
+    <h1>Log Sistemi</h1>
+
+    <div style="height: 100px;"></div>
+    
+    <div id="mainDiv">
+        <h2>Loglama Nedir?</h2>
+        <pre id="preh2">Log türkçesiyle günlük; Bir programın hangi zamanlarda nasıl davrandığını veya hangi kısımda hata çıkardığını görmek için yazılımcılar tarafından kullanılan bir program izleme tekniğidir.</pre>
+
+        <pre id="codeh2">Peki neden biz Log ile programı izlememiz gerekir? Çünkü programın hatalarını görmek ve iyileştirmek için tabi! Düşünün C dili ile kodlanmış programların çökme sebeblerinin çoğunluğu NULL ile işlemlerden kaynaklanmaktadır. Gerek dosya açarken gerek dinamik bellek açarken komutlar şartlardan dolayı başarısız olabilirler. Sonucunda ise program ya çöker ya da beklenmedik davranışlar sergiler. Genelde programda çökerken herhangi bir mesaj vermeden sessizce ölür. İşte bu gibi durumlarda Log ile programın çalışma sürecinde bizlere gerek konsol gerek dosyaya programın durumunu yazar. Tabi bu otomatik olmaz biz yazılımcı olarak önceden ön gördüğümüz veya sebeb olabilcek kod parçacıklarının içerisine Log kodlarını yerleştiririz. Böylelikle program çökerse neden çöktüğünü yerleştirdiğimiz kodlar sayesinde öğrenebiliriz.</pre>
+
+        <h2>Log Seviyeleri</h2>
+        <pre id="preh2">Log seviyeleri, Log bilgisinin ne kadar önemli veya neyi ve nerden geldiğini ifade eden seviyelerdir. Genel olarak yedi tane seviye vardır.</pre>
+
+        <table id="tableh2" border="1">
+            <thead>
+                <tr>
+                    <th>Log Seviyesi</th>
+                    <th>Açıklama</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>INFO</td>
+                    <td>Programda bir işlem sonucunu belirtir. Önrek olarak bir fonksiyonun başarılı bir şekilde çalıştığını ifade edebilir.</td>
+                </tr>
+                <tr>
+                    <td>DEBUG</td>
+                    <td>Genel olarak geliştiriciler içindir. Bir fonksiyona hangi verilerin verildiği veya sonucu ifade eder.</td>
+                </tr>
+                <tr>
+                    <td>TRACE</td>
+                    <td>DEBUG'tan daha detaylı ve adım adım işlemlerin nasıl yürüdüğünü görebiliriz. Eğer kapalı kaynak bir uygulama yazıyorsak ve kodların çalınması mühim bir durumsa, uygulamanın yayımlandığı sürümde bulunması tavsiye edilmez.</td>
+                </tr>
+                <tr>
+                    <td>WARNING</td>
+                    <td>Bir fonksiyonun istenen bir durumu yerine getireme durumunda bu seviye kullanılır. Örnek olarak dizini yanlış verilmiş bir Fopen fonksiyonun sonucu Null olarak döndürmesi gibi...</td>
+                </tr>
+                <tr>
+                    <td>ERROR</td>
+                    <td>Program çökmez ama istenmeyen şekilde davranmasıuna yol açan bir durum gerçekleştiğinde kullanılır. Örnek olarak Stack Overflow örnek verilebilir.</td>
+                </tr>
+                <tr>
+                    <td>FATAL</td>
+                    <td>Eğer programın çöküceği bir durum oluşursa bu seviye kullanılır. Örnek olarak herhangi bir işlemde Null kullanmak genelde programın çökmesi ile gerçekleşir.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Loglama Formatı</h2>
+        <pre id="preh2">Geler geçer bir format olmasada çoğunlukla kullanılan bir Loglama formatı vardır. Format: İlk olarak yıl ay gün, saat dakika ve saniye: satır numarası: Log seviyesi: Log mesajı şeklinde kullanılır.</pre>
+
+        <pre id="codeh2"><code>2026/05/23 22:56:04, 74 [LOG SEVİYESİ] Log mesaji</code></pre>
+
+        <h2>Konsola Loglama</h2>
+        <pre id="preh2">Konsola Loglama için bu örnek kodu kullanabiliriz.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+#include &lt;string.h>
+#include &lt;time.h>
+
+int main(){
+    time_t guncelZaman = time(0); // Güncel zamanı alma
+    char *guncelZamanStr = ctime(&guncelZaman);
+    for (int i = 0; i < strlen(guncelZamanStr); i++)
+        if (guncelZamanStr[i] == '\n')
+            guncelZamanStr[i] = '\0';
+    // Güncel zamanı alıp gereksiz olan "\n" elemanını silelim
+
+    char *LogSeviyesi = "INFO"; // Log seviyemiz
+    char *LogMsg = "Suanda bu log konsola loglanmistir"; // Loglama mesajımız
+
+    printf("%s [%s] %s\n", guncelZamanStr, LogSeviyesi, LogMsg); // Formatlı bir şekilde konsola yazdırma
+
+    return 0;
+}</code>
+
+Çıktı ise;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/20 Log Sistemi.html/1.png" alt="20.1" width="800px">
+        </div>
+
+        <h2>Dosyaya Loglama</h2>
+        <pre id="preh2">Dosyaya Loglamak için aynı örneğimizi dosyaya Loglıcak şekilde değiştirelim.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+#include &lt;string.h>
+#include &lt;time.h>
+
+int main(){
+
+    FILE *log = fopen(".log", "w"); // Log dosyamız olacak dosyayı açalım
+
+    time_t guncelZaman = time(0);
+    char *guncelZamanStr = ctime(&guncelZaman);
+    for (int i = 0; i < strlen(guncelZamanStr); i++)
+        if (guncelZamanStr[i] == '\n')
+            guncelZamanStr[i] = '\0';
+
+    char *LogSeviyesi = "INFO";
+    char *LogMsg = "Suanda bu log konsola loglanmistir";
+
+    fprintf(log,"%s,%d [%s] %s\n", guncelZamanStr, __LINE__, LogSeviyesi, LogMsg); // Fprintf ile dosyaya formatı yazalım
+
+    fclose(log);
+
+    return 0;
+}</code>
+
+Çıktı ise;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/20 Log Sistemi.html/2.png" alt="20.2" width="800px">
+        </div>
+
+        <h2>Loglama Kütüphanesi Yazma</h2>
+        <pre id="preh2">Evet... O kadar öğrendik şimdi ise gerçek bir ürün çıkartma vakti!</pre>
+
+        <pre id="preh2">Şimdi bir Loglama kütüphanesi yazacağız. Ben şu özellikleri olmasını istiyorum; Tüm Loglama sistemini tek bir Struct ile yönetmeli ve yürütülmelidir. Kullanıcıya iki farklı seçenek olarak, konsol mu yoksa bir dosyaya mı kayıt edilceğini ".init" fonksiyonu ile belirlemeliyim. Kütüphanede kesinlikle asenkron olmalı ki ana programı etkilemesin. Kütüpaheneyi tek bir başlık dosyası olarak tasarlacağım. Böylelikle kolay bir kullanım sağlıcak. Ayrıca platform bağımsız şekilde kodlamalıyım.</pre>
+
+        <pre id="preh2">Son olarak bu kütüphaneyi Github sayfamda paylaşacağım.</pre>
+
+        <pre id="preh2">Evet yol haritası hazır ise artık başlayabiliriz.</pre>
+
+        <h2>Kaynakça</h2>
+        <ul>
+            <li><a href="https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels">https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels</a></li>
+        </ul>    
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <footer style="position: fixed; left: 0; bottom: 0; width: 100%; background: transparent; text-align: center; padding: 10px 0; z-index: 100;">
+        <div>
+            <a href="./19 C Güvenlik ve Şifreleme.html" style="margin-right: 20px; cursor:pointer;">
+                &larr; Önceki
+            </a>
+            <a href="" style="cursor:pointer;">
+                Sonraki &rarr;
+            </a>
+        </div>
+        <div>
+            <p>&copy; 2026 Data's Book</p>
+        </div>
+
+        <div style="position: absolute; right: 20px; bottom: 20px;">
+            <a href="./1 C İçindekiler.html" style="text-decoration: none;">
+                İçindekiler
+            </a>
+        </div>
+    </footer>
+</body>
+</html>
+
+<!-- Muhammet Enes nam-ı diğer Data Delete tarafından sevgi ile yapıldı <3 -->

@@ -308,12 +308,11 @@
  
 ### C : Log Sistemi
 - **Loglama Nedir?**: Tanım. Kullanım Senaryoları.
-- **Log Seviyeleri**: DEBUG, INFO, WARNING, ERROR, FATAL. Tanım.
+- **Log Seviyeleri**: DEBUG, INFO, TRACE, WARNING, ERROR, FATAL. Tanım.
+- **Log Formatı**: Timestamp. Seviye. Mesaj. Örnek.
 - **Konsola Loglama**: Tanım. Örnek.
 - **Dosyaya Loglama**: Tanım. Örnek.
-- **Log Formatı**: Timestamp. Seviye. Mesaj. Örnek.
 - **Basit Log Kütüphanesi Yazma**: Tanım. Örnek.
-- **Hazır Kütüphaneler**: zlog, log.c. Kurulum. Örnek.
  
 ---
  
