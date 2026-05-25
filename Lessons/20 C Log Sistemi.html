@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data's Book on C</title>
+
+    <link rel="icon" type="image/x-icon" href="../Sources/favicon.png">
+
+    <script src="../Sources/JS/setBackgroundMedia.js"></script>
+
+    <link rel="stylesheet" href="../Sources/JS/hljs/vs2015.css">
+    <script src="../Sources/JS/hljs/highlight.min.js"></script>
+    <script>
+        window.onload = function() {
+            hljs.highlightAll();
+        };
+    </script>
+
+    <link rel="stylesheet" href="../Sources/CSS/main.css">
+</head>
+<body>
+    <h1>Log Sistemi</h1>
+
+    <div style="height: 100px;"></div>
+    
+    <div id="mainDiv">
+        <h2>Loglama Nedir?</h2>
+        <pre id="preh2">Log türkçesiyle günlük; Bir programın hangi zamanlarda nasıl davrandığını veya hangi kısımda hata çıkardığını görmek için yazılımcılar tarafından kullanılan bir program izleme tekniğidir.</pre>
+
+        <pre id="codeh2">Peki neden biz Log ile programı izlememiz gerekir? Çünkü programın hatalarını görmek ve iyileştirmek için tabi! Düşünün C dili ile kodlanmış programların çökme sebeblerinin çoğunluğu NULL ile işlemlerden kaynaklanmaktadır. Gerek dosya açarken gerek dinamik bellek açarken komutlar şartlardan dolayı başarısız olabilirler. Sonucunda ise program ya çöker ya da beklenmedik davranışlar sergiler. Genelde programda çökerken herhangi bir mesaj vermeden sessizce ölür. İşte bu gibi durumlarda Log ile programın çalışma sürecinde bizlere gerek konsol gerek dosyaya programın durumunu yazar. Tabi bu otomatik olmaz biz yazılımcı olarak önceden ön gördüğümüz veya sebeb olabilcek kod parçacıklarının içerisine Log kodlarını yerleştiririz. Böylelikle program çökerse neden çöktüğünü yerleştirdiğimiz kodlar sayesinde öğrenebiliriz.</pre>
+
+        <h2>Log Seviyeleri</h2>
+        <pre id="preh2">Log seviyeleri, Log bilgisinin ne kadar önemli veya neyi ve nerden geldiğini ifade eden seviyelerdir. Genel olarak yedi tane seviye vardır.</pre>
+
+        <table id="tableh2" border="1">
+            <thead>
+                <tr>
+                    <th>Log Seviyesi</th>
+                    <th>Açıklama</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>INFO</td>
+                    <td>Programda bir işlem sonucunu belirtir. Önrek olarak bir fonksiyonun başarılı bir şekilde çalıştığını ifade edebilir.</td>
+                </tr>
+                <tr>
+                    <td>DEBUG</td>
+                    <td>Genel olarak geliştiriciler içindir. Bir fonksiyona hangi verilerin verildiği veya sonucu ifade eder.</td>
+                </tr>
+                <tr>
+                    <td>TRACE</td>
+                    <td>DEBUG'tan daha detaylı ve adım adım işlemlerin nasıl yürüdüğünü görebiliriz. Eğer kapalı kaynak bir uygulama yazıyorsak ve kodların çalınması mühim bir durumsa, uygulamanın yayımlandığı sürümde bulunması tavsiye edilmez.</td>
+                </tr>
+                <tr>
+                    <td>WARNING</td>
+                    <td>Bir fonksiyonun istenen bir durumu yerine getireme durumunda bu seviye kullanılır. Örnek olarak dizini yanlış verilmiş bir Fopen fonksiyonun sonucu Null olarak döndürmesi gibi...</td>
+                </tr>
+                <tr>
+                    <td>ERROR</td>
+                    <td>Program çökmez ama istenmeyen şekilde davranmasıuna yol açan bir durum gerçekleştiğinde kullanılır. Örnek olarak Stack Overflow örnek verilebilir.</td>
+                </tr>
+                <tr>
+                    <td>FATAL</td>
+                    <td>Eğer programın çöküceği bir durum oluşursa bu seviye kullanılır. Örnek olarak herhangi bir işlemde Null kullanmak genelde programın çökmesi ile gerçekleşir.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Loglama Formatı</h2>
+        <pre id="preh2">Geler geçer bir format olmasada çoğunlukla kullanılan bir Loglama formatı vardır. Format: İlk olarak yıl ay gün, saat dakika ve saniye: satır numarası: Log seviyesi: Log mesajı şeklinde kullanılır.</pre>
+
+        <pre id="codeh2"><code>2026/05/23 22:56:04, 74 [LOG SEVİYESİ] Log mesaji</code></pre>
+
+        <h2>Konsola Loglama</h2>
+        <pre id="preh2">Konsola Loglama için bu örnek kodu kullanabiliriz.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+#include &lt;string.h>
+#include &lt;time.h>
+
+int main(){
+    time_t guncelZaman = time(0); // Güncel zamanı alma
+    char *guncelZamanStr = ctime(&guncelZaman);
+    for (int i = 0; i < strlen(guncelZamanStr); i++)
+        if (guncelZamanStr[i] == '\n')
+            guncelZamanStr[i] = '\0';
+    // Güncel zamanı alıp gereksiz olan "\n" elemanını silelim
+
+    char *LogSeviyesi = "INFO"; // Log seviyemiz
+    char *LogMsg = "Suanda bu log konsola loglanmistir"; // Loglama mesajımız
+
+    printf("%s [%s] %s\n", guncelZamanStr, LogSeviyesi, LogMsg); // Formatlı bir şekilde konsola yazdırma
+
+    return 0;
+}</code>
+
+Çıktı ise;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/20 Log Sistemi.html/1.png" alt="20.1" width="800px">
+        </div>
+
+        <h2>Dosyaya Loglama</h2>
+        <pre id="preh2">Dosyaya Loglamak için aynı örneğimizi dosyaya Loglıcak şekilde değiştirelim.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+#include &lt;string.h>
+#include &lt;time.h>
+
+int main(){
+
+    FILE *log = fopen(".log", "w"); // Log dosyamız olacak dosyayı açalım
+
+    time_t guncelZaman = time(0);
+    char *guncelZamanStr = ctime(&guncelZaman);
+    for (int i = 0; i < strlen(guncelZamanStr); i++)
+        if (guncelZamanStr[i] == '\n')
+            guncelZamanStr[i] = '\0';
+
+    char *LogSeviyesi = "INFO";
+    char *LogMsg = "Suanda bu log konsola loglanmistir";
+
+    fprintf(log,"%s,%d [%s] %s\n", guncelZamanStr, __LINE__, LogSeviyesi, LogMsg); // Fprintf ile dosyaya formatı yazalım
+
+    fclose(log);
+
+    return 0;
+}</code>
+
+Çıktı ise;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/20 Log Sistemi.html/2.png" alt="20.2" width="800px">
+        </div>
+
+        <h2>Loglama Kütüphanesi Yazma</h2>
+        <pre id="preh2">Evet... O kadar öğrendik şimdi ise gerçek bir ürün çıkartma vakti!</pre>
+
+        <pre id="preh2">Şimdi bir Loglama kütüphanesi yazacağız. Ben şu özellikleri olmasını istiyorum; Tüm Loglama sistemini tek bir Struct ile yönetmeli ve yürütülmelidir. Kullanıcıya iki farklı seçenek olarak, konsol mu yoksa bir dosyaya mı kayıt edilceğini ".init" fonksiyonu ile belirlemeliyim. Kütüphanede kesinlikle asenkron olmalı ki ana programı etkilemesin. Kütüpaheneyi tek bir başlık dosyası olarak tasarlacağım. Böylelikle kolay bir kullanım sağlıcak. Ayrıca platform bağımsız şekilde kodlamalıyım.</pre>
+
+        <pre id="preh2">Son olarak bu kütüphaneyi Github sayfamda paylaşacağım.</pre>
+
+        <pre id="preh2">Evet yol haritası hazır ise artık başlayabiliriz.</pre>
+
+        <pre id="codeh2">dlogger.c
+
+<code class="language-c">#include &lt;stdio.h>
+#include &lt;time.h>
+#include &lt;string.h>
+// Kütüphaneler
+
+#ifdef WIN32 // Windows'a isek
+
+#include &lt;windows.h>
+
+#else // Değil isek
+
+#include &lt;pthread.h>
+
+#endif
+
+#include "dlogger.h" // Ana başlık dosyası
+
+void dlogger_init(dlogger* dlggr ,int logOf, char* logFileName){ // Ana yapıyı başlatma fonksiyonu
+
+    if (logOf == logOfConsole) // Eğer konsola Loglama olucaksa
+    {
+        dlggr->logEntry = logOfConsole; // Konsola Loglancağını belirt
+        memset(dlggr->logFileName, 0, strlen(dlggr->logFileName)); // logFileName boşalt
+    }
+    else // Bir dosyaya Loglanacaksa
+    {
+        dlggr->logEntry = logOfFile; // Dosyaya Loglanacağını belirt
+        strcpy(dlggr->logFileName, logFileName); // logFileName Loglanacak olan dosyanın ismini ayarla
+    }
+
+    if (dlggr->logEntry == logOfFile) // Eğer dsoyaya loglanacaksa
+    {
+        fclose(fopen(logFileName, "w")); // Dsoyayı açma moduna aç ve kapat
+    }
+ }
+
+#ifdef WIN32 // Windows'da isek
+
+DWORD WINAPI dlogger_log_info_thread(LPVOID fileNameMsgFormat) // Ayrı Thread'e çalışıcak olan fonksiyon
+{
+    const time_t crrctTime = time(0); // Güncel zamanı al
+    char* crrctTimeStr = ctime(&crrctTime); // Güncel zamanı Char dizesine çevir
+    for (size_t i = 0; i < strlen(crrctTimeStr); i++) // Char dizesine verirken gelen gereksiz \n karakterini sil
+        if (crrctTimeStr[i] == '\n')
+            crrctTimeStr[i] = '\0';
+    
+    char* fileNameMsgFormat2 = fileNameMsgFormat; // dlogger_log_info'dan gelen formatı bir değişkene ata
+
+    short int avabialeFileName = 1; // formatı ayrımak için bir koşul belirle. 1 ise filename yaz, 0 ise msg'e yaz
+
+    char filename[102400]; // Yazılacak olan dosyaynın ismi. Eğer konsola yazılacak ise boş kalıcaktır
+    char msg[102400]; // Yazılacak olan mesaj
+
+    for (size_t i = 0; i < strlen(fileNameMsgFormat2); i++) // Formatı ayırmak için For döngüsü ile parçaları ayırıyoruz
+    {
+        if (fileNameMsgFormat2[i] == '|') // Eğer karakter | ise
+            avabialeFileName = 0; // 0 yap ki gire kalan kısım filename yazılmasın ve msg kısmına geçsin. Eğer konsola yazılacak ise format gereği ilk karakter | olduğundan filename'e yazılmadan direk msg kısmına geçer
+        if (avabialeFileName) // avabialeFileName 1 ise
+            filename[strlen(filename)] = fileNameMsgFormat2[i]; // Gelen karakteri filename'deki uygun karaktere yerleştir
+        else // 0 ise
+            if (fileNameMsgFormat2[i] != '|') // | karateri hariç
+                msg[strlen(msg)] = fileNameMsgFormat2[i]; // Gelen karateri msg'deki uygun karaktere yerleştir
+    }
+
+    if (filename[0] == '\0') // Eğer filename ilk karateri Null ise ki ilk karater Null ise filename tamamiyle boş demektir
+    {
+        printf("%s [%s] %s\n", crrctTimeStr, "INFO", msg); // Log formatını konosla yazdır
+    }
+    else // Eğer değilse
+    {
+        FILE *log = fopen(filename, "a"); // log dosyasını ekleme modunda aç
+        
+        fprintf(log,"%s [%s] %s\n", crrctTimeStr, "INFO", msg); // Formatı dosyaya yaz
+
+        fclose(log); // dosyayı kapat
+    }
+    
+    snprintf(fileNameMsgFormat2, strlen(fileNameMsgFormat2), "%c", '\0'); // Bellek sızıntısı yaşanmasın diye fileNameMsgFormat2'deki tüm karakterleri Null yapıyoruz
+}
+
+#else
+// Ayrı Thread'e çalışıcak olan fonksiyon. Linux için
+void* dlogger_log_info_thread(void* fileNameMsgFormat){
+
+    const time_t crrctTime = time(0);
+    char *crrctTimeStr = ctime(&crrctTime);
+    for (size_t i = 0; i < strlen(crrctTimeStr); i++)
+        if (crrctTimeStr[i] == '\n')
+            crrctTimeStr[i] = '\0';
+    
+    char fileNameMsgFormat2[102400];
+
+    snprintf(fileNameMsgFormat2, 102400, "%s", fileNameMsgFormat);
+
+    short int avabialeFileName = 1;
+
+    char filename[102400] = "";
+    char msg[102400] = "";
+
+    for (size_t i = 0; i < strlen(fileNameMsgFormat2); i++)
+    {
+        if (fileNameMsgFormat2[i] == '|')
+            avabialeFileName = 0;
+        if (avabialeFileName)
+            filename[strlen(filename)] = fileNameMsgFormat2[i];
+        else
+            if (fileNameMsgFormat2[i] != '|')
+                msg[strlen(msg)] = fileNameMsgFormat2[i];
+    }
+
+    if (filename[0] == '\0')
+    {
+        printf("%s [%s] %s\n", crrctTimeStr, "INFO", msg);
+    }
+    else
+    {
+        FILE *log = fopen(filename, "a");
+        
+        fprintf(log,"%s [%s] %s\n", crrctTimeStr, "INFO", msg);
+
+        fclose(log);
+    }
+
+    snprintf(fileNameMsgFormat2, strlen(fileNameMsgFormat2), "%c", '\0');
+}
+#endif
+// Info seviyesi için fonksiyon
+int dlogger_log_info(dlogger* dlggr ,char *msg){
+
+    char fileNameMsgFormat[102400]; // Format için değişken oluştur
+
+    if (dlggr->logFileName[0] != '\0') // Gelen yapının logFileName'i boş değil ise
+    {
+        strcat(fileNameMsgFormat, dlggr->logFileName); // İlk olarak logFileName'i yazdır
+        strcat(fileNameMsgFormat, "|"); // Format için ayırıcı olan | karakterini yazdır
+        strcat(fileNameMsgFormat, msg); // Mesajı yazdır
+    }
+    else // Boş ise
+    {
+        strcat(fileNameMsgFormat, "|"); // Ayrıcı karakteri yazdır
+        strcat(fileNameMsgFormat, msg); // Mesajı yazdır
+    }
+#ifdef WIN32 // Windows'a isek
+    DWORD threadId; // Thread için Id
+    HANDLE threadHandle = CreateThread(NULL, 0, dlogger_log_info_thread,(LPVOID)(fileNameMsgFormat), 0, &threadId); // Thread'i oluşturur
+    if (threadHandle == NULL) // Eğer başarısız olursa
+    {
+        printf("[DLOGGER] DLOGGER ERROR: LOG DEBUG BASARISIZ!\n"); // Hata mesajı
+ 
+        return -1; // Hata kodu
+    }
+
+    CloseHandle(threadHandle); // Thread açıcıyı kapat
+#else
+
+    pthread_t pt1; // Thread'in değişkenini oluştur
+
+    pthread_create(&pt1, NULL, dlogger_log_info_thread, fileNameMsgFormat); // Thread'i oluştur
+
+#endif
+    
+    return 0; // Tüm işlemler başarılı ise 0 döndürerek fonksiyonun başarılı olduğunu söyler
+}
+
+// Diğer fonksiyonlar, diğer seviyeler için optimize edilmiştir. Genel mantık aynı sadece seviyeler ve renkleri farklıdır
+
+#ifdef WIN32
+
+DWORD WINAPI dlogger_log_debug_thread(LPVOID fileNameMsgFormat)
+{
+    const time_t crrctTime = time(0);
+    char* crrctTimeStr = ctime(&crrctTime);
+    for (size_t i = 0; i < strlen(crrctTimeStr); i++)
+        if (crrctTimeStr[i] == '\n')
+            crrctTimeStr[i] = '\0';
+    
+    char* fileNameMsgFormat2 = fileNameMsgFormat;
+
+    short int avabialeFileName = 1;
+
+    char filename[102400];
+    char msg[102400];
+
+    for (size_t i = 0; i < strlen(fileNameMsgFormat2); i++)
+    {
+        if (fileNameMsgFormat2[i] == '|')
+            avabialeFileName = 0;
+        if (avabialeFileName)
+            filename[strlen(filename)] = fileNameMsgFormat2[i];
+        else
+            if (fileNameMsgFormat2[i] != '|')
+                msg[strlen(msg)] = fileNameMsgFormat2[i];
+    }
+
+    if (filename[0] == '\0')
+    {
+        printf("\x1b[32m" "%s [%s] %s\n" "\x1b[0m", crrctTimeStr, "DEBUG", msg);
+    }
+    else
+    {
+        FILE *log = fopen(filename, "a");
+        
+        fprintf(log,"%s [%s] %s\n", crrctTimeStr, "DEBUG", msg);
+
+        fclose(log);
+    }
+    
+    snprintf(fileNameMsgFormat2, strlen(fileNameMsgFormat2), "%c", '\0');
+}
+
+#else
+void* dlogger_log_debug_thread(void* fileNameMsgFormat){
+
+    const time_t crrctTime = time(0);
+    char *crrctTimeStr = ctime(&crrctTime);
+    for (size_t i = 0; i < strlen(crrctTimeStr); i++)
+        if (crrctTimeStr[i] == '\n')
+            crrctTimeStr[i] = '\0';
+    
+    char fileNameMsgFormat2[102400];
+
+    snprintf(fileNameMsgFormat2, 102400, "%s", fileNameMsgFormat);
+
+    short int avabialeFileName = 1;
+
+    char filename[102400] = "";
+    char msg[102400] = "";
+
+    for (size_t i = 0; i < strlen(fileNameMsgFormat2); i++)
+    {
+        if (fileNameMsgFormat2[i] == '|')
+            avabialeFileName = 0;
+        if (avabialeFileName)
+            filename[strlen(filename)] = fileNameMsgFormat2[i];
+        else
+            if (fileNameMsgFormat2[i] != '|')
+                msg[strlen(msg)] = fileNameMsgFormat2[i];
+    }
+
+    if (filename[0] == '\0')
+    {
+        printf("\x1b[32m" "%s [%s] %s\n" "\x1b[0m", crrctTimeStr, "DEBUG", msg);
+    }
+    else
+    {
+        FILE *log = fopen(filename, "a");
+        
+        fprintf(log,"%s [%s] %s\n", crrctTimeStr, "DEBUG", msg);
+
+        fclose(log);
+    }
+
+    snprintf(fileNameMsgFormat2, strlen(fileNameMsgFormat2), "%c", '\0');
+}
+#endif
+int dlogger_log_debug(dlogger* dlggr ,char *msg){
+    char fileNameMsgFormat[102400];
+
+    if (dlggr->logFileName[0] != '\0')
+    {
+        strcat(fileNameMsgFormat, dlggr->logFileName);
+        strcat(fileNameMsgFormat, "|");
+        strcat(fileNameMsgFormat, msg);
+    }
+    else
+    {
+        strcat(fileNameMsgFormat, "|");
+        strcat(fileNameMsgFormat, msg);
+    }
+#ifdef WIN32
+    DWORD threadId;
+    HANDLE threadHandle = CreateThread(NULL, 0, dlogger_log_debug_thread,(LPVOID)(fileNameMsgFormat), 0, &threadId);
+    if (threadHandle == NULL)
+    {
+        printf("[DLOGGER] DLOGGER ERROR: LOG INFO BASARISIZ!\n");
+ 
+        return -1;
+    }
+
+    CloseHandle(threadHandle);
+#else
+
+    pthread_t pt1;
+
+    pthread_create(&pt1, NULL, dlogger_log_debug_thread, fileNameMsgFormat);
+
+#endif
+    
+    return 0;
+}
+
+#ifdef WIN32
+
+DWORD WINAPI dlogger_log_trace_thread(LPVOID fileNameMsgFormat)
+{
+    const time_t crrctTime = time(0);
+    char* crrctTimeStr = ctime(&crrctTime);
+    for (size_t i = 0; i < strlen(crrctTimeStr); i++)
+        if (crrctTimeStr[i] == '\n')
+            crrctTimeStr[i] = '\0';
+    
+    char* fileNameMsgFormat2 = fileNameMsgFormat;
+
+    short int avabialeFileName = 1;
+
+    char filename[102400];
+    char msg[102400];
+
+    for (size_t i = 0; i < strlen(fileNameMsgFormat2); i++)
+    {
+        if (fileNameMsgFormat2[i] == '|')
+            avabialeFileName = 0;
+        if (avabialeFileName)
+            filename[strlen(filename)] = fileNameMsgFormat2[i];
+        else
+            if (fileNameMsgFormat2[i] != '|')
+                msg[strlen(msg)] = fileNameMsgFormat2[i];
+    }
+
+    if (filename[0] == '\0')
+    {
+        printf("\x1b[36m" "%s [%s] %s\n" "\x1b[0m", crrctTimeStr, "TRACE", msg);
+    }
+    else
+    {
+        FILE *log = fopen(filename, "a");
+        
+        fprintf(log,"%s [%s] %s\n", crrctTimeStr, "TRACE", msg);
+
+        fclose(log);
+    }
+    
+    snprintf(fileNameMsgFormat2, strlen(fileNameMsgFormat2), "%c", '\0');
+}
+
+#else
+void* dlogger_log_trace_thread(void* fileNameMsgFormat){
+
+    const time_t crrctTime = time(0);
+    char *crrctTimeStr = ctime(&crrctTime);
+    for (size_t i = 0; i < strlen(crrctTimeStr); i++)
+        if (crrctTimeStr[i] == '\n')
+            crrctTimeStr[i] = '\0';
+    
+    char fileNameMsgFormat2[102400];
+
+    snprintf(fileNameMsgFormat2, 102400, "%s", fileNameMsgFormat);
+
+    short int avabialeFileName = 1;
+
+    char filename[102400] = "";
+    char msg[102400] = "";
+
+    for (size_t i = 0; i < strlen(fileNameMsgFormat2); i++)
+    {
+        if (fileNameMsgFormat2[i] == '|')
+            avabialeFileName = 0;
+        if (avabialeFileName)
+            filename[strlen(filename)] = fileNameMsgFormat2[i];
+        else
+            if (fileNameMsgFormat2[i] != '|')
+                msg[strlen(msg)] = fileNameMsgFormat2[i];
+    }
+
+    if (filename[0] == '\0')
+    {
+        printf("\x1b[36m" "%s [%s] %s\n" "\x1b[0m", crrctTimeStr, "TRACE", msg);
+    }
+    else
+    {
+        FILE *log = fopen(filename, "a");
+        
+        fprintf(log,"%s [%s] %s\n", crrctTimeStr, "TRACE", msg);
+
+        fclose(log);
+    }
+
+    snprintf(fileNameMsgFormat2, strlen(fileNameMsgFormat2), "%c", '\0');
+}
+#endif
+int dlogger_log_trace(dlogger* dlggr ,char *msg){
+    char fileNameMsgFormat[102400];
+
+    if (dlggr->logFileName[0] != '\0')
+    {
+        strcat(fileNameMsgFormat, dlggr->logFileName);
+        strcat(fileNameMsgFormat, "|");
+        strcat(fileNameMsgFormat, msg);
+    }
+    else
+    {
+        strcat(fileNameMsgFormat, "|");
+        strcat(fileNameMsgFormat, msg);
+    }
+#ifdef WIN32
+    DWORD threadId;
+    HANDLE threadHandle = CreateThread(NULL, 0, dlogger_log_trace_thread,(LPVOID)(fileNameMsgFormat), 0, &threadId);
+    if (threadHandle == NULL)
+    {
+        printf("[DLOGGER] DLOGGER ERROR: LOG TRACE BASARISIZ!\n");
+ 
+        return -1;
+    }
+
+    CloseHandle(threadHandle);
+#else
+
+    pthread_t pt1;
+
+    pthread_create(&pt1, NULL, dlogger_log_trace_thread, fileNameMsgFormat);
+
+#endif
+    
+    return 0;
+}
+
+#ifdef WIN32
+
+DWORD WINAPI dlogger_log_warn_thread(LPVOID fileNameMsgFormat)
+{
+    const time_t crrctTime = time(0);
+    char* crrctTimeStr = ctime(&crrctTime);
+    for (size_t i = 0; i < strlen(crrctTimeStr); i++)
+        if (crrctTimeStr[i] == '\n')
+            crrctTimeStr[i] = '\0';
+    
+    char* fileNameMsgFormat2 = fileNameMsgFormat;
+
+    short int avabialeFileName = 1;
+
+    char filename[102400];
+    char msg[102400];
+
+    for (size_t i = 0; i < strlen(fileNameMsgFormat2); i++)
+    {
+        if (fileNameMsgFormat2[i] == '|')
+            avabialeFileName = 0;
+        if (avabialeFileName)
+            filename[strlen(filename)] = fileNameMsgFormat2[i];
+        else
+            if (fileNameMsgFormat2[i] != '|')
+                msg[strlen(msg)] = fileNameMsgFormat2[i];
+    }
+
+    if (filename[0] == '\0')
+    {
+        printf("\x1b[33m" "%s [%s] %s\n" "\x1b[0m", crrctTimeStr, "WARN", msg);
+    }
+    else
+    {
+        FILE *log = fopen(filename, "a");
+        
+        fprintf(log,"%s [%s] %s\n", crrctTimeStr, "WARN", msg);
+
+        fclose(log);
+    }
+    
+    snprintf(fileNameMsgFormat2, strlen(fileNameMsgFormat2), "%c", '\0');
+}
+
+#else
+void* dlogger_log_warn_thread(void* fileNameMsgFormat){
+
+    const time_t crrctTime = time(0);
+    char *crrctTimeStr = ctime(&crrctTime);
+    for (size_t i = 0; i < strlen(crrctTimeStr); i++)
+        if (crrctTimeStr[i] == '\n')
+            crrctTimeStr[i] = '\0';
+    
+    char fileNameMsgFormat2[102400];
+
+    snprintf(fileNameMsgFormat2, 102400, "%s", fileNameMsgFormat);
+
+    short int avabialeFileName = 1;
+
+    char filename[102400] = "";
+    char msg[102400] = "";
+
+    for (size_t i = 0; i < strlen(fileNameMsgFormat2); i++)
+    {
+        if (fileNameMsgFormat2[i] == '|')
+            avabialeFileName = 0;
+        if (avabialeFileName)
+            filename[strlen(filename)] = fileNameMsgFormat2[i];
+        else
+            if (fileNameMsgFormat2[i] != '|')
+                msg[strlen(msg)] = fileNameMsgFormat2[i];
+    }
+
+    if (filename[0] == '\0')
+    {
+        printf("\x1b[36m" "%s [%s] %s\n" "\x1b[0m", crrctTimeStr, "WARN", msg);
+    }
+    else
+    {
+        FILE *log = fopen(filename, "a");
+        
+        fprintf(log,"%s [%s] %s\n", crrctTimeStr, "WARN", msg);
+
+        fclose(log);
+    }
+
+    snprintf(fileNameMsgFormat2, strlen(fileNameMsgFormat2), "%c", '\0');
+}
+#endif
+int dlogger_log_warn(dlogger* dlggr ,char *msg){
+    char fileNameMsgFormat[102400];
+
+    if (dlggr->logFileName[0] != '\0')
+    {
+        strcat(fileNameMsgFormat, dlggr->logFileName);
+        strcat(fileNameMsgFormat, "|");
+        strcat(fileNameMsgFormat, msg);
+    }
+    else
+    {
+        strcat(fileNameMsgFormat, "|");
+        strcat(fileNameMsgFormat, msg);
+    }
+#ifdef WIN32
+    DWORD threadId;
+    HANDLE threadHandle = CreateThread(NULL, 0, dlogger_log_warn_thread,(LPVOID)(fileNameMsgFormat), 0, &threadId);
+    if (threadHandle == NULL)
+    {
+        printf("[DLOGGER] DLOGGER ERROR: LOG WARN BASARISIZ!\n");
+ 
+        return -1;
+    }
+
+    CloseHandle(threadHandle);
+#else
+
+    pthread_t pt1;
+
+    pthread_create(&pt1, NULL, dlogger_log_warn_thread, fileNameMsgFormat);
+
+#endif
+    
+    return 0;
+}
+
+#ifdef WIN32
+
+DWORD WINAPI dlogger_log_err_thread(LPVOID fileNameMsgFormat)
+{
+    const time_t crrctTime = time(0);
+    char* crrctTimeStr = ctime(&crrctTime);
+    for (size_t i = 0; i < strlen(crrctTimeStr); i++)
+        if (crrctTimeStr[i] == '\n')
+            crrctTimeStr[i] = '\0';
+    
+    char* fileNameMsgFormat2 = fileNameMsgFormat;
+
+    short int avabialeFileName = 1;
+
+    char filename[102400];
+    char msg[102400];
+
+    for (size_t i = 0; i < strlen(fileNameMsgFormat2); i++)
+    {
+        if (fileNameMsgFormat2[i] == '|')
+            avabialeFileName = 0;
+        if (avabialeFileName)
+            filename[strlen(filename)] = fileNameMsgFormat2[i];
+        else
+            if (fileNameMsgFormat2[i] != '|')
+                msg[strlen(msg)] = fileNameMsgFormat2[i];
+    }
+
+    if (filename[0] == '\0')
+    {
+        printf("\x1b[31m" "%s [%s] %s\n" "\x1b[0m", crrctTimeStr, "ERROR", msg);
+    }
+    else
+    {
+        FILE *log = fopen(filename, "a");
+        
+        fprintf(log,"%s [%s] %s\n", crrctTimeStr, "ERROR", msg);
+
+        fclose(log);
+    }
+    
+    snprintf(fileNameMsgFormat2, strlen(fileNameMsgFormat2), "%c", '\0');
+}
+
+#else
+void* dlogger_log_err_thread(void* fileNameMsgFormat){
+
+    const time_t crrctTime = time(0);
+    char *crrctTimeStr = ctime(&crrctTime);
+    for (size_t i = 0; i < strlen(crrctTimeStr); i++)
+        if (crrctTimeStr[i] == '\n')
+            crrctTimeStr[i] = '\0';
+    
+    char fileNameMsgFormat2[102400];
+
+    snprintf(fileNameMsgFormat2, 102400, "%s", fileNameMsgFormat);
+
+    short int avabialeFileName = 1;
+
+    char filename[102400] = "";
+    char msg[102400] = "";
+
+    for (size_t i = 0; i < strlen(fileNameMsgFormat2); i++)
+    {
+        if (fileNameMsgFormat2[i] == '|')
+            avabialeFileName = 0;
+        if (avabialeFileName)
+            filename[strlen(filename)] = fileNameMsgFormat2[i];
+        else
+            if (fileNameMsgFormat2[i] != '|')
+                msg[strlen(msg)] = fileNameMsgFormat2[i];
+    }
+
+    if (filename[0] == '\0')
+    {
+        printf("\x1b[31m" "%s [%s] %s\n" "\x1b[0m", crrctTimeStr, "ERROR", msg);
+    }
+    else
+    {
+        FILE *log = fopen(filename, "a");
+        
+        fprintf(log,"%s [%s] %s\n", crrctTimeStr, "ERROR", msg);
+
+        fclose(log);
+    }
+
+    snprintf(fileNameMsgFormat2, strlen(fileNameMsgFormat2), "%c", '\0');
+}
+#endif
+int dlogger_log_err(dlogger* dlggr ,char *msg){
+    char fileNameMsgFormat[102400];
+
+    if (dlggr->logFileName[0] != '\0')
+    {
+        strcat(fileNameMsgFormat, dlggr->logFileName);
+        strcat(fileNameMsgFormat, "|");
+        strcat(fileNameMsgFormat, msg);
+    }
+    else
+    {
+        strcat(fileNameMsgFormat, "|");
+        strcat(fileNameMsgFormat, msg);
+    }
+#ifdef WIN32
+    DWORD threadId;
+    HANDLE threadHandle = CreateThread(NULL, 0, dlogger_log_err_thread,(LPVOID)(fileNameMsgFormat), 0, &threadId);
+    if (threadHandle == NULL)
+    {
+        printf("[DLOGGER] DLOGGER ERROR: LOG ERROR BASARISIZ!\n");
+ 
+        return -1;
+    }
+
+    CloseHandle(threadHandle);
+#else
+
+    pthread_t pt1;
+
+    pthread_create(&pt1, NULL, dlogger_log_err_thread, fileNameMsgFormat);
+
+#endif
+    
+    return 0;
+}
+
+#ifdef WIN32
+
+DWORD WINAPI dlogger_log_ftl_thread(LPVOID fileNameMsgFormat)
+{
+    const time_t crrctTime = time(0);
+    char* crrctTimeStr = ctime(&crrctTime);
+    for (size_t i = 0; i < strlen(crrctTimeStr); i++)
+        if (crrctTimeStr[i] == '\n')
+            crrctTimeStr[i] = '\0';
+    
+    char* fileNameMsgFormat2 = fileNameMsgFormat;
+
+    short int avabialeFileName = 1;
+
+    char filename[102400];
+    char msg[102400];
+
+    for (size_t i = 0; i < strlen(fileNameMsgFormat2); i++)
+    {
+        if (fileNameMsgFormat2[i] == '|')
+            avabialeFileName = 0;
+        if (avabialeFileName)
+            filename[strlen(filename)] = fileNameMsgFormat2[i];
+        else
+            if (fileNameMsgFormat2[i] != '|')
+                msg[strlen(msg)] = fileNameMsgFormat2[i];
+    }
+
+    if (filename[0] == '\0')
+    {
+        printf("\x1b[35m" "%s [%s] %s\n" "\x1b[0m", crrctTimeStr, "FATAL", msg);
+    }
+    else
+    {
+        FILE *log = fopen(filename, "a");
+        
+        fprintf(log,"%s [%s] %s\n", crrctTimeStr, "FATAL", msg);
+
+        fclose(log);
+    }
+    
+    snprintf(fileNameMsgFormat2, strlen(fileNameMsgFormat2), "%c", '\0');
+}
+
+#else
+void* dlogger_log_ftl_thread(void* fileNameMsgFormat){
+
+    const time_t crrctTime = time(0);
+    char *crrctTimeStr = ctime(&crrctTime);
+    for (size_t i = 0; i < strlen(crrctTimeStr); i++)
+        if (crrctTimeStr[i] == '\n')
+            crrctTimeStr[i] = '\0';
+    
+    char fileNameMsgFormat2[102400];
+
+    snprintf(fileNameMsgFormat2, 102400, "%s", fileNameMsgFormat);
+
+    short int avabialeFileName = 1;
+
+    char filename[102400] = "";
+    char msg[102400] = "";
+
+    for (size_t i = 0; i < strlen(fileNameMsgFormat2); i++)
+    {
+        if (fileNameMsgFormat2[i] == '|')
+            avabialeFileName = 0;
+        if (avabialeFileName)
+            filename[strlen(filename)] = fileNameMsgFormat2[i];
+        else
+            if (fileNameMsgFormat2[i] != '|')
+                msg[strlen(msg)] = fileNameMsgFormat2[i];
+    }
+
+    if (filename[0] == '\0')
+    {
+        printf("\x1b[35m" "%s [%s] %s\n" "\x1b[0m", crrctTimeStr, "FATAL", msg);
+    }
+    else
+    {
+        FILE *log = fopen(filename, "a");
+        
+        fprintf(log,"%s [%s] %s\n", crrctTimeStr, "ERROR", msg);
+
+        fclose(log);
+    }
+
+    snprintf(fileNameMsgFormat2, strlen(fileNameMsgFormat2), "%c", '\0');
+}
+#endif
+int dlogger_log_ftl(dlogger* dlggr ,char *msg){
+    char fileNameMsgFormat[102400];
+
+    if (dlggr->logFileName[0] != '\0')
+    {
+        strcat(fileNameMsgFormat, dlggr->logFileName);
+        strcat(fileNameMsgFormat, "|");
+        strcat(fileNameMsgFormat, msg);
+    }
+    else
+    {
+        strcat(fileNameMsgFormat, "|");
+        strcat(fileNameMsgFormat, msg);
+    }
+#ifdef WIN32
+    DWORD threadId;
+    HANDLE threadHandle = CreateThread(NULL, 0, dlogger_log_ftl_thread,(LPVOID)(fileNameMsgFormat), 0, &threadId);
+    if (threadHandle == NULL)
+    {
+        printf("[DLOGGER] DLOGGER ERROR: LOG FATAL BASARISIZ!\n");
+ 
+        return -1;
+    }
+
+    CloseHandle(threadHandle);
+#else
+
+    pthread_t pt1;
+
+    pthread_create(&pt1, NULL, dlogger_log_ftl_thread, fileNameMsgFormat);
+
+#endif
+    
+    return 0;
+}</code>
+
+dlogger.h
+
+<code class="language-c">#ifndef _DLOGGER_H
+#define _DLOGGER_H
+
+enum log_entry{ // Konsol mu yoksa dosya olduğunu belirlemek için Enumlu değişkenler
+    logOfConsole = 0,
+    logOfFile,
+};
+
+typedef struct dlogger_s // Logger için yapı
+{
+    int logEntry; // Log girişi için değişken
+    char logFileName[1024]; // Loglanacak dosyanın ismi
+} dlogger; // Kolay kullanım için typedef ile atama
+
+extern void dlogger_init(dlogger* dlggr ,int logOf, char* logFileName); // dlogger başlatıcı fonksiyonu
+
+extern int dlogger_log_info(dlogger* dlggr ,char* msg); // INFO seviyesi için fonksiyon
+extern int dlogger_log_debug(dlogger* dlggr ,char *msg);  // DEBUG seviyesi için fonksiyon
+extern int dlogger_log_trace(dlogger* dlggr ,char *msg);  // TRACE seviyesi için fonksiyon
+extern int dlogger_log_warn(dlogger* dlggr ,char *msg);  // WARN seviyesi için fonksiyon
+extern int dlogger_log_err(dlogger* dlggr ,char *msg);  // ERROR seviyesi için fonksiyon
+extern int dlogger_log_ftl(dlogger* dlggr ,char *msg);  // FATAL seviyesi için fonksiyon
+
+#endif</code>
+
+Eğer detaylı bakmak istiyorsanız <a href="">Github Repo</a>'sundan inceleyebilirsiniz.</pre>
+
+        <h2>Kaynakça</h2>
+        <ul>
+            <li><a href="https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels">https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels</a></li>
+        </ul>    
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <footer style="position: fixed; left: 0; bottom: 0; width: 100%; background: transparent; text-align: center; padding: 10px 0; z-index: 100;">
+        <div>
+            <a href="./19 C Güvenlik ve Şifreleme.html" style="margin-right: 20px; cursor:pointer;">
+                &larr; Önceki
+            </a>
+            <a href="" style="cursor:pointer;">
+                Sonraki &rarr;
+            </a>
+        </div>
+        <div>
+            <p>&copy; 2026 Data's Book</p>
+        </div>
+
+        <div style="position: absolute; right: 20px; bottom: 20px;">
+            <a href="./1 C İçindekiler.html" style="text-decoration: none;">
+                İçindekiler
+            </a>
+        </div>
+    </footer>
+</body>
+</html>
+
+<!-- Muhammet Enes nam-ı diğer Data Delete tarafından sevgi ile yapıldı <3 -->
