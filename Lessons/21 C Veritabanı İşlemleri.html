@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data's Book on C</title>
+
+    <link rel="icon" type="image/x-icon" href="../Sources/favicon.png">
+
+    <script src="../Sources/JS/setBackgroundMedia.js"></script>
+
+    <link rel="stylesheet" href="../Sources/JS/hljs/vs2015.css">
+    <script src="../Sources/JS/hljs/highlight.min.js"></script>
+    <script>
+        window.onload = function() {
+            hljs.highlightAll();
+        };
+    </script>
+
+    <link rel="stylesheet" href="../Sources/CSS/main.css">
+</head>
+<body>
+    <h1>Veritabanı İşlemleri</h1>
+
+    <div style="height: 100px;"></div>
+    
+    <div id="mainDiv">
+        <h2>Veritabanı Nedir?</h2>
+        <pre id="preh2">Veritabanlar, biçimlendirilmiş veri depolama yapılarıdır.</pre>
+
+        <pre id="preh2">Evet geldik internetin veri depolarına! Veritabanları bizler için aslında kritik konular diyebiliriz. Çünkü biz genelde veriler ya bir değişkende ya bir dosyada yada bir json dosyasında tuttuk. Fark etti iseniz bu depolama şekli hiç verimli değildir. Sürekli veriyi al parçala anlamlı hale getir işle ve uygun olan kısmı geri koy şekilde verimsiz işlemler yaptık. Veritabanlarında ise sadece veriyi al, işle ve geri gönder gibi basit bir döngü ile veri depolamayı inanılmaz kolaylaştıran yapılardır. Tabiki bizim C programlama dili gibi veritabanlarıylada <code>printf</code> veya <code class="language-c">if</code> gibi komutlarla konuşamayız. Veritabanları için özel olarak tasarlanmış olan SQL dilini kullanırız...</pre>
+
+        <pre id="preh2">Peki neden veritabanları bizim için çok önemli? Az önce bahsettiğim gibi bir veriyi depolamak veritabansız çok zahmetlidir. Örneğin bir veriyi dosyada depoladığımızda formatsız ve verimsizdir. Düşünün bir dosyada binlerce veri var, ama biz özel bir veri istiyoruz. Normal şartlarda o dosyadaki tüm verileri teker teker okuyup "İstenen veri o mu?" diyerek verileri elememiz gerekirdi. Ama veritabanları ve SQL sayesinde bu durumu bizim yerimize SQL'in kendisi yaparak bizlere kullanım kolaylığı sunar. İşte teker teker çekmek yerine "<code>WHERE name="data"</code>" örnek bir koşullu ifade ile "name" değişkeni "data" olan veriyi kolaylıkla çekebiliriz.</pre>
+
+        <h2>SQLite Nedir?</h2>
+        <pre id="preh2">SQLite bizlere veritabanlarını bir dosya ile kullanmamızı sağlayan bir veritabanı uygulamasıdır.</pre>
+
+        <pre id="preh2">SQLite bizlere sağladığı avantaj şudur; Diğer veritaban uygulamaları ayrı bir sistemde çalışırlar ve biz dosya olarak göremeyiz. Diğer bir özelliği ise SQLite aksine çok fazla kurulum ve kütüphane bağlama gerektirir. Başka olarak da diğer veritabanları paralı ve işlemletim sistemine özeldir. Fakat SQLite hem Windows hem Linux hem Android için sürümleri vardır. Yani Cross-Platform'dur.</pre>
+
+        <h3>Kurulum</h3>
+        <pre id="codeh3">SQLite'ı Windows işletim sistemine kurmak için MinGW konsolunda bu komutu çalıştıralım;
+
+<code class="language-bash">pacman -S mingw-w64-x86_64-sqlite3</code>
+
+İndirmeden ardından artık kullanabiliriz. Derlerken ise;
+
+<code class="language-c">gcc main.c -o main -lsqlite3</code></pre>
+
+
+        <h2>Bağlantı Kurma</h2>
+        <pre id="preh2">SQLite bir veritabanına bağlanmak için <code class="language-c">sqlite3_open</code> ile yapılır. <code class="language-c">sqlite3_close</code> ile kapatılır.</pre>
+
+        <pre id="codeh2">Örnek bir kod yazalım;
+
+<code class="language-c">#include &lt;stdio.h>
+#include &lt;sqlite3.h> // Kütüphanemiz
+
+int main()
+{
+    sqlite3 *veritabani; // Veritabanı değişkenimiz
+    int q1 = sqlite3_open("veritabanim.db", &veritabani);
+    // Veritabanı bağlantısı açar
+    // "veritabanim.db"; Veritabanı değişkene tanımlanacak veritabanı dosyası
+    // &veritabani; Veritabanı değişkeni
+
+    if (q1) // İşlem eğer başarısız olursa sqlite3_open 1 döner
+    {
+        printf("SQLite veritabanini acamadi");
+    }
+    
+    sqlite3_close(veritabani); // Bağlantıyı kapatır
+
+    return 0;
+}</code>
+
+Çıktı olarak bizlere "veritabanim.db" adlı bir dosya oluşturur.</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/21 C Veritabanı İşlemleri.html/1.png" alt="21.1" width="800px">
+        </div>
+
+        <h2>Tablo Oluşturma</h2>
+        <pre id="preh2">Normal şartlarda tablodan önce veritabanı oluşturulur ardından tablo oluşturulur. Bu işlemler tabi SQL dilinde yapılır. Fakat Sqlite, <code>sqlite3_open</code> dediğimizde aslında arka planda çalıştırılan SQL komutu <code class="language-sql">create database dbIsmi</code> budur. Bu işlemin bu fonksiyonla beraber yapıldığı bilinmesi önemlidir. Tablo oluşturma için ise <code class="language-sql">create table tblIsmi(veriler...)</code> bu SQL komutu kullanılır.</pre>
+
+        <pre id="preh2">Tablo ise bizler için veri depolayan yapılardır.</pre>
+
+        <pre id="codeh2">Az önceki örneğimize şimdi bir tablo oluşturalım.
+
+<code class="language-c">#include &lt;stdio.h>
+#include &lt;sqlite3.h> // Kütüphanemiz
+
+int main()
+{
+    sqlite3 *veritabani;
+    int q1 = sqlite3_open("veritabanim.db", &veritabani);
+
+    if (q1)
+    {
+        printf("SQLite veritabanini acamadi");
+    }
+
+    char* hataMesaji; // Eğer işlem hata verir ise hata mesajının kayıt edilceği değişken
+    sqlite3_exec(veritabani, "create table kisiler(id int, name varchar(256), surname varchar(256))", 0, 0, &hataMesaji);
+    // SQL komutu çalıştırmamızı sağlar
+    // veritabani; Veritabanı değişkeni
+    // "create table kisiler(id int, name varchar(256), surname varchar(256))"; SQL komut ifadesi. İfade de "kisiler" adlı bir tablo oluşturuyor ve sırayla id, name ve surname adlı üç tane sütün koyuyor
+    // 0; Callback. sqlite_exec ile geri veri döndüren bir SQL komutu yazarsak diye çalıştırılacak olan bir fonksiyon sunar
+    // 0; Birinci elemanın Callback çağrısı
+    
+    // &hataMesaji; Hata mesajının kayıt edilceği değişken
+    if (hataMesaji[0] != '\0') // Hata mesajının ilk harfi boş değil ise
+    {
+        printf("HATA: %s", hataMesaji); // Hatayı yazdır
+    }
+    
+    sqlite3_close(veritabani);
+
+    return 0;
+}</code>
+
+Böylelikle bir tablo oluşturmuş olduk.</pre>
+
+        <h2>Veri Ekleme</h2>
+        <pre id="preh2">SQL tablolarına veri eklemek için <code class="language-sql">INSERT INTO</code> komutu kullanılır.</pre>
+
+        <pre id="codeh2"><code class="language-sql">insert into tblIsmi(sutunları...) values(sutunlaraDenkGelenVeriler...)</code></pre>
+
+        <pre id="codeh2">Şimdi örneğimize üç kişi ekliyelim;
+
+<code class="language-c">#include &lt;stdio.h>
+#include &lt;sqlite3.h> // Kütüphanemiz
+
+int main()
+{
+    sqlite3 *veritabani;
+    int q1 = sqlite3_open("veritabanim.db", &veritabani);
+
+    if (q1)
+    {
+        printf("SQLite veritabanini acamadi");
+    }
+
+    char* hataMesaji;
+    //sqlite3_exec(veritabani, "create table kisiler(id int, name varchar(256), surname varchar(256))", 0, 0, &hataMesaji);
+    // Yorum satırında çünkü eğer bir daha aynı isimle tablo oluşturmak istersek hata alırız
+    
+    if (hataMesaji[0] != '\0')
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+    
+    sqlite3_exec(veritabani, "insert into kisiler(id, name, surname) values(0, 'Data', 'Delete')", 0, 0, &hataMesaji); // SQL'de yazılı ifadeler tek tırnak içinde yazılır
+    if (hataMesaji[0] != '\0')
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(veritabani, "insert into kisiler(id, name, surname) values(1, 'Miku', 'Hastune')", 0, 0, &hataMesaji);
+    if (hataMesaji[0] != '\0')
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(veritabani, "insert into kisiler(id, name, surname) values(2, 'Teto', 'Kasane')", 0, 0, &hataMesaji);
+    if (hataMesaji[0] != '\0')
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_close(veritabani);
+
+    return 0;
+}</code>
+
+Artık tablomuzda Data Delete, Miku Hastune ve Teto Kasane kişileri bulunmakta(Kişilerin isimlerini ciddiye almayanız...)</pre>
+
+        <h2>Kaynakça</h2>
+        <ul>
+            <li><a href="https://tr.wikipedia.org/wiki/Veritabanı">https://tr.wikipedia.org/wiki/Veritabanı</a></li>
+            <li><a href="https://www.geeksforgeeks.org/cpp/sql-using-c-c-and-sqlite/">https://www.geeksforgeeks.org/cpp/sql-using-c-c-and-sqlite/</a></li>
+            <li><a href="https://sqlite.org/cintro.html">https://sqlite.org/cintro.html</a></li>
+            <li><a href="https://sqlite.org/c3ref/sqlite3.html">https://sqlite.org/c3ref/sqlite3.html</a></li>
+            <li><a href="https://sqlite.org/c3ref/exec.html">https://sqlite.org/c3ref/exec.html</a></li>
+        </ul>    
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <footer style="position: fixed; left: 0; bottom: 0; width: 100%; background: transparent; text-align: center; padding: 10px 0; z-index: 100;">
+        <div>
+            <a href="./20 C Log Sistemi.html" style="margin-right: 20px; cursor:pointer;">
+                &larr; Önceki
+            </a>
+            <a href="" style="cursor:pointer;">
+                Sonraki &rarr;
+            </a>
+        </div>
+        <div>
+            <p>&copy; 2026 Data's Book</p>
+        </div>
+
+        <div style="position: absolute; right: 20px; bottom: 20px;">
+            <a href="./1 C İçindekiler.html" style="text-decoration: none;">
+                İçindekiler
+            </a>
+        </div>
+    </footer>
+</body>
+</html>
+
+<!-- Muhammet Enes nam-ı diğer Data Delete tarafından sevgi ile yapıldı <3 -->
