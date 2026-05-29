@@ -330,7 +330,6 @@
 - **Veri Silme (DELETE)**: Tanım. Örnek.
   > Metodları
 - **Prepared Statements**: Tanım. SQL Injection Koruması. Örnek.
-- **Transaction Yönetimi**: Tanım. Örnek.
  
 ---
  

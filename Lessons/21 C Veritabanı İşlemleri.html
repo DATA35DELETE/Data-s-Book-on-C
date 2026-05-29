@@ -129,6 +129,7 @@ Böylelikle bir tablo oluşturmuş olduk.</pre>
 
 <code class="language-c">#include &lt;stdio.h>
 #include &lt;sqlite3.h> // Kütüphanemiz
+#include &lt;string.h>
 
 int main()
 {
@@ -140,29 +141,29 @@ int main()
         printf("SQLite veritabanini acamadi");
     }
 
-    char* hataMesaji;
+    char *hataMesaji;
     //sqlite3_exec(veritabani, "create table kisiler(id int, name varchar(256), surname varchar(256))", 0, 0, &hataMesaji);
     // Yorum satırında çünkü eğer bir daha aynı isimle tablo oluşturmak istersek hata alırız
-    
-    if (hataMesaji[0] != '\0')
+
+    if (strncat(hataMesaji, '\0', 0))
     {
         printf("HATA: %s", hataMesaji);
     }
     
     sqlite3_exec(veritabani, "insert into kisiler(id, name, surname) values(0, 'Data', 'Delete')", 0, 0, &hataMesaji); // SQL'de yazılı ifadeler tek tırnak içinde yazılır
-    if (hataMesaji[0] != '\0')
+    if (strncat(hataMesaji, '\0', 0))
     {
         printf("HATA: %s", hataMesaji);
     }
 
     sqlite3_exec(veritabani, "insert into kisiler(id, name, surname) values(1, 'Miku', 'Hastune')", 0, 0, &hataMesaji);
-    if (hataMesaji[0] != '\0')
+    if (strncat(hataMesaji, '\0', 0))
     {
         printf("HATA: %s", hataMesaji);
     }
 
     sqlite3_exec(veritabani, "insert into kisiler(id, name, surname) values(2, 'Teto', 'Kasane')", 0, 0, &hataMesaji);
-    if (hataMesaji[0] != '\0')
+    if (strncat(hataMesaji, '\0', 0))
     {
         printf("HATA: %s", hataMesaji);
     }
@@ -174,6 +175,632 @@ int main()
 
 Artık tablomuzda Data Delete, Miku Hastune ve Teto Kasane kişileri bulunmakta(Kişilerin isimlerini ciddiye almayanız...)</pre>
 
+        <h2>Veri Sorgulama</h2>
+        <pre id="codeh2">Veri sorgulamak yani veri çekmek için SQL komutlarından <code>SELECT * FROM tableIsmi</code> şeklinde çağrılır. Şimdi bunu C kodlarında SQLite ile yapalım. Ayrıca sqlite_exec, veri sorgularken Callback yapısı ile verileri satır satır çağırır ve Callback'deki parametreler aracılıyla sorgulanır. Her bir veri için Callback çağrılır.
+        
+<code class="language-c">#include &lt;stdio.h>
+#include &lt;sqlite3.h>
+#include &lt;string.h>
+
+int sqlVeriAliciFonk(void* bosVeri, int sutunSayisi, char** veriler, char** sutunIsmileri) // sqlite3_exec'nin Callback fonksiyonu
+{
+    for (size_t i = 0; i < sutunSayisi; i++) // For döngüsü ile her bir veriyi sütunuyla beraber konsola yazdırıyoruz
+    {
+        printf("%s = %s\n", sutunIsmileri[i], veriler[i]);
+    }
+
+    return 0;
+}
+
+int main(){
+
+    char* hataMesaji;
+
+    sqlite3 *db;
+    sqlite3_open("veritabanim.db", &db);
+
+    /*sqlite3_exec(db, "create table kisiler(id int, name text, surname text)", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "insert into kisiler(id, name, surname) values(0, 'Data', 'Delete')", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "insert into kisiler(id, name, surname) values(1, 'Miku', 'Hastune')", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "insert into kisiler(id, name, surname) values(2, 'Teto', 'Kasane')", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }*/
+
+    sqlite3_exec(db,"select * from kisiler", sqlVeriAliciFonk, 0, &hataMesaji);
+    // Callback olarak sqlVeriAliciFonk verdik ki veriler o fonksiyona aksın
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+    
+    sqlite3_close(db);
+
+    return 0;
+}</code>
+
+Çıktı ise;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/21 C Veritabanı İşlemleri.html/" alt="21.2" width="800px">
+        </div>
+
+        <pre id="preh2">Fark etti iseniz bu komut tüm sütunlarıyla beraber verileri çeker. Id, name ve surname sütunlarındaki tüm veriler dahil çıktıda görebilirsiniz. Ama biz sadece name sütunundaki verileri almak isteseydik. İşte o zaman * yerine name yazarak, SQL'e "Sadece bana name sütunundaki verileri getir" ditebiliriz.</pre>
+
+        <pre id="codeh2">Hadi uygulayalım.
+
+<code class="language-c">#include &lt;stdio.h>
+#include &lt;sqlite3.h>
+#include &lt;string.h>
+
+int sqlVeriAliciFonk(void* bosVeri, int sutunSayisi, char** veriler, char** sutunIsmileri) // sqlite3_exec'nin Callback fonksiyonu
+{
+    for (size_t i = 0; i < sutunSayisi; i++) // For döngüsü ile her bir veriyi sütunuyla beraber konsola yazdırıyoruz
+    {
+        printf("%s = %s\n", sutunIsmileri[i], veriler[i]);
+    }
+
+    return 0;
+}
+
+int main(){
+
+    char* hataMesaji;
+
+    sqlite3 *db;
+    sqlite3_open("veritabanim.db", &db);
+
+    /*sqlite3_exec(db, "create table kisiler(id int, name text, surname text)", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "insert into kisiler(id, name, surname) values(0, 'Data', 'Delete')", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "insert into kisiler(id, name, surname) values(1, 'Miku', 'Hastune')", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "insert into kisiler(id, name, surname) values(2, 'Teto', 'Kasane')", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }*/
+
+    sqlite3_exec(db,"select name from kisiler", sqlVeriAliciFonk, 0, &hataMesaji);
+    // Callback olarak sqlVeriAliciFonk verdik ki veriler o fonksiyona aksın
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+    
+    sqlite3_close(db);
+
+    return 0;
+}</code>
+
+Çıktı ise;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/21 C Veritabanı İşlemleri.html/3.png" alt="21.3" width="800px">
+        </div>
+
+        <pre id="preh2">Çok güzel artık sadece name sütunundaki verileri çekebiliyoruz. Peki ya biz bu verileri sıralamak istersek. İşte bu durumda da <code>ORDER BY</code> devreye girer. Order By önündeki sütunun ismine ve hemen arkasındaki DESC ve ASC ile küçükten büyüğemi yoksa küçükten büyüğe sıralacağını karar verir ve veriyi ona göre gönderir.</pre>
+
+        <pre id="codeh2">Şimdi ise kişilerin soyadlarını hem büyükten küçüğe hem de küçükten büyüğe sıralayalım.
+
+<code class="language-c">#include &lt;stdio.h>
+#include &lt;sqlite3.h>
+#include &lt;string.h>
+
+int kucuktenBuyugeFonk(void* bosVeri, int sutunSayisi, char** veriler, char** sutunIsmileri)
+{
+    printf("%s\n", veriler[0]);
+    // İlk veriyi çektin çünkü tek bir tane sütun gelecek veri olarak
+
+    return 0;
+}
+
+int buyuktenKucugeFonk(void* bosVeri, int sutunSayisi, char** veriler, char** sutunIsmileri)
+{
+    printf("%s\n", veriler[0]);
+
+    return 0;
+}
+
+int main(){
+
+    char* hataMesaji;
+
+    sqlite3 *db;
+    sqlite3_open("veritabanim.db", &db);
+
+    /*sqlite3_exec(db, "create table kisiler(id int, name text, surname text)", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "insert into kisiler(id, name, surname) values(0, 'Data', 'Delete')", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "insert into kisiler(id, name, surname) values(1, 'Miku', 'Hastune')", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "insert into kisiler(id, name, surname) values(2, 'Teto', 'Kasane')", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }*/
+
+    sqlite3_exec(db,"select surname from kisiler order by surname asc", buyuktenKucugeFonk, 0, &hataMesaji);
+    // Order By ile büyükten küçüğe sıralama
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    printf("---------------\n"); // Ayırma çizgisi
+
+    sqlite3_exec(db,"select surname from kisiler order by surname desc", kucuktenBuyugeFonk, 0, &hataMesaji);
+    // Order By ile küçükten büyüğe sırlama
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+    
+    sqlite3_close(db);
+
+    return 0;
+}</code>
+
+Çıktı ise;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/21 C Veritabanı İşlemleri.html/4.png" alt="21.4" width="800px">
+        </div>
+
+        <pre id="preh2">Çok güzel... Peki ya tek bir veri istersek? İşte bu durum için ise SQL dilindeki karar yapısı olan <code>WHERE</code> ile verileri bir koşula bağlı olarak çağrabiliriz.</pre>
+
+        <pre id="codeh2">Şimdi ise şöyle yapalım. Id'si 2 olan kişinin ismini veritabanından çekelim.
+
+<code class="language-c">#include &lt;stdio.h>
+#include &lt;sqlite3.h>
+#include &lt;string.h>
+
+int sqlCallbackFonk(void* bosVeri, int sutunSayisi, char** veriler, char** sutunIsmileri)
+{
+    printf("%s\n", veriler[0]);
+
+    return 0;
+}
+
+int main(){
+
+    char* hataMesaji;
+
+    sqlite3 *db;
+    sqlite3_open("veritabanim.db", &db);
+
+    /*sqlite3_exec(db, "create table kisiler(id int, name text, surname text)", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "insert into kisiler(id, name, surname) values(0, 'Data', 'Delete')", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "insert into kisiler(id, name, surname) values(1, 'Miku', 'Hastune')", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "insert into kisiler(id, name, surname) values(2, 'Teto', 'Kasane')", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }*/
+
+    sqlite3_exec(db,"select name from kisiler where id=1", sqlCallbackFonk, 0, &hataMesaji);
+    // Sorgumuzu Where ile değiştirdik
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+    
+    sqlite3_close(db);
+
+    return 0;
+}</code>
+
+Çıktı ise;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/21 C Veritabanı İşlemleri.html/5.png" alt="21.5" width="800px">
+        </div>
+
+        <h2>Veri Güncelleme</h2>
+        <pre id="preh2">SQL dilinde veri güncellemek için <code>UPDATE</code> ve <code>SET</code> komutları kullanılır. Ayrıca <code>WHERE</code> ile beraber kullanılır ki <code>UPDATE</code> tüm verileri güncellemesin</pre>
+
+        <pre id="codeh2">Şimdi ise name'i "Data" olan kişinin verisini "Enes" olarak değiştirelim ve farkı görmek için öncesini ve sonrasını <code>SELECT</code> ile yazdıralım.
+            
+<code class="language-c">#include &lt;stdio.h>
+#include &lt;sqlite3.h>
+#include &lt;string.h>
+
+int sqlCallbackFonk(void* bosVeri, int sutunSayisi, char** veriler, char** sutunIsmileri)
+{
+    for (size_t i = 0; i < sutunSayisi; i++)
+    {
+        printf("%s = %s\n", sutunIsmileri[i], veriler[i]);
+    }
+
+    return 0;
+}
+
+int main(){
+
+    char* hataMesaji;
+
+    sqlite3 *db;
+    sqlite3_open("veritabanim.db", &db);
+
+    /*sqlite3_exec(db, "create table kisiler(id int, name text, surname text)", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "insert into kisiler(id, name, surname) values(0, 'Data', 'Delete')", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "insert into kisiler(id, name, surname) values(1, 'Miku', 'Hastune')", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "insert into kisiler(id, name, surname) values(2, 'Teto', 'Kasane')", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }*/
+
+    sqlite3_exec(db,"select * from kisiler", sqlCallbackFonk, 0, &hataMesaji);
+    // Update'den önce verileri yazdıralım
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "update kisiler set name='Enes' where name='Data'", 0 , 0, &hataMesaji); // Update ile veriyi güncelleyelim
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    printf("---------------\n"); // Ayrıma çizgisi
+
+    sqlite3_exec(db,"select * from kisiler", sqlCallbackFonk, 0, &hataMesaji);
+    // Değişikliği yazdıralım
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+    
+    sqlite3_close(db);
+
+    return 0;
+}</code>
+
+Çıktı ise;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/21 C Veritabanı İşlemleri.html/6.png" alt="21.6" width="800px">
+        </div>
+
+        <pre id="preh2">Ve artık verimizi güncellemiş olduk...</pre>
+
+        <h2>Veri Silme</h2>
+        <pre id="preh2">SQL'de veri silmek için <code>DELETE</code> komutu kullanılır. Update'de olduğu gibi <code>WHERE</code> kullanılması tavsiye edilir aksi takdirde tüm veriler silinmiş hale gelebilir.</pre>
+
+        <pre id="codeh2">Aynı Update'de olduğu bu seferde name verisi "Enes" olan sütünü silelim.
+
+<code class="language-c">#include &lt;stdio.h>
+#include &lt;sqlite3.h>
+#include &lt;string.h>
+
+int sqlCallbackFonk(void* bosVeri, int sutunSayisi, char** veriler, char** sutunIsmileri)
+{
+    for (size_t i = 0; i < sutunSayisi; i++)
+    {
+        printf("%s = %s\n", sutunIsmileri[i], veriler[i]);
+    }
+
+    return 0;
+}
+
+int main(){
+
+    char* hataMesaji;
+
+    sqlite3 *db;
+    sqlite3_open("veritabanim.db", &db);
+
+    /*sqlite3_exec(db, "create table kisiler(id int, name text, surname text)", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "insert into kisiler(id, name, surname) values(0, 'Data', 'Delete')", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "insert into kisiler(id, name, surname) values(1, 'Miku', 'Hastune')", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "insert into kisiler(id, name, surname) values(2, 'Teto', 'Kasane')", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }*/
+
+    sqlite3_exec(db,"select * from kisiler", sqlCallbackFonk, 0, &hataMesaji);
+    // Delete'den önce verileri yazdıralım
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "delete from kisiler where name='Enes'", 0 , 0, &hataMesaji); // Delete ile veriyi silelim
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    printf("---------------\n"); // Ayrıma çizgisi
+
+    sqlite3_exec(db,"select * from kisiler", sqlCallbackFonk, 0, &hataMesaji);
+    // Değişikliği yazdıralım
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+    
+    sqlite3_close(db);
+
+    return 0;
+}</code>
+
+Çıktı ise;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/21 C Veritabanı İşlemleri.html/7.png" alt="21.7" width="800px">
+        </div>
+
+        <pre id="preh2">Eğer tablo veya veritabanı silmek istersek <code>DROP</code> komutu kullanılır.</pre>
+
+        <pre id="codeh2">Drop ile tablomuzu silelim.
+
+<code class="language-c">#include &lt;stdio.h>
+#include &lt;sqlite3.h>
+#include &lt;string.h>
+
+int sqlCallbackFonk(void* bosVeri, int sutunSayisi, char** veriler, char** sutunIsmileri)
+{
+    for (size_t i = 0; i < sutunSayisi; i++)
+    {
+        printf("%s = %s\n", sutunIsmileri[i], veriler[i]);
+    }
+
+    return 0;
+}
+
+int main(){
+
+    char* hataMesaji;
+
+    sqlite3 *db;
+    sqlite3_open("veritabanim.db", &db);
+
+    /*sqlite3_exec(db, "create table kisiler(id int, name text, surname text)", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "insert into kisiler(id, name, surname) values(0, 'Data', 'Delete')", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "insert into kisiler(id, name, surname) values(1, 'Miku', 'Hastune')", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "insert into kisiler(id, name, surname) values(2, 'Teto', 'Kasane')", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }*/
+
+    sqlite3_exec(db,"select * from kisiler", sqlCallbackFonk, 0, &hataMesaji);
+    // Drop'dan önce verileri yazdıralım
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "drop table kisiler", 0 , 0, &hataMesaji); // Drop ile tabloyu düşürelim
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    printf("---------------\n"); // Ayrıma çizgisi
+
+    sqlite3_exec(db,"select * from kisiler", sqlCallbackFonk, 0, &hataMesaji);
+    // Değişikliği yazdıralım
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+    
+    sqlite3_close(db);
+
+    return 0;
+}</code>
+
+Çıktı ise;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/21 C Veritabanı İşlemleri.html/8.png" alt="21.8" width="800px">
+        </div>
+
+        <h2>Güvenli Sorgu Yazma</h2>
+        <pre id="preh2">Evet... Şimdi günveli sorgu yazma dediğimiz kavram aslında kötü niyetli insanların "SQL Injection" yani SQL kötü parça enjekte edilmesi saldırısını engellemek için ortaya atılmış bir kavramdır.</pre>
+
+        <pre id="preh2">Peki biz neden SQL komutlarımızı "güvenli" şekilde yazmalıyız. Çünkü veritabanımızın veya tablomuzun bir anda toz olup gitmesin diye! Şuanda pek fazla görülmesede eski dönemlerde bir çok veritabanı ile çalışan sistemlerde bu saldırı çok popülerdi. Bu saldırının temel aldığı en büyük açık aslında dilin ta kendisiydi. SQL yapısı geriği hiç sorgulamayan ve direkt çalıştıran bir dildir. Yani zayıf bir dildir. Şuan günümüzde pek fazla olmasada Hacker'ler bir veritabanını patlatmak isterlerse arama veya bir giriş sayfasına <code class="language-sql">DROP DATABASE Main --</code> yazıp bütün veritabanı anında silebiliyorlardı. Kodu anlamak gerekirse "DROP DATABASE Main" kısmı zaten Main veritabanını düşür demek, "--" kısmı ise "Bu komuttan sonrasını yorum satırına al" diyerek geri kalan sorguyu çalıştırtmadan Main veritabanını düşmüş olur.</pre>
+
+        <pre id="preh2">Güvenli sorgu yazmak için Sqlite'nın içerisindeki sqlite3_prepare_v2 komutu ile yazılır. Güvenli sorguda verileri direkt Char dizelerine yazmak yerine, onların yerine tutacak şekilde soru işareti(?) konulur ve numaralandırma ile veriler güvenli şekilde sqlite3_bind komutlarıyla konulur. Numalandırma soldan sağa doğru birden başlıyarak otuz iki bin yedi yüz altmış altıya kadar devam eder.</pre>
+
+        <pre id="codeh2">Evet... teori bu kısma kadar. Şimdi pratik yapalım. Güvenli bir sorgu ile tablomuza bir veri ekliyelim.
+
+<code class="language-c">#include &lt;stdio.h>
+#include &lt;sqlite3.h>
+#include &lt;string.h>
+
+int sqlCallbackFonk(void* bosVeri, int sutunSayisi, char** veriler, char** sutunIsmileri)
+{
+    for (size_t i = 0; i < sutunSayisi; i++)
+    {
+        printf("%s = %s\n", sutunIsmileri[i], veriler[i]);
+    }
+
+    return 0;
+}
+
+int main(){
+
+    char* hataMesaji;
+
+    sqlite3 *db;
+    sqlite3_open("veritabanim.db", &db);
+
+    sqlite3_exec(db, "create table kisiler(id int, name text, surname text)", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "insert into kisiler(id, name, surname) values(0, 'Data', 'Delete')", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "insert into kisiler(id, name, surname) values(1, 'Miku', 'Hastune')", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_exec(db, "insert into kisiler(id, name, surname) values(2, 'Teto', 'Kasane')", 0, 0, &hataMesaji);
+    if (strncat(hataMesaji, '\0', 0))
+    {
+        printf("HATA: %s", hataMesaji);
+    }
+
+    sqlite3_stmt *sql; // Güvenli sorgu için değişkenimiz
+    char sqlString[] = "insert into kisiler(id, name, surname) values(?, ?, ?)"; // String şeklindeki sorgumuz. ? işaretleri yerine verilerimizi yerleştiriceğiz
+
+    sqlite3_prepare_v2(db, sqlString, -1, &sql, 0);
+    // Güvenli sorgu değişkenimizi başlatır
+    // db; Veritabanımız
+    // sqlString; String şeklinde sorgumuz
+    // -1; Sorgu ne kadar olucak. -1 değeri otomatik olarak ayarlanacak demektir
+    // &sql; Güvenli değişkenimiz
+    // 0; Hata mesajları. Şimdilik es geçtim
+
+    sqlite3_bind_int(sql, 1, 3);
+    // Sorgumuza Integer değeri ekler
+    // sql; Güvenli sorgu değişkeni
+    // 1; Kaçıncı numaradaki kısım
+    // 3; Konulucak değer
+    sqlite3_bind_text(sql, 2, "Luna", 1024, 0);
+    // Sorgumuza String değeri ekler
+    // sql; Güvenli sorgu değişkeni
+    // 2; Kaçıncı numaradaki kısım
+    // "Luna"; Konulacak değer
+    // 1024; Konulacak String ifadenin uzunluğu
+    // 0; UTF-16 ile kodlama şartı. UTF-16 ile işlem yapmadığımız için 0 yaptım
+    sqlite3_bind_text(sql, 3, "Delete", 1024,0);
+
+    char* gvnlSql = sqlite3_expanded_sql(sql); // Güvenli sorgumuzu normal String'e çeviriyoruz
+
+    sqlite3_exec(db, gvnlSql, 0, 0, 0);
+
+    sqlite3_exec(db, "Select * from kisiler", sqlCallbackFonk, 0, 0);
+
+    sqlite3_close(db);
+
+    return 0;
+}</code>
+
+Çıktı ise;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/21 C Veritabanı İşlemleri.html/9.png" alt="21.9" width="800px">
+        </div>
+
+        
+
         <h2>Kaynakça</h2>
         <ul>
             <li><a href="https://tr.wikipedia.org/wiki/Veritabanı">https://tr.wikipedia.org/wiki/Veritabanı</a></li>
@@ -181,6 +808,13 @@ Artık tablomuzda Data Delete, Miku Hastune ve Teto Kasane kişileri bulunmakta(
             <li><a href="https://sqlite.org/cintro.html">https://sqlite.org/cintro.html</a></li>
             <li><a href="https://sqlite.org/c3ref/sqlite3.html">https://sqlite.org/c3ref/sqlite3.html</a></li>
             <li><a href="https://sqlite.org/c3ref/exec.html">https://sqlite.org/c3ref/exec.html</a></li>
+            <li><a href="https://www.atakdomain.com/blog/sql-order-by-nedir-kullanimi-nasildir-orneklerle-anlatim">https://www.atakdomain.com/blog/sql-order-by-nedir-kullanimi-nasildir-orneklerle-anlatim</a></li>
+            <li><a href="https://www.w3schools.com/sql/sql_update.asp">https://www.w3schools.com/sql/sql_update.asp</a></li>
+            <li><a href="https://www.w3schools.com/sql/sql_delete.asp">https://www.w3schools.com/sql/sql_delete.asp</a></li>
+            <li><a href="https://www.w3schools.com/sql/sql_drop_table.asp">https://www.w3schools.com/sql/sql_drop_table.asp</a></li>
+            <li><a href="https://www.sqlite.org/c3ref/stmt.html">https://www.sqlite.org/c3ref/stmt.html</a></li>
+            <li><a href="https://www.sqlite.org/c3ref/bind_blob.html">https://www.sqlite.org/c3ref/bind_blob.html</a></li>
+            <li><a href="https://www.sqlite.org/c3ref/expanded_sql.html">https://www.sqlite.org/c3ref/expanded_sql.html</a></li>
         </ul>    
     </div>
 
