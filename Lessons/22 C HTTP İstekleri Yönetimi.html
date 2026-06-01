@@ -33,14 +33,205 @@
         <h2>Libcurl Kütüphanesi</h2>
         <pre id="preh2">Libcurl, HTTP istekleri için kullanılan bir kütüphanedir.</pre>
 
-        <pre id="preh2">Libcurl, hem Linux hem de Windows'da kurulu olarak gelir.</pre> 
-
-
+        <pre id="preh2">Libcurl, hem Linux hem de Windows'da kurulu olarak gelir. Derliceğimiz programlar<code> -lcurl</code> ile derlenir.</pre> 
         
+        <h2>GET İsteği</h2>
+        <pre id="preh2">GET isteği sunucudan veri almak istediğimiz zaman kullandığımız bir HTTP yöntemidir.</pre>
+
+        <pre id="preh2">GET, genellikle tarayıcılarda bir setinin HTML kodlarını çekmek veya bir sunucudaki verileri almak için kullanılır. Genellikle formatlı ise de bir Json verisi olarak dönmektedir.</pre>
+
+        <pre id="preh2">O zaman GET ile bir önceki sayfamızın içeriğini çekelim.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;curl/curl.h>
+#include &lt;stdio.h>
+
+int main()
+{
+    CURL* curlEntity = curl_easy_init(); // CURL işlemleri için bir değişken oluşturalım ve onu başlatalım
+    
+    if (curlEntity) // Eğer başarısız olmazsa
+    {
+        curl_easy_setopt(curlEntity, CURLOPT_URL, "https://data35delete.github.io/Data-s-Book-on-C/Lessons/21%20C%20Veritabanı%20İşlemleri.html"); // Bu kısımda curlEntity'e GET yapacağı sitenin linkini veriyoruz.
+
+        // curl_easy_setopt; Genel bir fonksiyondur. curlEntity için ayarları ayarlar.CURLOPT_URL bizlere bu ayarlamanın URL üzerine olucağını belirtir
+
+        curl_easy_perform(curlEntity); // Son olarak curlEntity'i çalıştırıyoruz
+    }
+
+    curl_easy_cleanup(curlEntity); // İşimiz bittiğinde curlEntity serbest bırakalım
+
+    return 0;
+}</code>
+
+Çalıştırdığımızda konsolda bir önceki sayfanın html kodlarını görebilirsiniz.</pre>
+
+        <pre id="codeh2">Peki ya bir dosyaya kayıt etmek istersek?
+
+<code class="language-c">#include &lt;curl/curl.h>
+#include &lt;stdio.h>
+
+size_t curlCallback(void* data, size_t boyut, size_t verininBoyutu, void* stream) 
+// Curl'den gelen verileri almak için 4 adet paramtre ile alırız.
+// data; Gelen verinin ham versiyonudur
+// boyut; Gelen verinin boyutur
+// verininBoyutu; Gelen verinin tüm boyutudur
+// stream; Akışı temsil eder
+{
+    FILE* out = fopen("site.html", "ab"); // site.html adlı dosyaya kayıt ediceğiz. Ayrıca ikili ekleme modunda açıcağız
+
+    char temp[2048]; // 2048 karakterlik bir geçici değişken oluşturduk ki bozulmaların önünde geçelim
+
+    snprintf(temp, verininBoyutu, "%s", data); // Gelen ham veriyi Char dizesi ve sınırlı şekile yazdık. Bunun sebebi gelen veride Char dizelerinin bittiğini ifade eden Null terminatörü(\0) bulunmaması ve bu Char dizesi ile işlemlerde öngürülemez sonuçlar vermesidir. Son satırların Null olmaması içinde 1 ekledik
+
+    fwrite(temp, sizeof(char), verininBoyutu, out); // Verileri yazdırdık
+
+    return boyut * verininBoyutu; // Formul ile çıkmalıyız. Bir nevi gelecek verilerin, önceki verinin önüne geçmemesi için bir "bitti" mesajını vermek gibi
+}
+
+int main()
+{
+    CURL* curlEntity = curl_easy_init();
+    
+    if (curlEntity)
+    {
+        curl_easy_setopt(curlEntity, CURLOPT_URL, "https://data35delete.github.io/Data-s-Book-on-C/Lessons/21%20C%20Veritabanı%20İşlemleri.html");
+
+        curl_easy_setopt(curlEntity, CURLOPT_WRITEFUNCTION, curlCallback); // Bu ayarlama ile curlCallback fonksiyonumuzu gelen verilerin gönderilceği fonksiyon olarak ayarlarız
+
+        curl_easy_perform(curlEntity);
+    }
+
+    curl_easy_cleanup(curlEntity);
+
+    return 0;
+}</code>
+
+Eğer "out.html" dosyasını tarayıcıda açarsanız karşınıza beyaz bir ekranda bir önceki sayfanın içeriğini görebilirsiniz.</pre>
+
+        <pre id="codeh2">Şimdi de Json formatında alalım. Yalnız bunun için <a href="https://httpbin.org">https://httpbin.org</a> adlı bir siteden test gerçekleştiriceğiz. O zaman hadi yapalım.
+        
+<code class="language-c">#include &lt;curl/curl.h>
+#include &lt;stdio.h>
+
+int main()
+{
+    CURL* curlEntity = curl_easy_init();
+    
+    if (curlEntity)
+    {
+        curl_easy_setopt(curlEntity, CURLOPT_URL, "https://httpbin.org/get?name=datadelete"); // /get kısmı bizim bir GET işlemi gerçekleştirceğimizi söylüyoruz. Soru işaretinden sonra ise veri ismi = veri değeri şekilinde format gönderilir. Ardından cevap Json olarak gelir
+
+        curl_easy_perform(curlEntity);
+    }
+
+    curl_easy_cleanup(curlEntity);
+
+    return 0;
+}</code>
+
+Çıktı ise;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/22 C HTTP İstekleri Yönetimi.html/1.png" alt="22.1" width="800px">
+        </div>
+
+        <pre id="preh2">Bu çıktıda "args" kısmı bizim hangi argumanları ve argumanların değerlerini gösteren bir liste vardır. Bu liste bize bağlıdır ve değişkendir.</pre>
+
+        <pre id="preh2">Headrs kısmı bizim bağlandığımız sistemin bilgilerini içerir. Accept; değeri "*/*", yani her türlü sistemi kabul ettiğini söyler. Host; verinin geldiği sunucudur. X-Amzn-Trace-Id ise bizlere özel tanımlanmış bir etikettir. Her çalışmada değişkenlik gösterir.</pre>
+
+        <pre id="preh2">Origin; Sunucunun IP numarısıdır.</pre>
+
+        <pre id="preh2">Url; Gönderilen Url'nin geri dönüşüdür.</pre>
+
+        <pre id="preh2">Şuan bunları tanıttım fakat diğer tüm sitelerde bu şekilde çalışmaz. Bu bilgiler <a href="https://httpbin.org">https://httpbin.org</a> sitesi için geçerlidir.</pre>
+
+        <h2>POST</h2>
+        <pre id="preh2">POST, sunucuya veri göndermek için kullanılan bir HTTP yöntemidir.</pre>
+
+        <pre id="preh2">Httpbin üzerinden POST yaptığımızda bize aslında geri sanki GET atmışız gibi bir veri döndürür. Fakat normal şartlarda bu durum diğer sunucularda geçerli değildir.</pre>
+
+        <pre id="codeh2">Şimdi ise Httpbin'e bir POST isteği gönderelim.
+
+<code class="language-c">#include &lt;curl/curl.h>
+#include &lt;stdio.h>
+
+int main()
+{
+    CURL* curlEntity = curl_easy_init();
+    
+    if (curlEntity)
+    {
+        curl_easy_setopt(curlEntity, CURLOPT_URL, "https://httpbin.org/post"); // Httpbin'nin POST kımına erişelim
+
+        curl_easy_setopt(curlEntity, CURLOPT_POSTFIELDS, "name=data&project=datasbookonc"); // POST isteği olarak data verisini data, project verisini de datasbookonc değerini değiştirceğimizi söyleyeb bir POST yazdık. Ardından POST modunda curlEntity'e tanıttık
+
+        curl_easy_perform(curlEntity);
+    }
+
+    curl_easy_cleanup(curlEntity);
+
+    return 0;
+}</code>
+
+Çıktı ise;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/22 C HTTP İstekleri Yönetimi.html/2.png" alt="22.2" width="800px">
+        </div>
+
+        <pre id="preh2">Çıktıda "form" kısmında POST olarak attığımız verileri görebilirsiniz.</pre>
+
+        <h2>HTTPS ve SSL</h2>
+        <pre id="preh2">HTTPS, HTTP'nin güvenli halidir. Peki neden? Çünkü HTTP verileri getiriyor güzel, fakat getirirken şifresiz bir şekilde getiriyor. İşte bunu önlemek için SSL sertifikalar ile getirilen ve götürülen verilerin korunumu sağlanmış oluyor. Yani veriler uçtan uca şifrelenmiş bir biçimde gidip geliyor.</pre>
+
+        <h2>Libcurl'de Hata Yönetimi</h2>
+        <pre id="preh2">Libcurl'de hata yönetimi, CURLcode adlı bir Enum tarafından sağlanır. Her Libcurl fonksiyonu sonucunda bir CURLcode döndürür. Eğer hatasız bir işlem olursa geri dönüş tipi sıfır olur. Fakat işlem hata alırsa sıfırdan farklı olarak, hataya bağlı bir hata kodu döndürülür. Hata kodları ise curl_easy_strerror metoduna paramtre olarak verilir ve verilen hata kodunun hangi anlama geldiğini bizlere bir Char dizesi olarak döndürür.</pre>
+
+        <pre id="codeh2">Şimdi bu bilgiyi örneğimize uygulayalım;
+
+<code class="language-c">#include &lt;curl/curl.h>
+#include &lt;stdio.h>
+
+int main()
+{
+    CURLcode sonuc; // CURLcode'ların atanacağı değişken
+    CURL* curlEntity = curl_easy_init();
+    
+    if (curlEntity)
+    {
+        sonuc = curl_easy_setopt(curlEntity, CURLOPT_URL, "https://httpbin.org/post");
+        if (sonuc != 0) // Eğer sıfırdan başka bir değer dönerse ki bu hata demektir
+        {
+            printf("%s\n", curl_easy_strerror(sonuc));
+        }
+        
+
+        sonuc = curl_easy_setopt(curlEntity, CURLOPT_POSTFIELDS, "name=data&project=datasbookonc");
+        if (sonuc != 0)
+        {
+            printf("%s\n", curl_easy_strerror(sonuc));
+        }
+
+        sonuc = curl_easy_perform(curlEntity);
+        if (sonuc != 0)
+        {
+            printf("%s\n", curl_easy_strerror(sonuc));
+        }
+    }
+
+    curl_easy_cleanup(curlEntity);
+
+    return 0;
+}</code>
+
+Artık kodumuz bir hata ile karşılaşırsa, hata mesajını ekrana yazdırıcaktır.</pre>
 
         <h2>Kaynakça</h2>
         <ul>
             <li><a href="https://tr.wikipedia.org/wiki/HTTP">https://tr.wikipedia.org/wiki/HTTP</a></li>
+            <li><a href="https://stackoverflow.com/questions/2329571/c-libcurl-get-output-into-a-string">https://stackoverflow.com/questions/2329571/c-libcurl-get-output-into-a-string</a></li>
+            <li><a href="https://everything.curl.dev/index.html">https://everything.curl.dev/index.html</a></li>
+            <li><a href="https://www.w3schools.com/tags/ref_httpmethods.asp">https://www.w3schools.com/tags/ref_httpmethods.asp</a></li>
         </ul>    
     </div>
 
