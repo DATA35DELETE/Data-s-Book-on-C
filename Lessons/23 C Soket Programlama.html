@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data's Book on C</title>
+
+    <link rel="icon" type="image/x-icon" href="../Sources/favicon.png">
+
+    <script src="../Sources/JS/setBackgroundMedia.js"></script>
+
+    <link rel="stylesheet" href="../Sources/JS/hljs/vs2015.css">
+    <script src="../Sources/JS/hljs/highlight.min.js"></script>
+    <script>
+        window.onload = function() {
+            hljs.highlightAll();
+        };
+    </script>
+
+    <link rel="stylesheet" href="../Sources/CSS/main.css">
+</head>
+<body>
+    <h1>Soket Programlama</h1>
+
+    <div style="height: 100px;"></div>
+    
+    <div id="mainDiv">
+        <h2>Soket Nedir?</h2>
+        <pre id="preh2">Soket, bir bilgisayarda iletişim kanalı açıldığında, IP adresi ve port numarasının yan yana yazılma biçimidir. IP adresi bir bilgisayarın internet ağlarını arasında kimlik görevi görürken, port numarası ise bilgisayarın içerisindeki telefonlar gibidir. Örnek olarak bir bilgisayarın 192.172.0.5 adresli bilgisayardaki 52. telefonunda bağlantı açtığımızda bize verilen bilgi "192.172.0.5/52" olucaktır. Biz o bilgsayara iletişim kuracağımız zaman bu soket ile bağlantı kurulacak ve veri alışverişi gerçekleşecektir.</pre>
+
+        <h2>TCP ve UDP Farkları</h2>
+        <pre id="preh2">TCP, TCP bir ağ protokoldur ve Dünya çapında sıklıkla kullanılan bir ağ protokuludur. Özelliği ise veri paketçiklerinin yolda değişmediklerinin garantisini vermektedir. Calışma mantığı ise sunucu-istemci mimarisi ile çalışmaktadır. Modeli, bir veri gönderlicek ise ilk önce sunucu-istemci arasında bağlantı kurulur ve istemci veriyi gönderir. Veri sunucuya ulaştığında, sunucu istemciye bilgi vererek bilginin geldiğini söyler. Arıdından aralarında bilginin değiştirilmediğini doğrular ve veri güvenli bir şekilde iletilmiş olur.</pre>
+
+        <pre id="preh2">UDP ise TCP'nin bir katmanıdır ve bazende sadece UDP kullanılır. UDP TCP'nin veri iletimiyle sorumlu olan kısmıdır. UDP'nin TCP'den farklı olarak herhangi veri kontrol mekanizması bulunmamaktadır ve TCP'de bulunan Handshake(El sıkışma, TCP'deki veri kontrol mekanizmasına denir) mantığı bulunmaz. Avantaj olarak UDP TCP'ye göre daha hızlıdır ancak verilerin değiştirilip değiştirilmediğini garanti etmez. TCP internet trafiği yaparken, UDP TCP kadar internet trafiği yapmaz.</pre>
+
+        <pre id="preh2">TCP genelde statik mesajlar için kullanılır. E-posta, telefon mesajları ve internet verileri gibi çoğu bilgi TCP ile iletilir. UDP ise daha çok gerçek zamanlı video ve ses verisi göndermek için kullanılır.</pre>
+
+        <h2>TCP Soketi ile İletişim</h2>
+        <pre id="preh2">TCP sunucu-istemci mantığı ile çalıştığı için iki dosya olucaktır. Biri server.c diğeri ise client.c. İlk olarak server.c'i yazalım.</pre>
+
+        <pre id="codeh2"> Windows için;
+            
+<code class="language-c">#include &lt;stdio.h>
+#include &lt;stdlib.h>
+#include &lt;string.h>
+
+#include &lt;winsock2.h> // Window'da soket açmak için kullanılan genel kütüphane
+
+int main()
+{   
+    WSADATA wsa; // WSADATA ile soket işlemleri için bir değişken oluşturuyoruz
+    WSAStartup(MAKEWORD(2,2), &wsa); // İşlevlerin çalışması için bu değişkeni başlatıyoruz
+
+    struct sockaddr_in serverAddr; // Server bilgileri için yapı oluşturuyoruz
+    int serverSoket; // Server için bir akış değişkeni tanımlıyoruz. BU soket işlemleri için aslında bir nevi ID belirlemek gibi bir işlemdir
+
+    serverSoket = socket(AF_INET, SOCK_STREAM, 0); // serverSoket'i socket işlevi ile TCP olarak tanımlıyoruz
+
+    memset(&serverAddr, 0, sizeof(serverAddr)); // Bellekte bazen veriler karmaşık olarak ayrılabilir. O yüzden memset ile yapıyı sıfırlıyoruz
+    serverAddr.sin_addr.S_un.S_addr = inet_addr("127.0.0.1"); // IP adresi olarak 127.0.0.1 tanımlıyoruz. Aslında bu IP tüm bilgisayarlarda "Lokal IP" yerine geçen bir IP'dir
+    serverAddr.sin_family = AF_INET; // AF_INET olarak ayalıyoruz ki bu soketin hep IP'si hem de portu olduğunu ifade eder
+    serverAddr.sin_port = htons(1234); // Portunu 1234 olarak htons ile ayarlıyoruz
+
+    bind(serverSoket, (struct sockaddr*)&serverAddr, sizeof(serverAddr));
+    // Soket bigilerini soket akışlarına aktaran fonksiyondur
+    // serverSoket; Bağlanacak soket
+    // (struct sockaddr*)&serverAddr; Bağlanan soket bilgilerini içeren yapı
+    // sizeof(serverAddr); Bilgilerin büyüklüğü
+
+    listen(serverSoket, 5);
+    // Soketleri dinler, veri kabul eden recv için önemlidir
+    // serverSoket; Dinlenen soket
+    // 5; Dinleme modu
+
+    int clientSocket; // Client'dan gelecek olan Client soketi
+    char gelenVeri[1024]; // Gelen verileri saklamak için bir değişken
+
+    while (1) // Ana döngü, döngü içerisinde Server'a gelecek istekleri kabul eden veya geri bir değer gönderen tüm işlemler bu kısımda olur.
+    {
+        clientSocket = accept(serverSoket, NULL, NULL);
+        // Server soketinden gelen veriler client soketine aktarır. Gelen veriyi kabul eder. İnternetten gelen tüm veriler aslında bir Node yapısında olup, her veriyi sırayla kabul etmeli ve işlemeliyiz
+        // serverSoket; Server soketinin soketi
+
+        memset(gelenVeri, 0, 1024); // Bir önceki veriden temizlemek için
+        recv(clientSocket, gelenVeri, 1024, 0);
+        // Gelen veriyi bir değişkene tanımlar
+        // clientSocket; Gelen verinin Client soketi
+        // gelenVeri; Kayıt edilecek değişken
+        // 1024; Kayıt edilecek verinin boyutu. Yetersiz gelirse Stack Overflow yaşanması muhtemeldir
+        // 0; Güvenlik ayarları. Şuanlık varsayalında
+
+        printf("Client'dan gelen veri: %s\n", gelenVeri); // Veriyi konsola yazdırma
+    }   
+}</code>
+
+Server kodları hazır. Şimdi clinet.c kodlarını yazalım;
+
+<code class="language-c">#include &lt;stdio.h>
+#include &lt;stdlib.h>
+#include &lt;string.h>
+
+#include &lt;winsock2.h>
+
+int main(){
+
+    WSADATA wsa;
+    WSAStartup(MAKEWORD(2,2), &wsa);
+
+    struct sockaddr_in serverAddr;
+    SOCKET serverSoket;
+
+    serverAddr.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_port = htons(1234);
+
+    serverSoket = socket(AF_INET, SOCK_STREAM, 0);
+
+    // Server soketi için işlemleri yapıyoruz...
+
+    connect(serverSoket, (struct sockaddr*)&serverAddr, sizeof(serverAddr));
+    // Server'a bağlanır
+    // serverSoket; Server soketi
+    // (struct sockaddr*)&serverAddr; Server bilgileri
+    // sizeof(serverAddr); Serveri bilgilerinin boyutu
+
+    listen(serverSoket, 5);
+
+    send(serverSoket, "Selam Server!", 1024, 0);
+    // Server'a veri gönderir
+    // serverSoket; Server soketi
+    // "Selam Server!"; Gönderelecek veri
+    // 1024; Gönderelecek verinin boyutu
+    // 0; Güvenlik ayarları. Şuanlık varsayalında
+
+    return 0;
+}</code>
+
+Şimdi ise ikisinine derleyip(<code>-lws2_32</code> kütüphanesi ile derlenir), ilk öncek Server'ı sonra Client'ı çalıştıralım ve sonucu gözlemleyelim.</pre> 
+
+        <div id="divh2Img">
+            <img src="../Bibliography/23 C Soket Programlama.html/1.png" alt="23.1" width="800px">
+        </div>
+
+        <pre id="preh2">Linux'daki kodlar aslında Windows ile benzerdir sadece kütüphaneler farklı olarak isimlendirilmiştir. Birde fazladan bir kütüphane bağlanmaz.
+            
+Server.c komutları
+<code class="language-c">#include &lt;netinet/in.h>
+#include &lt;arpa/inet.h>
+#include &lt;stdio.h>
+#include &lt;stdlib.h>
+#include &lt;string.h>
+#include &lt;sys/socket.h>
+#include &lt;unistd.h>
+
+int main(){
+
+    struct sockaddr_in serverAddr;
+    int serverSoket;
+
+    serverSoket = socket(AF_INET, SOCK_STREAM, 0);
+
+    serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_port = htons(8080);
+
+    bind(serverSoket, (struct sockaddr*)&serverAddr, sizeof(serverAddr));
+
+    listen(serverSoket, 3);
+
+    int clientSoket;
+
+    char gelenVeri[1024];
+
+    while (1)
+    {
+        clientSoket = accept(serverSoket, NULL, NULL);
+
+        memset(gelenVeri, 0, 1024);
+        recv(clientSoket, gelenVeri, 1024, 0);
+
+        printf("Client'dan mesaj; %s\n", gelenVeri);
+    }
+    
+    return 0;
+}</code>
+
+client.
+<code class="language-c">#include &lt;netinet/in.h>
+#include &lt;arpa/inet.h>
+#include &lt;stdio.h>
+#include &lt;stdlib.h>
+#include &lt;string.h>
+#include &lt;sys/socket.h>
+#include &lt;unistd.h>
+
+int main(){
+
+    struct sockaddr_in serverAddr;
+    int serverSoket;
+
+    serverSoket = socket(AF_INET, SOCK_STREAM, 0);
+
+    serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_port = htons(8080);
+
+    connect(serverSoket, (struct sockaddr*)&serverAddr, sizeof(serverAddr));
+
+    send(serverSoket, "Hey selam ben Client!", 1024, 0);
+
+    return 0;
+}</code>
+
+
+Aynı şekilde derleyip çalıştırırsak eğer;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/23 C Soket Programlama.html/2.png" alt="23.2" width="800px">
+        </div>
+
+        <h2>Kaynakça</h2>
+        <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Network_socket">https://en.wikipedia.org/wiki/Network_socket</a></li>
+            <li><a href="https://tr.wikipedia.org/wiki/TCP">https://tr.wikipedia.org/wiki/TCP</a></li>
+            <li><a href="https://tr.wikipedia.org/wiki/UDP">https://tr.wikipedia.org/wiki/UDP</a></li>
+            <li><a href="https://learn.microsoft.com/en-us/windows/win32/winsock/complete-client-code">https://learn.microsoft.com/en-us/windows/win32/winsock/complete-client-code</a></li>
+            <li><a href="https://learn.microsoft.com/en-us/windows/win32/winsock/complete-server-code">https://learn.microsoft.com/en-us/windows/win32/winsock/complete-server-code</a></li>
+            <li><a href="https://github.com/IsaacZhang4/TCP-Server">https://github.com/IsaacZhang4/TCP-Server</a></li>
+            <li><a href="https://www.dayibilir.com/bilgi-bankasi/af-inet-nedir,560387">https://www.dayibilir.com/bilgi-bankasi/af-inet-nedir,560387</a></li>
+        </ul>    
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <footer style="position: fixed; left: 0; bottom: 0; width: 100%; background: transparent; text-align: center; padding: 10px 0; z-index: 100;">
+        <div>
+            <a href="./22 C HTTP İstekleri Yönetimi.html" style="margin-right: 20px; cursor:pointer;">
+                &larr; Önceki
+            </a>
+            <a href="" style="cursor:pointer;">
+                Sonraki &rarr;
+            </a>
+        </div>
+        <div>
+            <p>&copy; 2026 Data's Book</p>
+        </div>
+
+        <div style="position: absolute; right: 20px; bottom: 20px;">
+            <a href="./1 C İçindekiler.html" style="text-decoration: none;">
+                İçindekiler
+            </a>
+        </div>
+    </footer>
+</body>
+</html>
+
+<!-- Muhammet Enes nam-ı diğer Data Delete tarafından sevgi ile yapıldı <3 -->
