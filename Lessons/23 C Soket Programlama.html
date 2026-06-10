@@ -218,6 +218,110 @@ Aynı şekilde derleyip çalıştırırsak eğer;</pre>
             <img src="../Bibliography/23 C Soket Programlama.html/2.png" alt="23.2" width="800px">
         </div>
 
+        <h2>UDP Soketi ile İletişim</h2>
+        <pre id="preh2">UDP ile birer örnek yapalım.</pre>
+
+        <pre id="codeh2">Windows için;
+
+server.c
+<code class="language-c">#include &lt;stdio.h>
+#include &lt;stdlib.h>
+#include &lt;string.h>
+
+#include &lt;WinSock2.h>
+
+int main(){
+
+    WSADATA wsa;
+
+    struct sockaddr_in serverAddr;
+    int serverSoc;
+
+    WSAStartup(MAKEWORD(2,2), &wsa);
+
+    serverSoc = socket(AF_INET, SOCK_DGRAM, 0);
+    // UDP de SOCK_STREAM yerine SOCK_DGRAM kullanılır
+
+    serverAddr.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
+    serverAddr.sin_port = htons(1234);
+    serverAddr.sin_family = AF_INET;
+
+    bind(serverSoc, (struct sockaddr*)&serverAddr, sizeof(serverAddr));
+
+    char veri[1024];
+
+    while(1)
+    {
+        printf("Client'dan veri bekleniyor...\n");
+
+        memset(veri, 0, 1024);
+
+        int len = sizeof(serverAddr);
+
+        recvfrom(serverSoc, veri, 1024, 0, (struct sockaddr*)&serverAddr, &len);
+        // UDP portu için veri almak fonksiyonu. UDP'de TCP gibi connect yoktur çünkü connect TCP'deki Handshake mantığına denk gelir
+        // serverSoc; Okunun soket
+        // veri; Verinin kayıt edilecek değişken
+        // 1024; Kayıt edilecek verinin boyutu. Az gelirse Stack Overflow ihtimal
+        // 0; Güvenlik ayarları. Şuan varsayılan güvenlik ayarlarındayız
+        // (struct sockaddr*)&serverAddr; Server soketi bilgileri
+        // &len; Server soketi bilgilerinin boyutu
+
+        printf("%s\n", veri);
+    }
+
+    return 0;
+}</code>
+
+client.c
+<code class="language-c">#include &lt;stdio.h>
+#include &lt;stdlib.h>
+#include &lt;string.h>
+
+#include &lt;WinSock2.h>
+
+int main(){
+
+    WSADATA wsa;
+
+    struct sockaddr_in outServerAddr;
+    int outServerSoc;
+
+    WSAStartup(MAKEWORD(2,2), &wsa);
+
+    outServerSoc = socket(AF_INET, SOCK_DGRAM, 0);
+
+    outServerAddr.sin_family = AF_INET;
+    outServerAddr.sin_port = htons(1234);
+    outServerAddr.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
+
+    struct sockaddr_in inClientAddr;
+    int inClientSoc;    
+
+    char veri[1024] = "Hey selam ben UDP ile iletisim kuran Client!";
+
+    printf("Server'a veri gönderiliyor...\n");
+
+    int len = sizeof(outServerAddr);
+
+    sendto(outServerSoc, veri, 1024, 0, (struct sockaddr*)&outServerAddr, len);
+    // UDP Server'ına veri göndermek için kullanılır. UDP'de TCP'deki connect yoktur. Çünkü connect TCP'deki Handskake denk gelir
+    // outServerSoc; Server'ın soketi
+    // veri; Gönderelicek veri
+    // 1024; Gönderelicek verinin boyutu
+    // 0; Güvenlik ayarı
+    // (struct sockaddr*)&outServerAddr; Server soketi bilgileri
+    // len; Server soketinin bilgilerin boyutu
+
+    return 0;
+}</code>
+
+Aynı şekilde derler ve çalıştırırsak;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/23 C Soket Programlama.html/3.png" alt="23.3" width="800px">
+        </div>
+
         <h2>Kaynakça</h2>
         <ul>
             <li><a href="https://en.wikipedia.org/wiki/Network_socket">https://en.wikipedia.org/wiki/Network_socket</a></li>
@@ -228,6 +332,7 @@ Aynı şekilde derleyip çalıştırırsak eğer;</pre>
             <li><a href="https://github.com/IsaacZhang4/TCP-Server">https://github.com/IsaacZhang4/TCP-Server</a></li>
             <li><a href="https://www.dayibilir.com/bilgi-bankasi/af-inet-nedir,560387">https://www.dayibilir.com/bilgi-bankasi/af-inet-nedir,560387</a></li>
             <li><a href="https://www.geeksforgeeks.org/c/socket-programming-cc/">https://www.geeksforgeeks.org/c/socket-programming-cc/</a></li>
+            <li><a href="https://www.geeksforgeeks.org/cpp/udp-server-client-implementation-c/">https://www.geeksforgeeks.org/cpp/udp-server-client-implementation-c/</a></li>
         </ul>    
     </div>
 
