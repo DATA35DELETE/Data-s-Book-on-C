@@ -322,7 +322,263 @@ Aynı şekilde derler ve çalıştırırsak;</pre>
             <img src="../Bibliography/23 C Soket Programlama.html/3.png" alt="23.3" width="800px">
         </div>
 
-        
+        <h2>Çok İstemcili Server</h2>
+        <pre id="preh2">Çok istemcili Server, birden fazla soketi olan Server'ladır.</pre>
+
+        <pre id="preh2">Aynı anda iki farklı Server soketini kullanmak için, birincisinin portu 1111 diğerinin ise 2222 olan iki adet soket açalım. Ardından Client'ı çalıştırdığımız girdiğimiz paramtreye göre hangi Server soketine veri gönderdiğini konsolda görelim.</pre>
+
+        <pre id="codeh2">Windows;
+
+server.c
+<code class="language-c">#include &lt;stdio.h>
+#include &lt;stdlib.h>
+#include &lt;string.h>
+
+#include &lt;WinSock2.h>
+
+DWORD WINAPI server1(void* bos)
+{
+    struct sockaddr_in server1Addr;
+    int server1Soc;
+
+    server1Soc = socket(AF_INET, SOCK_STREAM, 0);
+
+    server1Addr.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
+    server1Addr.sin_family = AF_INET;
+    server1Addr.sin_port = htons(1111);
+
+    bind(server1Soc, (struct sockaddr*)&server1Addr, sizeof(server1Addr));
+
+    listen(server1Soc, 5);
+
+    int client1Soc;
+    char veri[1024];
+
+    while(1)
+    {
+        client1Soc = accept(server1Soc, NULL, NULL);
+
+        memset(veri, 0, 1024);
+        recv(client1Soc, veri, 1024, 0);
+
+        printf("1. Server'den veri geldi: \"%s\"\n", veri);
+    }
+}
+
+DWORD WINAPI server2(void* bos)
+{
+    struct sockaddr_in server2Addr;
+    int server2Soc;
+
+    server2Soc = socket(AF_INET, SOCK_STREAM, 0);
+
+    server2Addr.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
+    server2Addr.sin_family = AF_INET;
+    server2Addr.sin_port = htons(2222);
+
+    bind(server2Soc, (struct sockaddr*)&server2Addr, sizeof(server2Addr));
+
+    listen(server2Soc, 5);
+
+    int client2Soc;
+    char veri[1024];
+
+    while(1)
+    {
+        client2Soc = accept(server2Soc, NULL, NULL);
+
+        memset(veri, 0, 1024);
+        recv(client2Soc, veri, 1024, 0);
+
+        printf("2. Server'den veri geldi: \"%s\"\n", veri);
+    }
+}
+
+int main()
+{
+    WSADATA wsa;
+    WSAStartup(MAKEWORD(2,2), &wsa);
+
+    HANDLE thread1;
+    DWORD thread1Id;
+    thread1 = CreateThread(0, 0, server1, 0, 0, &thread1Id);
+
+    HANDLE thread2;
+    DWORD thread2Id;
+    thread2 = CreateThread(0, 0, server2, 0, 0, &thread2Id);
+
+    WaitForSingleObject(thread1, INFINITE);
+
+    return 0;
+}</code>
+
+client.c
+<code class="language-c">#include &lt;stdio.h>
+#include &lt;stdlib.h>
+#include &lt;string.h>
+
+#include &lt;WinSock2.h>
+
+int main(int argn, char* arg[])
+{
+    WSADATA wsa;
+    WSAStartup(MAKEWORD(2,2), &wsa);
+
+    struct sockaddr_in serverAddr;
+    int serverSoc;
+
+    serverSoc = socket(AF_INET, SOCK_STREAM, 0);
+
+    short int birinciServer = 1;
+    if (arg[1][0] == '2')
+        birinciServer = 0;
+
+    printf("%c", arg[1][0]);
+
+    serverAddr.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_port = htons(((birinciServer) ? 1111 : 2222));
+
+    connect(serverSoc, (struct sockaddr*)&serverAddr, sizeof(serverAddr));
+
+    send(serverSoc, "Hey selam ben Client!", 1024, 0);
+
+    return 0;
+},</code>
+
+Çıktımız;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/23 C Soket Programlama.html/4.png" alt="23.4" width="800px">
+        </div>
+
+        <pre id="codeh2">Linux için;
+
+serverc.
+<code class="language-c">#include &lt;netinet/in.h>
+#include &lt;arpa/inet.h>
+#include &lt;stdio.h>
+#include &lt;stdlib.h>
+#include &lt;string.h>
+#include &lt;sys/socket.h>
+#include &lt;unistd.h>
+
+#include &lt;pthread.h>
+
+void* server1(void* bos)
+{
+    struct sockaddr_in server1Addr;
+    int server1Soc;
+
+    server1Soc = socket(AF_INET, SOCK_STREAM, 0);
+
+    server1Addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    server1Addr.sin_family = AF_INET;
+    server1Addr.sin_port = htons(1111);
+
+    bind(server1Soc, (struct sockaddr*)&server1Addr, sizeof(server1Addr));
+
+    listen(server1Soc, 5);
+
+    int client1Soc;
+    int server1AddrLen = sizeof(server1Addr);
+
+    char veri[1024];
+
+    while (1)
+    {
+        client1Soc = accept(server1Soc, (struct sockaddr*)&server1Addr, &server1AddrLen);
+
+        memset(veri, 0, 1024);
+        recv(client1Soc, veri, 1024, 0);
+
+        printf("1. Server'a gelen veri: \"%s\"\n", veri);
+    }
+}
+
+void* server2(void* bos)
+{
+    struct sockaddr_in server2Addr;
+    int server2Soc;
+
+    server2Soc = socket(AF_INET, SOCK_STREAM, 0);
+
+    server2Addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    server2Addr.sin_family = AF_INET;
+    server2Addr.sin_port = htons(2222);
+
+    bind(server2Soc, (struct sockaddr*)&server2Addr, sizeof(server2Addr));
+
+    listen(server2Soc, 5);
+
+    int client1Soc;
+    int server2AddrLen = sizeof(server2Addr);
+
+    char veri[1024];
+
+    while (1)
+    {
+        client1Soc = accept(server2Soc, (struct sockaddr*)&server2Addr, &server2AddrLen);
+
+        memset(veri, 0, 1024);
+        recv(client1Soc, veri, 1024, 0);
+
+        printf("2. Server'a gelen veri: \"%s\"\n", veri);
+    }
+}
+
+int main(){
+
+    pthread_t server1Id;
+    pthread_create(&server1Id, 0, server1, 0);
+
+    pthread_t server2Id;
+    pthread_create(&server2Id, 0, server2, 0);
+
+    pthread_join(server1Id, 0);
+    
+    return 0;
+}</code>
+
+client.c
+<code class="language-c">#include &lt;netinet/in.h>
+#include &lt;arpa/inet.h>
+#include &lt;stdio.h>
+#include &lt;stdlib.h>
+#include &lt;string.h>
+#include &lt;sys/socket.h>
+#include &lt;unistd.h>
+
+#include &lt;pthread.h>
+
+int main(int argn, char *argv[]){
+
+    struct sockaddr_in serverAddr;
+    int serverSoket;
+
+    serverSoket = socket(AF_INET, SOCK_STREAM, 0);
+
+    short int birinciServer = 1;
+    if (argv[1][0] == '2')
+        birinciServer = 0;
+    
+
+    serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_port = htons(((birinciServer) ? 1111 : 2222));
+
+    connect(serverSoket, (struct sockaddr*)&serverAddr, sizeof(serverAddr));
+
+    send(serverSoket, "Hey selam ben Client!", 1024, 0);
+
+    return 0;
+}</code>
+
+Çıktımız ise;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/23 C Soket Programlama.html/5.png" alt="23.5" width="800px">
+        </div>
 
         <h2>Kaynakça</h2>
         <ul>

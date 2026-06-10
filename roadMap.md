@@ -357,8 +357,7 @@
 - **UDP Socket**:
   - **Server ve Client**: sendto, recvfrom. Örnek.
 - **Çok İstemcili Server**: fork veya thread ile. Örnek.
-- **Non-Blocking Socket**: Tanım. Örnek.
- 
+
 ---
  
 ### C : Test Sistemi
