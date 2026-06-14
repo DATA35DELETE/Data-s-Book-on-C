@@ -364,7 +364,6 @@
 - **Test Nedir?**: Tanım. Önemi. Kullanım Senaryoları.
 - **Unit Test Nedir?**: Tanım. Örnek.
 - **CUnit**: Kurulum. Tanım. Örnek.
-- **CMocko**: Kurulum. Tanım. Örnek.
 - **Test Yazma Prensipleri**: AAA (Arrange-Act-Assert). Örnek.
 - **Mock ve Stub**: Tanım. Örnek.
 - **CMake ile Test Entegrasyonu**: CTest. Örnek.
