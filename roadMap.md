@@ -368,3 +368,11 @@
 - **Mock ve Stub**: Tanım. Örnek.
 - **CMake ile Test Entegrasyonu**: CTest. Örnek.
 - **Kod Kapsama (Coverage)**: gcov. lcov. Örnek.
+
+---
+
+# Sonsöz
+- **Bu Dokmantasyonda Ne Öğrendik**
+- **İlerki Projeler**
+- **Diğer Data's Books Dökümantasyonları**
+- **Özel Teşekkür**

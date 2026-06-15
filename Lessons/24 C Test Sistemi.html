@@ -44,7 +44,76 @@ Linux;
 
 <code class="language-bash">sudo apt install libcunit1 libcunit1-doc libcunit1-dev</code></pre>
 
-        <pre id="preh2"></pre>
+        <pre id="preh2">Öğrenmek için ufak bir kod yazalım. Kodumuz, bir dosyayı yazma üzerine olsun. Dosyanın içerine "Hello CUnit" yazdıralım ve program çıktısını gözlemleyelim.</pre>
+
+        <pre id="codeh2"><code class="language-c">#include &lt;stdio.h>
+
+#include &lt;CUnit/CUnit.h> // CUnit genel kütüphanesi
+#include &lt;CUnit/Basic.h> // CUnit'in basit arayüzü için kütüphane
+ 
+FILE* testDosya = NULL;
+// Genel test dosyamız
+
+static int initTest() // CUnit testlerinde bir başlangıç fonksiyonu vardır. Test bu fonksiyonda başlar ana fonksiyondan devam edilir
+{
+    testDosya = fopen("testFile", "w");// Dosyayı yazma modunya açmaya çalışıyoruz
+
+    if (testDosya != NULL) // Eğer başarısız olmazdayısa
+        return CUE_SUCCESS; // CUnit'in "başarılı" makrosunu gönder
+    else // Değilse
+        return CUE_FOPEN_FAILED; // CUnit'in "Fopen başarısız oldu" makrosunu gönder
+}
+
+void test(void) // Ana test fonksiyonumuz. Bu fonksiyon başlangıç fonksiyonundan sonra çalıştırılır
+{
+    fprintf(testDosya, "Hello CUnit");
+}
+
+static int cleanTest() // CUnit testlerinde bir de son fonksiyon vardır. Bu fonksiyonda, ana test fonksiyonu bittiği an çalıştırılan ve genelde başlangıç ve ana fonksiyonların artıklarını temizler
+{
+    fclose(testDosya);
+
+    if (testDosya != NULL) // Eğer başarılı bir şekilde kapatıldı ise
+        return CUE_SUCCESS;
+    else // Değilse
+        return CUE_FCLOSE_FAILED;  // CUnit'in "Fclose başarısız oldu" makrasonu gönder
+    
+}
+
+int main()
+{
+    CU_initialize_registry(); // Genel CUnit'ın genel kayıtçısını başlat
+
+    CU_pSuite birinciBolme = CU_add_suite("Bolme1", initTest, cleanTest);
+    // Test bölmesi oluşturmamızı sağlar. Test bölmeleri testlerin barındığı ve sınıflarndırıldığı kısım gibidir
+    // "Bolme1"; Bölmenin adı
+    // initTest; Başlangıç fonksiyonu
+    // cleanTest; Temizleme fonksiyonu
+
+    CU_pTest birinciTest = CU_add_test(birinciBolme, "test1", test);
+    // Bölmeye test eklememizi sağlar
+    // birinciBolme; Eklenecek bölmenin yapısı
+    // "test1"; Eklenecek testin ismi
+    // test; Eklenecek test fonksiyonu
+
+    CU_basic_set_mode(CU_BRM_VERBOSE); // CUnit arayüzlerinde olan BASIC'e ayar ekler. Bu kısımda bize her şeyi göster diyoruz
+    CU_basic_run_test(birinciBolme, birinciTest);
+    // Testi başlatmamızı sağlar
+    // birinciBolme; Testin bölmesi
+    // birinciTest; Test yapısı
+
+    CU_cleanup_registry(); // Genel kayıtçıyı temizler
+
+    return 0;
+}</code>
+
+<code> -lcunit</code> ile derleyerek çalıştırdığımızda çıktımız;</pre>
+
+        <div id="divh2Img">
+            <img src="../Bibliography/24 C Test Sistemi.html/1.png" alt="24.1" width="800px">
+        </div>
+
+        
 
         <h2>Kaynakça</h2>
         <ul>
@@ -52,6 +121,8 @@ Linux;
             <li><a href="https://medium.com/innova-tech/unit-birim-test-nedir-neden-önemlidir-352fe3593eae">https://medium.com/innova-tech/unit-birim-test-nedir-neden-önemlidir-352fe3593eae</a></li>
             <li><a href="https://stackoverflow.com/questions/68276336/how-to-install-cunit-on-ubuntu">https://stackoverflow.com/questions/68276336/how-to-install-cunit-on-ubuntu</a></li>
             <li><a href="https://cunit.sourceforge.net/doc/index.html">https://cunit.sourceforge.net/doc/index.html</a></li>
+            <li><a href="https://bitsheriff.dev/posts/2023-03-10_cunit-module-tests/">https://bitsheriff.dev/posts/2023-03-10_cunit-module-tests/</a></li>
+            <li><a href="https://cunit.sourceforge.net/example.html">https://cunit.sourceforge.net/example.html</a></li>
     </div>
 
     <div style="height: 100px;"></div>
