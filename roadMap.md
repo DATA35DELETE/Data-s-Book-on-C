@@ -372,6 +372,6 @@
 - **Bu Dokmantasyonda Ne Öğrendik**
 - **İlerki Projeler**
 - **Diğer Data's Books Dökümantasyonları**
-- **Özel Teşekkür**
+- **Özel Teşekkürler**
 
 ---
