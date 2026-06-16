@@ -365,14 +365,13 @@
 - **Unit Test Nedir?**: Tanım. Örnek.
 - **CUnit**: Kurulum. Tanım. Örnek.
 - **Test Yazma Prensipleri**: AAA (Arrange-Act-Assert). Örnek.
-- **Mock ve Stub**: Tanım. Örnek.
-- **CMake ile Test Entegrasyonu**: CTest. Örnek.
-- **Kod Kapsama (Coverage)**: gcov. lcov. Örnek.
 
 ---
 
-# Sonsöz
+### Sonsöz
 - **Bu Dokmantasyonda Ne Öğrendik**
 - **İlerki Projeler**
 - **Diğer Data's Books Dökümantasyonları**
 - **Özel Teşekkür**
+
+---

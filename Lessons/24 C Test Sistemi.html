@@ -66,7 +66,9 @@ static int initTest() // CUnit testlerinde bir başlangıç fonksiyonu vardır. 
 
 void test(void) // Ana test fonksiyonumuz. Bu fonksiyon başlangıç fonksiyonundan sonra çalıştırılır
 {
-    fprintf(testDosya, "Hello CUnit");
+    CU_ASSERT(fprintf(testDosya, "Hello CUnit") == 11);
+    // Assert ile test ediyoruz
+    // fprintf(testDosya, "Hello CUnit") == 11; İçerisi CUnit'in iddia edilecek işlemlerdir. Bu kısımda fprintf'ın başarılı olup olmadığına dair bir iddia bulunduk
 }
 
 static int cleanTest() // CUnit testlerinde bir de son fonksiyon vardır. Bu fonksiyonda, ana test fonksiyonu bittiği an çalıştırılan ve genelde başlangıç ve ana fonksiyonların artıklarını temizler
@@ -113,7 +115,20 @@ int main()
             <img src="../Bibliography/24 C Test Sistemi.html/1.png" alt="24.1" width="800px">
         </div>
 
-        
+        <h2>Test Yazma Prensibleri</h2>
+        <pre id="preh2">Test yazarken bazı prensibler vardır. AAA olarak bilinen ve açılımı Arrange-Act-Assert(Hazırlık-Eylem-İddia) test yazma prensibidir. Her bir A'nın anlamı vardır. İlk olarak teker teker açıklayalım.</pre>
+
+        <h3>Arrange(Hazırlık)</h3>
+        <pre id="preh3">Test yapmadan önce değişkenlerin ve fonksiyonların tanımlandığı ve test edilecek kısımların test bölümlerine ve test yapılarına katılmasıdır. CUnit örneğinde verdiğimiz kodda o kodu yazarken aslında biz Arrange aşamasında oluruz.</pre>
+
+        <h3>Act(Eylem)</h3>
+        <pre id="preh3">Arrange aşamasında yazılan kodları çalıştırma aşamasıdır. Örneğimizde bu durum kodları derleyip çalıştırmamızla eş değerdir.</pre>
+
+        <h3>Assert(İddia)</h3>
+        <pre id="preh3">Assert ise Act'an gelen çıktıyı inceleyerek, CUnit'in bizlere ne kadar iddia bulunduğunu yani "Şu kısımda hata çıkabilir" dediği kısımlara denir. Eğer kaliteli ve hatasız kod yazmak istiyorsak mümkün olduğunca CUnit'in en az iddiada bulunduğu kodlar yazmaktır. Bu kısım kodda "<code class="language-c">CU_ASSERT(fprintf(testDosya, "Hello CUnit") == 11);</code>"
+         olarak ifade edilir.</pre>
+
+        <pre id="preh2">Kodun çıktısında gelen tabloda birler hataları temsil ederken, sıfırlar hatasız olanları temsil eder.</pre>
 
         <h2>Kaynakça</h2>
         <ul>
@@ -123,6 +138,7 @@ int main()
             <li><a href="https://cunit.sourceforge.net/doc/index.html">https://cunit.sourceforge.net/doc/index.html</a></li>
             <li><a href="https://bitsheriff.dev/posts/2023-03-10_cunit-module-tests/">https://bitsheriff.dev/posts/2023-03-10_cunit-module-tests/</a></li>
             <li><a href="https://cunit.sourceforge.net/example.html">https://cunit.sourceforge.net/example.html</a></li>
+            <li><a href="https://medium.com/akbank-teknoloji/aaa-arrange-act-assert-pattern-kullanarak-test-yazmak-29c8ade89ca1">https://medium.com/akbank-teknoloji/aaa-arrange-act-assert-pattern-kullanarak-test-yazmak-29c8ade89ca1</a></li>
     </div>
 
     <div style="height: 100px;"></div>
